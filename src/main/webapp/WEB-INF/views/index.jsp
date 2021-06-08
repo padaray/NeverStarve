@@ -79,7 +79,7 @@
 
 </head>
 <body>
-123
+
       <div id="headbar" style="background-color: #C4E1E1; ">
             <div class="logodiv">
                 <img src='<c:url value="/images/NeverStarvelogo3.png"/>' height="125px">
