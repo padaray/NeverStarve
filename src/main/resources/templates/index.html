@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>NeverStarve</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<style>
+        *{
+            padding: 0%;
+            margin: 0;
+        }
+        body {
+            /* background-image: url("images/indexbackground.jpg"); */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover
+        }
+        #headbar{
+            display: flex;
+            align-items: center;
+            position: relative;
+            justify-content: space-between;
+        }
+        
+
+        .logodiv{
+            width: 379px;
+            float: left;
+        }
+        
+        .headform{
+            position: absolute;
+            
+            right:100px;
+        }
+
+        .form-group{
+            width: 200px;
+            margin: 0;
+            float: left ;
+        }
+        .longin{
+            border-radius: 20px;
+            position: absolute;
+            right: 50px;
+            background-color: seagreen;
+            padding: 5px;
+            font-weight: 600;
+            
+        }
+        a{
+            text-decoration:none;
+        }
+        a:link {
+	    color: yellow; /*未訪問連接颜色*/
+        }
+ 
+        a:visited {
+	    color: rgb(255, 255, 255); /*已訪問的連接颜色*/
+        }
+ 
+        a:hover {
+	    /* color: blue; 移動到連接的颜色 */
+	    text-decoration: underline;
+        }
+ 
+        a:active {
+	    color: orange; /*點擊的颜色*/
+        }
+
+
+    </style>
+
+
+</head>
+<body>
+
+      <div th:insert="Generic :: Header"></div>
+
+
+</body>
+</html>
