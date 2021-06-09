@@ -13,8 +13,15 @@ import javax.persistence.Table;
 
 import com.NeverStarve.store.model.StoreBean;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name="BOOKINGTABLE")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookingBean {
 	
 	@Id
@@ -35,8 +42,6 @@ public class BookingBean {
 	Integer bookingNum ;
 	Date bookingDate;
 	
-	public BookingBean() {
-
-	}
+	
 
 }

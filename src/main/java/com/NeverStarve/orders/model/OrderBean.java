@@ -18,8 +18,15 @@ import javax.persistence.Table;
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name ="ORDERS")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -43,119 +50,7 @@ public class OrderBean implements Serializable {
 	String order_note;
 	
 	String totalCost;
-	
-	Date  orderDate;
-	
-	public OrderBean() {
-		super();
-	}
-
-	public OrderBean(Integer pkOrderId, StoreBean storeBean, MemberBean memberBean, Set<OrderListBean> items,
-			String shipping_address, String order_note, String totalCost, Date orderDate) {
-		super();
-		this.pkOrderId = pkOrderId;
-		this.storeBean = storeBean;
-		this.memberBean = memberBean;
-		this.items = items;
-		this.shipping_address = shipping_address;
-		this.order_note = order_note;
-		this.totalCost = totalCost;
-		this.orderDate = orderDate;
-	}
-
-	public Integer getPkOrderId() {
-		return pkOrderId;
-	}
-
-	public void setPkOrderId(Integer pkOrderId) {
-		this.pkOrderId = pkOrderId;
-	}
-
-	public StoreBean getStoreBean() {
-		return storeBean;
-	}
-
-	public void setStoreBean(StoreBean storeBean) {
-		this.storeBean = storeBean;
-	}
-
-	public MemberBean getMemberBean() {
-		return memberBean;
-	}
-
-	public void setMemberBean(MemberBean memberBean) {
-		this.memberBean = memberBean;
-	}
-
-	public Set<OrderListBean> getItems() {
-		return items;
-	}
-
-	public void setItems(Set<OrderListBean> items) {
-		this.items = items;
-	}
-
-	public String getShipping_address() {
-		return shipping_address;
-	}
-
-	public void setShipping_address(String shipping_address) {
-		this.shipping_address = shipping_address;
-	}
-
-	public String getOrder_note() {
-		return order_note;
-	}
-
-	public void setOrder_note(String order_note) {
-		this.order_note = order_note;
-	}
-
-	public String getTotalCost() {
-		return totalCost;
-	}
-
-	public void setTotalCost(String totalCost) {
-		this.totalCost = totalCost;
-	}
-
-	public Date getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("OrderBean [pkOrderId=");
-		builder.append(pkOrderId);
-		builder.append(", storeBean=");
-		builder.append(storeBean);
-		builder.append(", memberBean=");
-		builder.append(memberBean);
-		builder.append(", items=");
-		builder.append(items);
-		builder.append(", shipping_address=");
-		builder.append(shipping_address);
-		builder.append(", order_note=");
-		builder.append(order_note);
-		builder.append(", totalCost=");
-		builder.append(totalCost);
-		builder.append(", orderDate=");
-		builder.append(orderDate);
-		builder.append("]");
-		return builder.toString();
-	}
-	
-	
-
-	
+  
+  Date  orderDate;
 
 }
