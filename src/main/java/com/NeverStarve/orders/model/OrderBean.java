@@ -1,6 +1,7 @@
 package com.NeverStarve.orders.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -49,6 +50,7 @@ public class OrderBean implements Serializable {
 	String order_note;
 	
 	String totalCost;
-	
+  
+  Date  orderDate;
 
 }
