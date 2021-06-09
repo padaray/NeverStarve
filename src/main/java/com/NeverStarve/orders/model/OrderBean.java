@@ -1,6 +1,7 @@
 package com.NeverStarve.orders.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -43,14 +44,14 @@ public class OrderBean implements Serializable {
 	
 	String totalCost;
 	
+	Date  orderDate;
+	
 	public OrderBean() {
 		super();
 	}
-	
-	
 
 	public OrderBean(Integer pkOrderId, StoreBean storeBean, MemberBean memberBean, Set<OrderListBean> items,
-			String shipping_address, String order_note, String totalCost) {
+			String shipping_address, String order_note, String totalCost, Date orderDate) {
 		super();
 		this.pkOrderId = pkOrderId;
 		this.storeBean = storeBean;
@@ -59,9 +60,8 @@ public class OrderBean implements Serializable {
 		this.shipping_address = shipping_address;
 		this.order_note = order_note;
 		this.totalCost = totalCost;
+		this.orderDate = orderDate;
 	}
-
-
 
 	public Integer getPkOrderId() {
 		return pkOrderId;
@@ -119,10 +119,17 @@ public class OrderBean implements Serializable {
 		this.totalCost = totalCost;
 	}
 
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 
 	@Override
 	public String toString() {
@@ -141,6 +148,8 @@ public class OrderBean implements Serializable {
 		builder.append(order_note);
 		builder.append(", totalCost=");
 		builder.append(totalCost);
+		builder.append(", orderDate=");
+		builder.append(orderDate);
 		builder.append("]");
 		return builder.toString();
 	}
