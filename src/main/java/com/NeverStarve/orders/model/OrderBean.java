@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,23 +35,23 @@ public class OrderBean implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkOrderId;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_Store_Id")
 	private StoreBean storeBean;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_MemberBean_Id")
 	private MemberBean memberBean;
 	
-	@OneToMany(mappedBy="orderBean", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="orderBean", cascade=CascadeType.ALL,fetch = FetchType.EAGER)
 	private Set<OrderListBean> items = new LinkedHashSet<>();
 	
 	String shipping_address;
 	
 	String order_note;
 	
-	String totalCost;
+	Double totalCost;
   
-  Date  orderDate;
+	Date  orderDate;
 
 }

@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.NeverStarve.orders.model.OrderBean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +34,8 @@ public class StoreBean {
 	String storePassword;
 	String storeAddress;
 	String storePhone;
+	
+	@JsonIgnore
 	Blob storeImage;
 	String storeType;
 	Integer seatNumber;

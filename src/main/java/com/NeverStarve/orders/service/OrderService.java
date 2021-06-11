@@ -1,16 +1,19 @@
-package com.NeverStarve.orders.repository;
+package com.NeverStarve.orders.service;
 
 import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.NeverStarve.orders.model.OrderBean;
 import com.NeverStarve.store.model.StoreBean;
 
-public interface OrderRepository extends JpaRepository<OrderBean, Integer> {
-
+public interface OrderService {
+	
 	List<OrderBean> findBypkOrderId (Integer id);
+	
+	List<OrderBean> getAll();
 	
 	List<OrderBean>  findBystoreBean  (StoreBean storeBean);
 	
+	OrderBean save(OrderBean orderBean);
+	
+
 }

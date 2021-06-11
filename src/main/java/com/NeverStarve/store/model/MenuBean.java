@@ -4,12 +4,15 @@ import java.sql.Blob;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,9 +30,10 @@ public class MenuBean {
 	String dishName;
 	Double dishPrice;
 	String dishIntroduction;
+	@JsonIgnore
 	Blob dishPicture;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_Store_Id")
 	private StoreBean storeBean;
 
