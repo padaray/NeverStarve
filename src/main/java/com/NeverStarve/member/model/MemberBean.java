@@ -47,6 +47,7 @@ String mobilePhone;
 String userType;
 Timestamp registerTime;
 Date longTime;
+
 @JsonIgnore
 Blob coverImage;
 String fileName;
