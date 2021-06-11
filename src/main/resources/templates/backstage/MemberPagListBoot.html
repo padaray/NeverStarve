@@ -7,87 +7,33 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="/NeverStarve/js/jquery-2.2.3.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	
 <style th:inline="css">
-* {
-	padding: 0%;
-	margin: 0;
-	font-family: "微軟正黑體",sans-serif;
-
-}
-
-body {
-	/* background-image: url("images/indexbackground.jpg"); */
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-position: center;
-	background-size: cover
-}
-
-#headbar {
-	display: flex;
-	align-items: center;
-	position: relative;
-	justify-content: space-between;
-}
-
-.logodiv {
-	width: 379px;
-	float: left;
-}
-
-.headform {
-	position: absolute;
-	right: 100px;
-}
-
-.form-group {
-	width: 200px;
-	margin: 0;
-	float: left;
-}
-
-.longin {
-	border-radius: 20px;
-	position: absolute;
-	right: 50px;
-	background-color: seagreen;
-	padding: 5px;
-	font-weight: 600;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:link {
-	color: bule; /*未訪問連接颜色*/
-}
-
-a:visited {
-	color: rgb(255, 255, 255); /*已訪問的連接颜色*/
-}
-
-a:hover {
-	/* color: blue; 移動到連接的颜色 */
-	text-decoration: underline;
-}
-
-a:active {
-	color: orange; /*點擊的颜色*/
-}
 .table{
 	margin:auto ;
 	margin-top:50px;  	
 	width: 1300px;
+	text-align:center;
+	align-items: center
+	
 }
 .center{
 	text-align:center;
 	margin:auto ;
+	
 }
 </style>
 <script type="text/javascript" th:inline="javascript">
 $(function(){
-	if([[${pageNo}]]==1){
+	var pag =/*[[${pageNo}]]*/ 
+	console.log(pag);
+	var nex =/*[[${pageNo}+1]]*/
+	console.log(pag);
+	var back=/*[[${pageNo}-1]]*/
+	console.log(pag);
+	var tl =/*[[${totalPages}]]*/
+	console.log(pag);
+	if(pag==1){
 		$("#but0").attr("disabled", true);
 		$("#but00").attr("disabled", true);
 	}
@@ -112,14 +58,14 @@ $(function(){
 		type:"GET",
 		contentType:"application/json",
 		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
-		data:{"pageNo":[[${pageNo}-1]]},  //輸入傳值		
+		data:{"pageNo":back },  //輸入傳值		
 		dataType: "html", 
 		async: true,
         cache: false,
 		success:function (data) {
 			
 				$(".article_type").html(data);
-				if([[${pageNo}]]==1){
+				if(pag ==1){
 					$("#but0").attr("disabled", true);
 				}				
 		}
@@ -132,19 +78,19 @@ $(function(){
 		type:"GET",
 		contentType:"application/json",
 		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
-		data:{"pageNo":[[${pageNo}+1]]},  //輸入傳值		
+		data:{"pageNo":nex},  //輸入傳值		
 		dataType: "html", 
 		async: true,
         cache: false,
 		success:function (data) {
 			
 				$(".article_type").html(data);
-				if([[${pageNo}+1]]==[[${totalPages}]]){
+				if(nex==tl){
 					$("#but1").attr("disabled", true);
 					$("#but2").attr("disabled", true);
 					
 				}
-				if([[${pageNo}]]!=1){
+				if(pag!=1){
 					$("#but0").attr("disabled", false);
 				}else{$("#but0").attr("disabled", true);
 				}				
@@ -157,7 +103,7 @@ $(function(){
 		type:"GET",
 		contentType:"application/json",
 		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
-		data:{"pageNo":[[${totalPages}]]},  //輸入傳值		
+		data:{"pageNo":pag},  //輸入傳值		
 		dataType: "html", 
 		async: true,
         cache: false,
@@ -173,11 +119,11 @@ $(function(){
 
 </script>
 </head>
-<body class="article_type" th:fragment="article_type" >
+<body class="article_type" th:fragment="article_type" th:inline="text" >
 	<div th:insert="Generic :: Header"></div>
 	<div>
-	<div th:inline="text" style="height: 550px;" >
-		<table width=400px; class="table table-striped table-dark" >
+	<div th:inline="text" style="height: 520px;" >
+		<table width=400px; class="table table-striped table-dark " >
 			<thead>
 				<tr>
 				<th>會員編號</th>
@@ -193,15 +139,15 @@ $(function(){
 			</thead>
 			<tbody>
 				<tr th:each="member,loopStatus: ${products_DPP}">
-				<th>[[${member.value.pkMemberId}]] </th>
-				<td>[[${member.value.name}]] </td>
-				<td>[[${member.value.address}]]</td>
-				<td>[[${member.value.email}]] </td>
-				<td>[[${member.value.password}]] </td>
-				<td>[[${member.value.mobilePhone}]]</td>
-				<td>[[${member.value.userType}]] </td>
-				<td>[[${member.value.registerTime}]] </td>
-				<td><img height="120" th:src='${member.value.bas64}'> </td>
+				<th valign="middle"><a href=/yahoo.com.tw>[[${member.value.pkMemberId}]] </a></th>
+				<td valign="middle">[[${member.value.name}]] </td>
+				<td valign="middle">[[${member.value.address}]]</td>
+				<td valign="middle">[[${member.value.email}]] </td>
+				<td valign="middle">[[${member.value.password}]] </td>
+				<td valign="middle">[[${member.value.mobilePhone}]]</td>
+				<td valign="middle">[[${member.value.userType}]] </td>
+				<td valign="middle">[[${member.value.registerTime}]] </td>
+				<td ><img height="120" th:src='${member.value.bas64}'> </td>
 				</tr>
 			</tbody>
 		</table>
@@ -209,6 +155,7 @@ $(function(){
 		<div  class="center" >	
 			<button id="but00" width='250px' >第一頁</button>
 			<button id="but0" width='250px' >上一頁</button>
+			<span>[[${pageNo}]] / [[${totalPages}]]</span>
 			<button id="but1" width='250px' >下一頁</button>
 			<button id="but2" width='250px' >最尾頁</button>
 		</div>
