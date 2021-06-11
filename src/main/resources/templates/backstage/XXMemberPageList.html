@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>MemberList</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src="/NeverStarve/js/jquery-2.2.3.min.js"></script>
+<style th:inline="css">
+* {
+	padding: 0%;
+	margin: 0;
+	font-family: "微軟正黑體",sans-serif;
+
+}
+
+body {
+	/* background-image: url("images/indexbackground.jpg"); */
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center;
+	background-size: cover
+}
+
+#headbar {
+	display: flex;
+	align-items: center;
+	position: relative;
+	justify-content: space-between;
+}
+
+.logodiv {
+	width: 379px;
+	float: left;
+}
+
+.headform {
+	position: absolute;
+	right: 100px;
+}
+
+.form-group {
+	width: 200px;
+	margin: 0;
+	float: left;
+}
+
+.longin {
+	border-radius: 20px;
+	position: absolute;
+	right: 50px;
+	background-color: seagreen;
+	padding: 5px;
+	font-weight: 600;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:link {
+	color: bule; /*未訪問連接颜色*/
+}
+
+a:visited {
+	color: rgb(255, 255, 255); /*已訪問的連接颜色*/
+}
+
+a:hover {
+	/* color: blue; 移動到連接的颜色 */
+	text-decoration: underline;
+}
+
+a:active {
+	color: orange; /*點擊的颜色*/
+}
+.pagebody{
+	font-size: 25px;
+	margin:0 auto;
+	width:1000px;
+	text-align:center
+
+}
+.border{
+	border-collapse: collapse;
+}
+
+
+</style>
+<script type="text/javascript" th:inline="javascript">
+$(function(){
+// 	alert([[${pageNo}+1]]);
+// 	alert("[[${totalPages}]]");
+// 	alert(pagno);
+
+	if([[${pageNo}]]==1){
+					$("#but0").attr("disabled", true);
+					$("#but00").attr("disabled", true);
+					
+	}
+	
+	$("#but1").click(function(){
+		$.ajax({
+		type:"GET",
+		contentType:"application/json",
+		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProductsJSON",
+		data:{"pageNo":[[${pageNo}+1]]},  //輸入傳值		
+		dataType: "json", 
+		async: true,
+        cache: false,
+		success:function (data) {
+			var a = JSON.parse(data)
+				alert(a.name);
+					$("#tablearea").empty();
+					$("#tablearea").append($("<table border='2' id='tb' width='800' class='border' >"))
+				$.each(a,function(k,v){
+					
+					
+					
+					
+// 					$("<tr height='18' >").appendTo($("#tb"))
+// 					.append($("<td width='800' colspan='2' align='left'>").text(v.name))
+// 					.append($("<table border='1' width='800'>"))
+// 					.append($("<tr><td width='400' align='left'>會員姓名："))
+// 					.append($("<a id='name'	>")).text(v.name)
+// 					.append($("<td width='400'>會員編號:")).text(v.pkMemberId)
+// 					.append($("<td rowspan='3' width='100'>"))
+// 					.append($("<img height='150'>")).arrt("src",v.bas64)
+// 					.append($("<TR ><TD width='800' align='left'><TABLE border='1' width='800'><TR>"))
+// 					.append($("<TD width='400' align='left'>Email:")).text(v.email)
+// 					.append($("<TD width='400' align='left' >手機號碼:")).text(v.mobilePhone)
+// 					.append($("<tr><TD width='800'>會員地址:")).text(v.address)
+// 					.append($("	<TR ><TD width='800' align='left'><TABLE border='1' width='800'><TR>"))
+// 					.append($("<TD width='400' align='left'>")).text(v.password)
+// 					.append($("<TD width='270' align='left'>")).text(v.longTime)
+// 					.append($("<TD width='130' align='left'>")).text(v.userType)
+// 					.append("</TR></TABLE></tr>")
+		
+
+// 					$("#name").html(v.name);
+// 					$("#pkno").html(v.pkMemberId);
+// 					$("#imge").attr("src",v.bas64);
+// 					$("#email").html(v.email);
+// 					$("#phone").html(v.mobilePhone);
+// 					$("#address").html(v.address);
+// 					$("#pow").html(v.password);
+// 					$("#time").html(v.longTime);
+// 					$("#type").html(v.userType);
+				} )
+// 				$(".article_type").html(data);
+				if([[${pageNo}+1]]==[[${totalPages}]]){
+					$("#but1").attr("disabled", true);
+					$("#but2").attr("disabled", true);
+					
+				}
+				if([[${pageNo}]]!=1){
+					$("#but0").attr("disabled", false);
+				}else{$("#but0").attr("disabled", true);
+				}
+			}
+
+		});
+	});
+	
+	$("#but0").click(function(){
+		$.ajax({
+		type:"GET",
+		contentType:"application/json",
+		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
+		data:{"pageNo":[[${pageNo}-1]]},  //輸入傳值		
+		dataType: "html", 
+		async: true,
+        cache: false,
+		success:function (data) {
+			
+				$(".article_type").html(data);
+				if([[${pageNo}]]==1){
+					$("#but0").attr("disabled", true);
+				}
+				
+			}
+
+		});
+	});
+	
+	$("#but2").click(function(){
+		$.ajax({
+		type:"GET",
+		contentType:"application/json",
+		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
+		data:{"pageNo":[[${totalPages}]]},  //輸入傳值		
+		dataType: "html", 
+		async: true,
+        cache: false,
+		success:function (data) {
+			
+				$(".article_type").html(data);
+				
+					$("#but1").attr("disabled", true);
+					$("#but2").attr("disabled", true);
+				
+				
+			}
+
+		});
+	});
+	
+	$("#but00").click(function(){
+		$.ajax({
+		type:"GET",
+		contentType:"application/json",
+		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
+		data:{"pageNo":1},  //輸入傳值		
+		dataType: "html", 
+		async: true,
+        cache: false,
+		success:function (data) {
+			$(".article_type").html(data);
+		}
+
+		});
+	});
+
+});
+
+
+
+
+</script>
+</head>
+<body class="article_type" th:fragment="article_type" >
+	<div th:insert="Generic :: Header"></div>
+	
+	<div th:with="rowColor ='#FFEBFF'" th:inline="text" class="pagebody">
+		<div id="tablearea">
+		<table border="2" width="800" class="border" >
+			<tbody  th:each="member,loopStatus: ${products_DPP}" th:style="${loopStatus.count % 2==0}?'background: #DEFADE' : 'background: #FFEBFF'">
+
+<!-- 					<tr align="center"> -->
+<!-- 						<td width="80px" align="center" >會員姓名:[[${member.value.name}]]</td> -->
+<!-- 						<td th:text="${member.value.name}"></td> -->
+<!-- 						<td><img height='100' width='80' -->
+<!-- 							th:src="${member.value.bas64}"></td> -->
+<!-- 					</tr> -->
+					
+		<tr height='18' >
+			<td width='800' colspan='2' align='left'>
+			<table border='1' width='800'>
+				<tr>
+					<td width='400' align='left'>會員姓名：<a id='name'
+
+						href='/'>[[${member.value.name}]]</a>
+					</td>
+					<td width='400' id="pkno" >會員編號:[[${member.value.pkMemberId}]]
+					
+					</td>
+				</tr>
+			</table>
+			</td>
+			<td rowspan='3' width='100'><img height='150' id='imge'
+				th:src='${member.value.bas64}'></td>
+		</tr>	
+		<TR >
+			<TD width='800' align='left'>
+			<TABLE border='1' width='800'>
+				<TR>
+					<TD width='400' align="left" id='email'>Email: [[${member.value.email}]]</TD>
+					<TD width='400' align="left" id='phone'>手機號碼:
+					[[${member.value.mobilePhone}]]</TD>
+				</TR>
+				<tr>
+				<TD width='800' id='address'>會員地址:[[${member.value.address}]]</TD>
+				</tr>
+				
+			</TABLE>
+			</TD>
+		</TR>
+		<TR >
+			<TD width='800' align='left'>
+			<TABLE border='1' width='800'>
+				<TR>
+					<TD width='400' align='left' id='pow'>密碼:[[${member.value.password}]]</TD>
+					<TD width='270' align='left' id='time'>註冊時間:[[${member.value.registerTime}]]</TD>					
+					<TD width='130' align='left' id='type'>會員等級:[[${member.value.userType}]]</TD>					
+				</TR>
+			</TABLE>
+			</TD>
+		</tr>
+			</tbody>
+		</table>
+		</div>
+	<div >	
+		<button id="but00" width='250px' >第一頁</button>
+		<button id="but0" width='250px' >上一頁</button>
+		<button id="but1" width='250px' >下一頁</button>
+		<button id="but2" width='250px' >最尾頁</button>
+	</div>
+		
+		
+	</div>
+	
+</body>
+</html>

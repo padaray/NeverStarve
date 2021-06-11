@@ -1,0 +1,66 @@
+@charset "UTF-8";
+  *{
+            padding: 0%;
+            margin: 0;
+        }
+        .index {
+            /* background-image: url("images/indexbackground.jpg"); */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover
+        }
+        #headbar{
+            display: flex;
+            align-items: center;
+            position: relative;
+            justify-content: space-between;
+        }
+        
+
+        .logodiv{
+            width: 379px;
+            float: left;
+        }
+        
+        .headform{
+            position: absolute;
+            
+            right:100px;
+        }
+
+        .form-group{
+            width: 200px;
+            margin: 0;
+            float: left ;
+        }
+        .longin{
+            position: absolute;
+            right: 50px;	
+            padding: 5px;
+            font-weight: 600;
+            
+        }
+        .select{
+        	float: right;
+        }
+        a{
+            text-decoration:none;
+        }
+        a:link {
+	    color: yellow; /*未訪問連接颜色*/
+        }
+ 
+        a:visited {
+	    color: rgb(255, 255, 255); /*已訪問的連接颜色*/
+        }
+ 
+        a:hover {
+	    /* color: blue; 移動到連接的颜色 */
+	    text-decoration: underline;
+        }
+ 
+        a:active {
+	    color: orange; /*點擊的颜色*/
+        }
+
