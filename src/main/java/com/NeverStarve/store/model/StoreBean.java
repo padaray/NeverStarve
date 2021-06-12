@@ -40,10 +40,8 @@ public class StoreBean {
 	String storeType;
 	Integer seatNumber;
 	
-	@OneToMany(mappedBy ="storeBean",fetch = FetchType.EAGER)
-	private Set<OrderBean> orders =new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy ="storeBean",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<MenuBean> menus =new LinkedHashSet<>();
 	
 	
