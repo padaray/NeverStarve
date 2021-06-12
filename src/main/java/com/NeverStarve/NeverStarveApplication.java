@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class NeverStarveApplication {
 
 	public static void main(String[] args) {
-		System.out.println("hi i am ningkuan");
+		
 		SpringApplication.run(NeverStarveApplication.class, args);
 	
 	}
