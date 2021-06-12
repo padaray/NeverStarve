@@ -7,11 +7,12 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="/NeverStarve/js/jquery-2.2.3.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />
+<link rel="shortcut icon"  th:href="@{/favicon.ico}"/>	
 <style th:inline="css">
 .table{
 	margin:auto ;
-	margin-top:50px;  	
+	margin-top:20px;  	
 	width: 1300px;
 	text-align:center;
 	align-items: center
@@ -22,6 +23,11 @@
 	margin:auto ;
 	
 }
+.tit{
+	font-weight: 700;
+	margin-top: 50px;
+}
+
 </style>
 <script type="text/javascript" th:inline="javascript">
 $(function(){
@@ -31,90 +37,234 @@ $(function(){
 	console.log(pag);
 	var back=/*[[${pageNo}-1]]*/
 	console.log(pag);
-	var tl =/*[[${totalPages}]]*/
+	var tl =/*[[${totalPages}]]*/ //全部會員的 總頁數
 	console.log(pag);
-	if(pag==1){
-		$("#but0").attr("disabled", true);
-		$("#but00").attr("disabled", true);
-	}
+	var t2 =/*[[${pagecounts}]]*/ //全部會員的 總個數
+	console.log(t2)
+	var pag =1
+	var totalcount=t2 //預設搜尋出來的個數為 全部的
+	var recordsPerPage=5 //預設每個分頁的個數
+	
+	
+	$("#but0").attr("disabled", true);
+	$("#but00").attr("disabled", true);
+	
+	if(pag==tl){
+		$("#but1").attr("disabled", true);
+		$("#but2").attr("disabled", true);					
+		}
+
 	
 	$("#but00").click(function(){
+		var v=$("#city").val()
+		pag=1
 		$.ajax({
-		type:"GET",
-		contentType:"application/json",
-		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
-		data:{"pageNo":1},  //輸入傳值		
-		dataType: "html", 
-		async: true,
-        cache: false,
-		success:function (data) {
-			$(".article_type").html(data);
-		}
-		});
+			type:"GET",
+			contentType:"application/json",
+			url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+			data:{"pageNo":1,"city":v},  //輸入傳值		
+			dataType:"JSON", 
+			async: true,
+	        cache: false,
+			success:function (data) {
+				
+				$("#tbody").empty();
+				var url
+				$.each(data, function(index, element){ 
+					$('<tr>').appendTo("#tbody")
+					.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+					.append($('<td valign="middle">').text(element.name))
+					.append($('<td valign="middle">').text(element.address))
+					.append($('<td valign="middle">').text(element.email))
+					.append($('<td valign="middle">').text(element.password))
+					.append($('<td valign="middle">').text(element.mobilePhone))
+					.append($('<td valign="middle">').text(element.userType))
+					.append($('<td valign="middle">').text(element.registerTime))
+					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
+					
+				})
+				
+			
+				$("#pageno").text(pag+"/"+tl)
+					
+			}
+			});
 	});
 	
 	$("#but0").click(function(){
+		v=$("#city").val()
+		pag-=1
 		$.ajax({
-		type:"GET",
-		contentType:"application/json",
-		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
-		data:{"pageNo":back },  //輸入傳值		
-		dataType: "html", 
-		async: true,
-        cache: false,
-		success:function (data) {
+			type:"GET",
+			contentType:"application/json",
+			url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+			data:{"pageNo":pag,"city":v},  //輸入傳值		
+			dataType:"JSON", 
+			async: true,
+	        cache: false,
+			success:function (data) {
+				
+				$("#tbody").empty();
+				var url
+				$.each(data, function(index, element){ 
+					$('<tr>').appendTo("#tbody")
+					.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+					.append($('<td valign="middle">').text(element.name))
+					.append($('<td valign="middle">').text(element.address))
+					.append($('<td valign="middle">').text(element.email))
+					.append($('<td valign="middle">').text(element.password))
+					.append($('<td valign="middle">').text(element.mobilePhone))
+					.append($('<td valign="middle">').text(element.userType))
+					.append($('<td valign="middle">').text(element.registerTime))
+					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
+					
+				})
+				
+				
 			
-				$(".article_type").html(data);
-				if(pag ==1){
-					$("#but0").attr("disabled", true);
-				}				
-		}
-
-		});
+				$("#but2").attr("disabled", false);
+				$("#but1").attr("disabled", false);
+			}
+			});
 	});
 	
 	$("#but1").click(function(){
+		v=$("#city").val()
+		pag+=1
 		$.ajax({
 		type:"GET",
 		contentType:"application/json",
-		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
-		data:{"pageNo":nex},  //輸入傳值		
-		dataType: "html", 
+		url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+		data:{"pageNo":pag,"city":v},  //輸入傳值		
+		dataType:"JSON", 
 		async: true,
         cache: false,
 		success:function (data) {
+			$("#tbody").empty();
+			var url
+			$.each(data, function(index, element){ 
+				$('<tr>').appendTo("#tbody")
+				.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+				.append($('<td valign="middle">').text(element.name))
+				.append($('<td valign="middle">').text(element.address))
+				.append($('<td valign="middle">').text(element.email))
+				.append($('<td valign="middle">').text(element.password))
+				.append($('<td valign="middle">').text(element.mobilePhone))
+				.append($('<td valign="middle">').text(element.userType))
+				.append($('<td valign="middle">').text(element.registerTime))
+				.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
+				
+			})
 			
-				$(".article_type").html(data);
-				if(nex==tl){
-					$("#but1").attr("disabled", true);
-					$("#but2").attr("disabled", true);
-					
-				}
-				if(pag!=1){
-					$("#but0").attr("disabled", false);
-				}else{$("#but0").attr("disabled", true);
-				}				
+		
 		}
 		});
 	});
 	
 	$("#but2").click(function(){
+		v=$("#city").val()
+		pag=tl
 		$.ajax({
-		type:"GET",
-		contentType:"application/json",
-		url:"http://localhost:9527/NeverStarve/Member/DisplayPageProducts",
-		data:{"pageNo":pag},  //輸入傳值		
-		dataType: "html", 
-		async: true,
-        cache: false,
-		success:function (data) {
-			$(".article_type").html(data);	
-			$("#but1").attr("disabled", true);
-			$("#but2").attr("disabled", true);
-		}
-		});
+			type:"GET",
+			contentType:"application/json",
+			url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+			data:{"pageNo":tl,"city":v},  //輸入傳值		
+			dataType:"JSON", 
+			async: true,
+	        cache: false,
+			success:function (data) {
+				$("#tbody").empty();
+				$.each(data, function(index, element){ 
+					$('<tr>').appendTo("#tbody")
+					.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+					.append($('<td valign="middle">').text(element.name))
+					.append($('<td valign="middle">').text(element.address))
+					.append($('<td valign="middle">').text(element.email))
+					.append($('<td valign="middle">').text(element.password))
+					.append($('<td valign="middle">').text(element.mobilePhone))
+					.append($('<td valign="middle">').text(element.userType))
+					.append($('<td valign="middle">').text(element.registerTime))
+					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
+					
+				})																	
+			}
+			});
 	});
 	
+	$("#sele").click(function(){
+		v=$("#city").val()
+		
+		$.ajax({
+			type:"GET",
+			contentType:"application/json",
+			url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+			data:{"pageNo":1,"city":v},  //輸入傳值		
+			dataType:"JSON", 
+			async: true,
+	        cache: false,
+			success:function (data) {
+				
+				$("#tbody").empty();
+				
+				$.each(data, function(index, element){ 
+					totalcount=element.totalcount					
+					$('<tr>').appendTo("#tbody")
+					.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+					.append($('<td valign="middle">').text(element.name))
+					.append($('<td valign="middle">').text(element.address))
+					.append($('<td valign="middle">').text(element.email))
+					.append($('<td valign="middle">').text(element.password))
+					.append($('<td valign="middle">').text(element.mobilePhone))
+					.append($('<td valign="middle">').text(element.userType))
+					.append($('<td valign="middle">').text(element.registerTime))
+					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
+					
+				})
+				if(v==null){
+					$("#tit").text("所有會員")
+				}
+				$("#tit").text(v+"會員")
+				
+				pag=1
+				tl=Math.ceil(totalcount/recordsPerPage)
+				$("#pageno").text(pag+"/"+tl)
+				$("#resl").text("結果共:"+totalcount+"筆")	
+				if(1==totalcount){
+					$("#but1").attr("disabled", true);
+					$("#but2").attr("disabled", true);	
+				}else{
+					$("#but1").attr("disabled", false);
+					$("#but2").attr("disabled", false);	
+				}
+				$("#but0").attr("disabled", true);
+				$("#but00").attr("disabled", true);						
+			}
+			});
+	
+		
+	})
+	$(document).click(function(){
+		v=$("#city").val()	
+		$("#pageno").text(pag+"/"+tl)
+		$("#resl").text("結果共:"+totalcount+"筆")
+				
+		if(pag==tl || 1==tl){
+			$("#but1").attr("disabled", true);
+			$("#but2").attr("disabled", true);					
+		}
+		if(tl!=1){
+			if(pag!=1){
+			$("#but0").attr("disabled", false);											
+			$("#but00").attr("disabled", false);											
+		}else{
+			$("#but0").attr("disabled", true);											
+			$("#but00").attr("disabled", true);		
+			$("#but1").attr("disabled", false);		
+			$("#but2").attr("disabled", false);		
+		}	
+		}
+						
+	})
 })
 
 </script>
@@ -122,43 +272,57 @@ $(function(){
 <body class="article_type" th:fragment="article_type" th:inline="text" >
 	<div th:insert="Generic :: Header"></div>
 	<div>
-	<div th:inline="text" style="height: 520px;" >
-		<table width=400px; class="table table-striped table-dark " >
-			<thead>
-				<tr>
-				<th>會員編號</th>
-				<th>會員姓名</th>
-				<th>會員地址</th>
-				<th>電子信箱</th>
-				<th>會員密碼</th>
-				<th>電話號碼</th>
-				<th>會員等級</th>
-				<th>註冊時間</th>
-				<th>會員圖片</th>
-				</tr>		
-			</thead>
-			<tbody>
-				<tr th:each="member,loopStatus: ${products_DPP}">
-				<th valign="middle"><a href=/yahoo.com.tw>[[${member.value.pkMemberId}]] </a></th>
-				<td valign="middle">[[${member.value.name}]] </td>
-				<td valign="middle">[[${member.value.address}]]</td>
-				<td valign="middle">[[${member.value.email}]] </td>
-				<td valign="middle">[[${member.value.password}]] </td>
-				<td valign="middle">[[${member.value.mobilePhone}]]</td>
-				<td valign="middle">[[${member.value.userType}]] </td>
-				<td valign="middle">[[${member.value.registerTime}]] </td>
-				<td ><img height="120" th:src='${member.value.bas64}'> </td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+		<h2 class="center tit"  id="tit">[[${SearchResult}]]</h2>
+		<h2 id="resl" class="center tit" style="margin-top: 20px">結果共:[[${pagecounts}]]筆</h2>	
 		<div  class="center" >	
 			<button id="but00" width='250px' >第一頁</button>
 			<button id="but0" width='250px' >上一頁</button>
-			<span>[[${pageNo}]] / [[${totalPages}]]</span>
+			<span id="pageno">[[${pageNo}]] / [[${totalPages}]]</span>
 			<button id="but1" width='250px' >下一頁</button>
 			<button id="but2" width='250px' >最尾頁</button>
 		</div>
+		<div style="margin-top: 20px" class="center">	
+			<select name="city" id="city" >			
+				<option value="" disabled selected >請選擇城市</option>
+				<option value="台北市">台北市</option>
+				<option>基隆市</option>
+				<option>龍紀市</option>
+			</select>
+			<input type="date" name="date">
+			<input type="date" name="date">
+			<button id="sele" class="btn btn-primary">查詢</button>
+		</div>	
+		<div th:inline="text" style="margin-bottom: 30px;" >
+			<table width=400px; class="table table-striped table-dark " >
+				<thead>
+					<tr>
+					<th>會員編號</th>
+					<th>會員姓名</th>
+					<th>會員地址</th>
+					<th>電子信箱</th>
+					<th>會員密碼</th>
+					<th>電話號碼</th>
+					<th>會員等級</th>
+					<th>註冊時間</th>
+					<th>會員圖片</th>
+					</tr>		
+				</thead>
+				<tbody id="tbody">
+					<tr th:each="member,loopStatus: ${products_DPP}">
+						<th valign="middle"><a id="a" th:inline="text" th:href='@{${member.value.pkMemberId}}'>[[${member.value.pkMemberId}]] </a></th>
+						<td valign="middle">[[${member.value.name}]] </td>
+						<td valign="middle">[[${member.value.address}]]</td>
+						<td valign="middle">[[${member.value.email}]] </td>
+						<td valign="middle">[[${member.value.password}]] </td>
+						<td valign="middle">[[${member.value.mobilePhone}]]</td>
+						<td valign="middle">[[${member.value.userType}]] </td>
+						<td valign="middle">[[${member.value.registerTime}]] </td>
+						<td ><img height="120" th:src='${member.value.bas64}'> </td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
 	</div>
 
 	

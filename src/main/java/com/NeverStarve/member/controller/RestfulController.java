@@ -21,9 +21,9 @@ public class RestfulController {
 	@Autowired
 	MemberService memberservice;
 
-	@GetMapping("/getMamberById/{id}")
+	@GetMapping("/{id}")
 	public Optional<MemberBean> getMamberById(@PathVariable int id) {
-
+		
 		return memberservice.getMamberById(id);
 	}
 
