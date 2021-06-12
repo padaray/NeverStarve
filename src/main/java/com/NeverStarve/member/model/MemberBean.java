@@ -57,6 +57,7 @@ String password;
 String checkPassword;
 @NotBlank
 String address;
+@NotBlank
 @Email
 String email;
 @Pattern(regexp= PHONE_REG , message="請輸入正確手機號碼")

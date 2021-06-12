@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.service.MemberService;
@@ -20,7 +21,7 @@ import com.NeverStarve.member.service.MemberService;
 public class RegisterController {
 	
 	@Autowired
-	MemberService memberServicr;
+	MemberService memberService;
 	
 	@GetMapping("/login")
 	public String login() {
@@ -35,7 +36,7 @@ public class RegisterController {
 	@GetMapping("/register")
 	public String register(Model model) {
 		
-		model.addAttribute("member",new MemberBean());
+		model.addAttribute("memberBean",new MemberBean());
 		
 		return "member/register";
 	}
@@ -44,9 +45,9 @@ public class RegisterController {
 	@PostMapping("/register")
 	public String registerPost(@Valid MemberBean memberBean ,BindingResult result ,Model model) {
 		
-		// 檢查 memberId是否重複
-		if (memberServicr.emailExists(memberBean.getEmail())) {
-			result.rejectValue("memberId", "", "帳號已存在，請重新輸入");
+//		 檢查 memberId是否重複
+		if (memberService.emailExists(memberBean.getEmail())) {
+			result.rejectValue("email", "", "信箱已存在，請重新輸入");
 		}
 		
 		
@@ -55,22 +56,22 @@ public class RegisterController {
 		}
 		
 		if(result.hasErrors()) {
-			return"register";
+			return"member/register";
 		}
 		
 		Timestamp registerTime = new Timestamp(System.currentTimeMillis());
 		memberBean.setRegisterTime(registerTime);
 		memberBean.setUserType("1");
-		memberServicr.save(memberBean);
-		return "redirect:/member/login";
+		memberService.save(memberBean);
+		return "redirect:/Member/login";
 	}
 	
 
 	
 	
-	public boolean confirmPassword(MemberBean user) {
+	public boolean confirmPassword(MemberBean memberBean) {
 		
-		if(user.getPassword().equals(user.getCheckPassword())) {
+		if(memberBean.getPassword().equals(memberBean.getCheckPassword())) {
 			return true;
 		}
 		return false;
