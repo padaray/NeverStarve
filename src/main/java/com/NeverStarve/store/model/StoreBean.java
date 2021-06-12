@@ -40,7 +40,7 @@ public class StoreBean {
 	String storeType;
 	Integer seatNumber;
 	
-	
+	@JsonIgnore
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<MenuBean> menus =new LinkedHashSet<>();
 	
