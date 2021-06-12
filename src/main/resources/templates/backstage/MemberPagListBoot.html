@@ -37,12 +37,13 @@ $(function(){
 	console.log(pag);
 	var back=/*[[${pageNo}-1]]*/
 	console.log(pag);
-	var tl =/*[[${totalPages}]]*/ //全部會員的
+	var tl =/*[[${totalPages}]]*/ //全部會員的 總頁數
 	console.log(pag);
-	var t2 =/*[[${counts}]]*/
+	var t2 =/*[[${pagecounts}]]*/ //全部會員的 總個數
 	console.log(t2)
 	var pag =1
-	
+	var totalcount=t2 //預設搜尋出來的個數為 全部的
+	var recordsPerPage=5 //預設每個分頁的個數
 	
 	
 	$("#but0").attr("disabled", true);
@@ -83,17 +84,7 @@ $(function(){
 					
 				})
 				
-				if(pag==tl){
-				$("#but1").attr("disabled", true);
-				$("#but2").attr("disabled", true);					
-				}
-				if(pag!=1){
-					$("#but0").attr("disabled", false);											
-					$("#but00").attr("disabled", false);											
-				}else{
-					$("#but0").attr("disabled", true);											
-					$("#but00").attr("disabled", true);		
-				}
+			
 				$("#pageno").text(pag+"/"+tl)
 					
 			}
@@ -103,12 +94,6 @@ $(function(){
 	$("#but0").click(function(){
 		v=$("#city").val()
 		pag-=1
-		if(pag==1){
-			$("#but0").attr("disabled", true);																				
-			$("#but00").attr("disabled", true);																				
-		}
-		$("#but2").attr("disabled", false);
-		$("#but1").attr("disabled", false);
 		$.ajax({
 			type:"GET",
 			contentType:"application/json",
@@ -136,10 +121,7 @@ $(function(){
 				})
 				
 				
-				if(pag==1){
-					$("#but0").attr("disabled", true);																				
-					$("#but00").attr("disabled", true);																				
-				}
+			
 				$("#but2").attr("disabled", false);
 				$("#but1").attr("disabled", false);
 			}
@@ -174,13 +156,7 @@ $(function(){
 				
 			})
 			
-			if(pag==tl){
-			$("#but1").attr("disabled", true);
-			$("#but2").attr("disabled", true);					
-			}				
-			$("#but0").attr("disabled", false);											
-			$("#but00").attr("disabled", false);	
-			$("#pageno").text(pag/tl)
+		
 		}
 		});
 	});
@@ -210,14 +186,7 @@ $(function(){
 					.append($('<td valign="middle">').text(element.registerTime))
 					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
 					
-				})
-				
-				if(pag==tl){
-				$("#but1").attr("disabled", true);
-				$("#but2").attr("disabled", true);					
-					}				
-				$("#but0").attr("disabled", false);											
-				$("#but00").attr("disabled", false);											
+				})																	
 			}
 			});
 	});
@@ -236,8 +205,9 @@ $(function(){
 			success:function (data) {
 				
 				$("#tbody").empty();
-				var url
+				
 				$.each(data, function(index, element){ 
+					totalcount=element.totalcount					
 					$('<tr>').appendTo("#tbody")
 					.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
 					.append($('<td valign="middle">').text(element.name))
@@ -250,28 +220,51 @@ $(function(){
 					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
 					
 				})
-				alert(pag)
-				alert(tl)				
-			
-				if(pag==tl){
+				if(v==null){
+					$("#tit").text("所有會員")
+				}
+				$("#tit").text(v+"會員")
+				
+				pag=1
+				tl=Math.ceil(totalcount/recordsPerPage)
+				$("#pageno").text(pag+"/"+tl)
+				$("#resl").text("結果共:"+totalcount+"筆")	
+				if(1==totalcount){
 					$("#but1").attr("disabled", true);
-					$("#but2").attr("disabled", true);					
-				}
-				if(pag!=1){
-					$("#but0").attr("disabled", false);											
-					$("#but0").attr("disabled", false);											
+					$("#but2").attr("disabled", true);	
 				}else{
-					$("#but0").attr("disabled", true);											
-					$("#but0").attr("disabled", true);		
+					$("#but1").attr("disabled", false);
+					$("#but2").attr("disabled", false);	
 				}
-				$("#pageno").text(pag)
-					
+				$("#but0").attr("disabled", true);
+				$("#but00").attr("disabled", true);						
 			}
 			});
 	
 		
 	})
-	
+	$(document).click(function(){
+		v=$("#city").val()	
+		$("#pageno").text(pag+"/"+tl)
+		$("#resl").text("結果共:"+totalcount+"筆")
+				
+		if(pag==tl || 1==tl){
+			$("#but1").attr("disabled", true);
+			$("#but2").attr("disabled", true);					
+		}
+		if(tl!=1){
+			if(pag!=1){
+			$("#but0").attr("disabled", false);											
+			$("#but00").attr("disabled", false);											
+		}else{
+			$("#but0").attr("disabled", true);											
+			$("#but00").attr("disabled", true);		
+			$("#but1").attr("disabled", false);		
+			$("#but2").attr("disabled", false);		
+		}	
+		}
+						
+	})
 })
 
 </script>
@@ -279,8 +272,8 @@ $(function(){
 <body class="article_type" th:fragment="article_type" th:inline="text" >
 	<div th:insert="Generic :: Header"></div>
 	<div>
-		<h2 class="center tit" >[[${SearchResult}]]</h2>
-		<h2 class="center tit" style="margin-top: 20px">結果共:[[${counts}]]筆</h2>	
+		<h2 class="center tit"  id="tit">[[${SearchResult}]]</h2>
+		<h2 id="resl" class="center tit" style="margin-top: 20px">結果共:[[${pagecounts}]]筆</h2>	
 		<div  class="center" >	
 			<button id="but00" width='250px' >第一頁</button>
 			<button id="but0" width='250px' >上一頁</button>

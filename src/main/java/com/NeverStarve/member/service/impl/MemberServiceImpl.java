@@ -80,8 +80,8 @@ public class MemberServiceImpl implements MemberService {
 	public Map<Integer, MemberBean> getPageMembers(int pageNo) {
 		Map<Integer, MemberBean> map = new LinkedHashMap<>();
 		PageRequest pageable = PageRequest.of(pageNo - 1, recordsPerPage);
-		Page<MemberBean> beans = memberDao.findAll(pageable);
-		beans.getTotalElements();
+		Page<MemberBean> beans = memberDao.findAll(pageable);	
+		setTotalcount(beans.getTotalElements());
 		List<MemberBean> list = beans.getContent();
 		for (MemberBean bean : list) {
 			map.put(bean.getPkMemberId(), bean);
@@ -103,7 +103,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int getTotalPages() {
 
-		totalPages = (int) (Math.ceil(getRecordCounts() / (double) recordsPerPage));
+		totalPages = (int) (Math.ceil(getTotalcount() / (double) recordsPerPage));
 		return totalPages;
 	}
 
@@ -127,6 +127,7 @@ public class MemberServiceImpl implements MemberService {
 		setTotalcount(beans.getTotalElements());
 		beans.getTotalElements();
 		for (MemberBean bean : list) {
+			bean.setTotalcount(beans.getTotalElements());
 			map.put(bean.getPkMemberId(), bean);
 		}
 		return map;

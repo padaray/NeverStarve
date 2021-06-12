@@ -53,6 +53,8 @@ String fileName;
 Double unpaid_amount;
 
 @Transient
+long totalcount;
+@Transient
 String bas64;
 
 @Transient

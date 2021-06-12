@@ -48,12 +48,13 @@ public class MemberPageController {
 		}		
 		Map<Integer, MemberBean> memberMap = memberService.getPageMembers(pageNo);
 		tobase64(memberMap);
-		model.addAttribute("pagecounts",memberService.getTotalcount());
-		model.addAttribute("counts",memberService.getRecordCounts());
+		model.addAttribute("pagecounts",memberService.getTotalcount()); //取得取回來的總筆數
+		model.addAttribute("counts",memberService.getRecordCounts()); //取得資料庫共有幾筆
 		model.addAttribute("pageNo", String.valueOf(pageNo));
 		model.addAttribute("totalPages", memberService.getTotalPages());
 		// 將讀到的一頁資料放入request物件內，成為它的屬性物件
 		model.addAttribute("products_DPP", memberMap);
+		model.addAttribute("SearchResult","所有會員");
 		// 使用Cookie來儲存目前讀取的網頁編號，Cookie的名稱為memberId + "pageNo"
 		// -----------------------
 //		Cookie pnCookie = new Cookie(memberId + "pageNo", String.valueOf(pageNo));
@@ -89,31 +90,13 @@ public class MemberPageController {
 			model.addAttribute("products_DPP", memberMap);
 			model.addAttribute("counts",memberService.getRecordCounts());
 			model.addAttribute("SearchResult","所有會員");
-
+			
 
 		}
 		model.addAttribute("pageNo", String.valueOf(pageNo));
 		model.addAttribute("totalPages", memberService.getTotalPages());	// 將讀到的一頁資料放入request物件內，成為它的屬性物件
 		return memberMap;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
