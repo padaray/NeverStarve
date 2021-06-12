@@ -51,6 +51,6 @@ public class OrderBean implements Serializable {
 	
 	String totalCost;
   
-  Date  orderDate;
+    Date  orderDate;
 
 }
