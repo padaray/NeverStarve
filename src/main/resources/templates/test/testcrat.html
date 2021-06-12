@@ -2,52 +2,88 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <title>這是購物車</title>
+<style type="text/css">
+</style>
+<script>
+	$(function() {
+		$(".add").click(function() {
+			var t = $("#text_box");
+			t.val(parseInt(t.val()) + 1)
+			setTotal();
+		})
+		$(".min").click(function() {
+			var t = $("#text_box");
+			t.val(parseInt(t.val()) - 1)
+			if (parseInt(t.val()) < 0) {
+				t.val(0);
+			}
+			setTotal();
+		})
+
+		function setTotal(){
+			var s=0;
+			
+			console.log(s);
+			s+=parseInt($("#text_box").val())*parseFloat($("#price").text());
+			$("#total").html(s.toFixed(1));
+			
+			}
+			setTotal();
+})
+</script>
 </head>
 <body>
 
-<table>
-	<thead>
-	<tr>
-	<th width="300">商品信息</th>
-	<th width="150">單價</th>
-	<th width="200">數量</th>
-	<th width="200">總金額</th>
-	<th width="80">操作</th>
-	</tr>
-
-	
-	</thead>
-	
-	
-	
-	
-	<td><div style="padding-left:60px;">
-	颜色分类：<div></div>
-	尺码：<div ></div>
-	</div></td>
-	
-	<td>$1.0</td>
-	
-	<td>
-		<div class="cart-num__box">
-		<input type="button" class="sub" value="-">
-		<input type="text" class="val" value="1" maxlength="2">
-		<input type="button" class="add" value="+">
-		</div>
-	</td>
-	
-	<td >這裡寫總金額</td>
-	<td><a >刪除</a></td>
-	
-	
+	<table id="tab" style="border: 5px; border-color: black;">
+		<thead>
+			<tr>
+				<th width="300">商品</th>
+				<th width="300">商品信息</th>
+				<th width="150">單價</th>
+				<th width="200">數量</th>
+				<th width="200">總金額</th>
+				<th width="80">操作</th>
+			</tr>
 
 
+		</thead>
 
-</table>
+		<tbody>
+			<tr>
+			<td>
+			</td>
 
+				<td>
+				<div style="padding-left: 60px;">
+						颜色分类：
+						<div></div>
+						尺码：
+						<div></div>
+					</div>
+				</td>
 
+				<td><span  id="price" class="price">1</span></td>
+				<td>
+				
+				<input class="min" name="" value="-"  type="button"/>
+				<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="1" disabled="disabled"/>
+				<input class="add" name="" type="button" value="+"/>
+				
+				</td>
+				
+				
+				<td><label id="total"></label></td>
+				<td><a>刪除</a></td>
+			</tr>
+		</tbody>
 
-
+	</table>
+	
 </body>
 </html>

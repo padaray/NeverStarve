@@ -53,7 +53,7 @@ public class StoreBean {
 	@Pattern(regexp = "^[0-9]*$", message="只能填入數字")
 	Integer seatNumber;
 	
-	
+	@JsonIgnore
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<MenuBean> menus =new LinkedHashSet<>();
 	

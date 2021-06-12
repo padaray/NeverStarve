@@ -38,6 +38,7 @@ public class MenuBean {
 	@JsonIgnore
 	Blob dishPicture;
 	
+	@JsonIgnore
 	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_Store_Id")
 	private StoreBean storeBean;
