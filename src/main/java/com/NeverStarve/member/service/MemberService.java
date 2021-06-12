@@ -28,6 +28,10 @@ public interface MemberService {
 
 	// 分頁會員
 	Map<Integer, MemberBean> getPageMembers(int pageNo);
+	Map<Integer, MemberBean> findByAddressContaining(int pageNo,String adderss);
+//	Map<Integer, MemberBean> getPageCityMembers(String city, int pageNo);	
+//	Map<Integer, MemberBean> getPageRTimeMembers(Timestamp begin,Timestamp end,int pageNo);
+//	Map<Integer, MemberBean> getPageCAndRMembers(Timestamp begin,Timestamp end,String address,int pageNo);
 
 	int getRecordsPerPage();
 
@@ -36,5 +40,8 @@ public interface MemberService {
 	int getTotalPages();
 
 	void setRecordsPerPage(int recordsPerPage);
+
+	long getTotalcount();
+
 
 }
