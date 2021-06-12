@@ -6,4 +6,8 @@ import com.NeverStarve.orders.model.OrderBean;
 
 public interface OrderRepository extends JpaRepository<OrderBean, Integer> {
 
+	
+	
+	
+	
 }

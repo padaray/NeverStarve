@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,24 +35,16 @@ public class OrderBean implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkOrderId;
-	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "FK_Store_Id")
-	private StoreBean storeBean;
-	
+	String  storeId;
+	@JsonIgnore
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "FK_MemberBean_Id")
 	private MemberBean memberBean;
-	
-	@OneToMany(mappedBy="orderBean", cascade=CascadeType.ALL)
-	private Set<OrderListBean> items = new LinkedHashSet<>();
-	
 	String shipping_address;
-	
 	String order_note;
+	Double totalCost;
+	Date  orderDate;
+	String product_name;
+	String quantity ; 
 	
-	String totalCost;
-  
-  Date  orderDate;
-
 }
