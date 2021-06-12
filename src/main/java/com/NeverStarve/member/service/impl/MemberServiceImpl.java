@@ -41,6 +41,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberBean updateMember(MemberBean bean) {
+		
 		return memberDao.save(bean);
 	}
 
@@ -121,5 +122,12 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.findByRegisterTimeBetween(Timestamp.valueOf(begin + " 00:00:00"),
 				Timestamp.valueOf(end + " 00:00:00"));
 	}
-
+	
+	
+	
+	
+	
+	
+	
+	
 }
