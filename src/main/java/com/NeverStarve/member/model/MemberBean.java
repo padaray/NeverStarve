@@ -59,7 +59,8 @@ String bas64;
 @Transient
 private MultipartFile memberImage;
 
-@OneToMany(mappedBy ="memberBean",fetch = FetchType.EAGER)
+@JsonIgnore
+@OneToMany(mappedBy ="memberBean")
 private Set<OrderBean> orders =new LinkedHashSet<>();
 
 

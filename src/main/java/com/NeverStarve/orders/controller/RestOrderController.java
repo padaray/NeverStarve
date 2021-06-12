@@ -1,6 +1,7 @@
 package com.NeverStarve.orders.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,23 +21,21 @@ public class RestOrderController {
 	@Autowired
 	OrderService orderService;
 	
-	@GetMapping("/findById/{id}")
-	List<OrderBean> findBypkOrderId (@PathVariable Integer id) {
-
-		return orderService.findBypkOrderId(id);
-	}
-	
-	
-	@GetMapping("/findall")
-	List<OrderBean> findall (){
+	@GetMapping("/find/{id}")
+	Optional<OrderBean> findByPkOrderId(int pkOrderId){
 		
-		return orderService.getAll();
+		return orderService.findByPkOrderId(pkOrderId);
 	}
-
+	
 	@PostMapping("/save")
 	OrderBean save(OrderBean orderBean) {
-		
+	
 		return orderService.save(orderBean);
 	}
+	@GetMapping("/findall")
+	List<OrderBean> findll(){
+		return orderService.findll();
+	}
+
 
 }
