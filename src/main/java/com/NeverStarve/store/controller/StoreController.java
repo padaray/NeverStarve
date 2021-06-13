@@ -1,11 +1,14 @@
 package com.NeverStarve.store.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,14 +34,17 @@ public class StoreController {
 	public String register(@Valid StoreBean storeBean, BindingResult result) {
 		if(comfirmPassword(storeBean)) {
 			result.rejectValue("兩次密碼不一致", "確認密碼失敗");
-			return "store/register";
 		}
 		
 		if(result.hasErrors()) {
-			return "register";
+			List<FieldError> fieldErrors = result.getFieldErrors();
+			for(FieldError error : fieldErrors) {
+				System.out.println(error.getField() + ":" + error.getDefaultMessage() + ":" + error.getCode());
+			}
+			return "store/register";
 		}
 		storeService.save(storeBean);
-		return "login";
+		return "store/login";
 	}
 	
 	//登入頁面頁面

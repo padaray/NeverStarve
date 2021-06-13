@@ -21,7 +21,7 @@
 	<div class="container text-center" style="max-width: 700px">
 		<h3 class="page-header">會員註冊</h3>
 		<div class="jumbotron">
-			<form action="@{/register}" method="post" th:object="${storeBean}">
+			<form th:action="@{/store/register}" method="post" th:object="${storeBean}">
 				<div class="form-group">
 					<label for="storeAccountId">帳號:</label> 
 					<input type="text" name="storeAccount" id="storeAccountId" class="form-controller" th:field="*{storeAccount}">
@@ -32,7 +32,11 @@
 				</div>
 				<div class="form-group">
 					<label for="storeCheckPasswordId">確認密碼:</label> 
-					<input type="text" name="storeCheckPassword" id="storeCheckPassword" class="form-controller" th:field="*{storeCheckPassword}">
+					<input type="text" name="storeCheckPasswordId" id="storeCheckPassword" class="form-controller" th:field="*{storeCheckPassword}">
+				</div>
+				<div class="form-group">
+					<label for="storeNameId">店家名稱:</label> 
+					<input type="text" name="storeName" id="storeNameId" class="form-controller" th:field="*{storeName}">
 				</div>
 				<div class="form-group">
 					<label for="storeAddressId">地址:</label> 
