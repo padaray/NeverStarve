@@ -31,9 +31,7 @@ import com.NeverStarve.member.service.MemberService;
 @SessionAttributes({ "pageNo", "products_DPP" })
 @RequestMapping("/Member")
 public class MemberPageController {
-	@Autowired
-	ServletContext context;
-
+	
 	@Autowired
 	MemberService memberService;
 
@@ -47,7 +45,7 @@ public class MemberPageController {
 			
 		}		
 		Map<Integer, MemberBean> memberMap = memberService.getPageMembers(pageNo);
-		tobase64(memberMap);
+//		tobase64(memberMap);
 		model.addAttribute("pagecounts",memberService.getTotalcount()); //取得取回來的總筆數
 		model.addAttribute("counts",memberService.getRecordCounts()); //取得資料庫共有幾筆
 		model.addAttribute("pageNo", String.valueOf(pageNo));
@@ -67,107 +65,51 @@ public class MemberPageController {
 
 		return "backstage/MemberPagListBoot";
 	}
-		
-	
+
 	@GetMapping("/PageCityMember")
 	public @ResponseBody Map<Integer, MemberBean> PageCityMember(Model model, HttpServletRequest request, HttpServletResponse response,RedirectAttributes ra,
 			@RequestParam(value = "pageNo", required = false) Integer pageNo,@RequestParam(value = "city", required = false)String city) {
 
 		if (pageNo == null) {
 			pageNo = 1;
-		}
-		Map<Integer, MemberBean> memberMap;
-		if(city != null) {
-			memberMap = memberService.findByAddressContaining(pageNo, city);			
-			tobase64(memberMap);
-			model.addAttribute("products_DPP", memberMap);
-			model.addAttribute("counts",memberService.getTotalcount());
-			String flush = city+"會員";
-			model.addAttribute("SearchResult",flush);
-		}else {	
-			memberMap = memberService.getPageMembers(pageNo);
-			tobase64(memberMap);
-			model.addAttribute("products_DPP", memberMap);
-			model.addAttribute("counts",memberService.getRecordCounts());
-			model.addAttribute("SearchResult","所有會員");
-			
-
-		}
-		model.addAttribute("pageNo", String.valueOf(pageNo));
-		model.addAttribute("totalPages", memberService.getTotalPages());	// 將讀到的一頁資料放入request物件內，成為它的屬性物件
-		return memberMap;
+		} 
+		return  memberService.getMemberData(pageNo, city);	
 	}
 	
 	
 	
+//	
+//	@GetMapping("/PageCityMember")
+//	public @ResponseBody Map<Integer, MemberBean> PageCityMember(Model model, HttpServletRequest request, HttpServletResponse response,RedirectAttributes ra,
+//			@RequestParam(value = "pageNo", required = false) Integer pageNo,@RequestParam(value = "city", required = false)String city) {
+//
+//		if (pageNo == null) {
+//			pageNo = 1;
+//		}
+//		Map<Integer, MemberBean> memberMap;
+//		if(city != null) {
+//			memberMap = memberService.findByAddressContaining(pageNo, city);			
+//			tobase64(memberMap);
+//			model.addAttribute("products_DPP", memberMap);
+//			model.addAttribute("counts",memberService.getTotalcount());
+//			String flush = city+"會員";
+//			model.addAttribute("SearchResult",flush);
+//		}else {	
+//			memberMap = memberService.getPageMembers(pageNo);
+//			tobase64(memberMap);
+//			model.addAttribute("products_DPP", memberMap);
+//			model.addAttribute("counts",memberService.getRecordCounts());
+//			model.addAttribute("SearchResult","所有會員");
+//			
+//
+//		}
+//		model.addAttribute("pageNo", String.valueOf(pageNo));
+//		model.addAttribute("totalPages", memberService.getTotalPages());	// 將讀到的一頁資料放入request物件內，成為它的屬性物件
+//		return memberMap;
+//	}
+//	
+//	
+//	
 	
 	
-	
-	
-	
-	
-	private byte[] toByteArrayJSON(String filepath) {
-		byte[] b = null;
-		String realPath = context.getRealPath(filepath);
-		try {
-			File file = new File(realPath);
-			long size = file.length();
-			b = new byte[(int) size];
-			InputStream fis = context.getResourceAsStream(filepath);
-			fis.read(b);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return b;
 	}
-	
-	private Map<Integer, MemberBean> tobase64(Map<Integer, MemberBean> memberMap ) {
-		String filePath = "/images/NoImage.jpg";
-		StringBuffer sb = new StringBuffer();
-		byte[] media = null;
-		for (Entry<Integer, MemberBean> m : memberMap.entrySet()) {
-			sb.setLength(0);
-			String filename = m.getValue().getFileName();
-			Blob coverImage = m.getValue().getCoverImage();
-			if (filename != null && coverImage != null) {
-				String mimeType = context.getMimeType(filename);
-
-				try (InputStream is = coverImage.getBinaryStream();
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();) {
-					System.out.println(filename);
-
-					int len = 0;
-					byte[] b = new byte[81920]; // 512的整數倍
-					while ((len = is.read(b)) != -1) {
-						baos.write(b, 0, len);
-					}
-					byte[] ba = baos.toByteArray();
-
-					sb.append("data:" + mimeType + ";base64,");
-					Base64.Encoder be = Base64.getEncoder();
-					sb.append(new String(be.encode(ba)));
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-
-//				System.out.println(sb.toString());
-				m.getValue().setBas64(sb.toString());
-
-			} else {
-				media = toByteArrayJSON(filePath);
-
-				String mimeType = context.getMimeType(filePath);
-				sb.append("data:" + mimeType + ";base64,");
-				Base64.Encoder be = Base64.getEncoder();
-				sb.append(new String(be.encode(media)));
-
-				System.out.println(sb.toString());
-				m.getValue().setBas64(sb.toString());
-			}		
-		}
-		return memberMap;
-	}
-
-}

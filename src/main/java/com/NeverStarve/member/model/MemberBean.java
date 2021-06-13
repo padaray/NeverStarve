@@ -2,7 +2,7 @@ package com.NeverStarve.member.model;
 
 import java.io.Serializable;
 import java.sql.Blob;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,7 +45,8 @@ String address;
 String email;
 String mobilePhone;
 String userType;
-Timestamp registerTime;
+LocalDate registerTime;
+//Timestamp registerTime;
 Date longTime;
 @JsonIgnore
 Blob coverImage;
