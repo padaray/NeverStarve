@@ -31,6 +31,8 @@ public class OrderBean implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkOrderId;
 	String  storeId;
+	
+	String pkOrderUsedId; //同一個人的訂購必須一樣但是不同人的訂購不可以重複
 	@JsonIgnore
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "FK_MemberBean_Id")

@@ -16,7 +16,7 @@ public interface OrderRepository extends JpaRepository<OrderBean, Integer> {
 //	List<OrderBean> findByOrderDate(Date orderDate );
 //	List<OrderBean> findAllBeans();
 	
-	List<OrderBean> findByStoreBean(StoreBean storebean );
+//	List<OrderBean> findByStoreBean(StoreBean storebean );
 
 	
 	
