@@ -5,14 +5,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.NeverStarve.orders.model.OrderBean;
 import com.NeverStarve.orders.service.OrderService;
-import com.NeverStarve.store.model.StoreBean;
 
 @RestController
 @RequestMapping("/Order")
@@ -34,7 +32,7 @@ public class RestOrderController {
 	}
 	@GetMapping("/findall")
 	List<OrderBean> findll(){
-		return orderService.findll();
+		return orderService.findAll();
 	}
 
 

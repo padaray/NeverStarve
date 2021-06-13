@@ -21,7 +21,7 @@ public class OrderController {
 	@GetMapping("/getOrderById/{id}")
 	public Optional<OrderBean> getOrderById(@PathVariable int id) {
 
-		return orderservice.getOrderById(id);
+		return orderservice.findByPkOrderId(id);
 	}
 	
 }

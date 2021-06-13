@@ -2,14 +2,13 @@ package com.NeverStarve.member.model;
 
 import java.io.Serializable;
 import java.sql.Blob;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -63,7 +62,8 @@ String email;
 @Pattern(regexp= PHONE_REG , message="請輸入正確手機號碼")
 String mobilePhone;
 String userType;
-Timestamp registerTime;
+LocalDate registerTime;
+//Timestamp registerTime;
 Date longTime;
 @JsonIgnore
 Blob coverImage;
