@@ -2,22 +2,17 @@ package com.NeverStarve.orders.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.NeverStarve.member.model.MemberBean;
-import com.NeverStarve.store.model.StoreBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -47,11 +42,6 @@ public class OrderBean implements Serializable {
 	String product_name;
 	String quantity ; 
 	
-<<<<<<< HEAD
-	String totalCost;
-  
-    Date  orderDate;
 
-=======
->>>>>>> 78d41aa24f7f285c5a851d46fe5d3cde45d50768
+
 }

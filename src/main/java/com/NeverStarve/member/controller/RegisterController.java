@@ -1,6 +1,6 @@
 package com.NeverStarve.member.controller;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import javax.validation.Valid;
 
@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.service.MemberService;
@@ -59,7 +58,7 @@ public class RegisterController {
 			return"member/register";
 		}
 		
-		Timestamp registerTime = new Timestamp(System.currentTimeMillis());
+		LocalDate registerTime =LocalDate.now();		 
 		memberBean.setRegisterTime(registerTime);
 		memberBean.setUserType("1");
 		memberService.save(memberBean);

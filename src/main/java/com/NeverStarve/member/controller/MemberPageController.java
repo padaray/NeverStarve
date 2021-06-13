@@ -1,16 +1,7 @@
 package com.NeverStarve.member.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
-import java.util.Base64;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
