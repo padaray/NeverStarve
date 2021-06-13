@@ -54,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberBean updateMember(MemberBean bean) {
+		
 		return memberDao.save(bean);
 	}
 
@@ -163,7 +164,7 @@ public class MemberServiceImpl implements MemberService {
 	public long getTotalcount() {
 		return totalcount;
 	}
-
+  
 	public void setTotalcount(long totalcount) {
 		this.totalcount = totalcount;
 	}
@@ -233,7 +234,5 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
-
-	
 
 }
