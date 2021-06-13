@@ -21,27 +21,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "ORDERS")
+@Table(name ="ORDERList")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderBean implements Serializable {
+public class OrderListBean implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
-
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Integer pkOrderId; 				//訂單ID
-	String storeId; 				//商家ID
+	Integer pkOrderListId; 		//商品ID
+	String product_name; 		//商品名稱
+	String quantity ;			//商品數量
 	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_MemberBean_Id")
-	private MemberBean memberBean; 	//建立與會員的關聯
-	String shipping_address;		//購買者的地址
-	String order_note;				//訂單備註
-	Double totalCost;				//整個訂單的總價
-	LocalDate orderDate;			//購買日期
-	Integer trading;				// 交易成功的判斷
-
-	// 訂單編號 日期 總價 訂單狀態 付款狀態
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "FK_OrderBean_Id")
+	private OrderBean orderBean; //取得訂單的Bean
+	Double productPrice; 		//單價
+	Double onetotalCost; 		//單項總價
+	LocalDate  buyDate;			//購買日期
+	
+	
+	
+	//商品名稱 商品ID 購買數量 單價 單項總價 購買日期
 
 }
