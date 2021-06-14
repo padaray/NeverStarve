@@ -29,5 +29,10 @@ public class StoreServiceImpl implements StoreService {
 		return storeRepository.findById(id);
 	}
 
+	@Override
+	public List<StoreBean> findAll() {
+		return storeRepository.findAll();
+	}
+
 
 }

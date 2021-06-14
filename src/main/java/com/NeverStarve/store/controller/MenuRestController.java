@@ -3,16 +3,17 @@ package com.NeverStarve.store.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.service.MenuService;
 
-@RestController
+@Controller
 @RequestMapping("/MenuRest")
 public class MenuRestController {
 
@@ -28,10 +29,19 @@ public class MenuRestController {
 		return menuService.save(menuBean);
 	}
 	
+//	@GetMapping("/getMenuByStoreId/{id}")
+//	public List<MenuBean> getMenuByStroeId(@PathVariable Integer id,Model model){
+//		List<MenuBean> MenuByStorId = menuService.getMenuByStroeId(id);
+//		model.addAttribute("menu",MenuByStorId);
+//	return menuService.getMenuByStroeId(id);
+//	}
+//	
 	@GetMapping("/getMenuByStoreId/{id}")
-	public List<MenuBean> getMenuByStroeId(@PathVariable Integer id){
-		
-	return menuService.getMenuByStroeId(id);
+	public String getMenuByStroeId(@PathVariable Integer id,Model model){
+		List<MenuBean> MenuByStorId = menuService.getMenuByStroeId(id);
+		model.addAttribute("menu",MenuByStorId);
+		return "store/testGetMbsi";
 	}
+	
 	
 }
