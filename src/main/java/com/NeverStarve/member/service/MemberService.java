@@ -16,6 +16,8 @@ public interface MemberService {
 	MemberBean updateMember(MemberBean bean);
 
 	MemberBean queryMember(String id);
+	
+	MemberBean loginMember(String email, String password);
 
 	void deleteMemberByPrimaryKey(int id);
 
@@ -44,5 +46,5 @@ public interface MemberService {
 
 	long getTotalcount();
 
-
+	
 }

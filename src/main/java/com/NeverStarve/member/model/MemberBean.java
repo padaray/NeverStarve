@@ -54,14 +54,22 @@ String name;
 String password;
 @Transient
 String checkPassword;
-@NotBlank
+@NotBlank(message = "地址不得空白")
 String address;
+@Transient
+@NotBlank(message = "請選擇縣市地區")
+String memberCity;
+@Transient
 @NotBlank
-@Email
+String memberTown;
+@NotBlank
+@Email(message = "必須是形式完整的電子郵件")
 String email;
 @Pattern(regexp= PHONE_REG , message="請輸入正確手機號碼")
 String mobilePhone;
+
 String userType;
+
 LocalDate registerTime;
 //Timestamp registerTime;
 Date longTime;

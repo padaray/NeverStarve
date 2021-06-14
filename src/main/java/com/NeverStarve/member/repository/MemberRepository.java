@@ -25,6 +25,9 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	
 	Page<MemberBean> findByRegisterTimeBetweenAndAddressContaining(Pageable pageable,LocalDate start,LocalDate end,String address);
 	
+	MemberBean findByEmailAndPassword(String email, String password);
+	
+	
 //	List<MemberBean> findByRegisterTimeBetween(Timestamp start,Timestamp end);
 //	
 //	List<MemberBean> findByRegisterTimeBetweenAndAddressContaining(Timestamp start,Timestamp end,String address);
