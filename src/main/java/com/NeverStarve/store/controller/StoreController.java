@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
@@ -32,10 +33,18 @@ public class StoreController {
 	//註冊表單輸入
 	@PostMapping("/register")
 	public String register(@Valid StoreBean storeBean, BindingResult result) {
+		
+		storeBean.setStoreAddress(storeBean.getStoreCity() + storeBean.getStoreTown() + storeBean.getStoreAddress());
+		
+		//確認帳號是否存在
+		if (storeService.accountExist(storeBean.getStoreAccount())) {
+			result.rejectValue("storeAccount", "", "帳號申請重複");
+		}
+		//確認兩次密碼輸入一樣
 		if(comfirmPassword(storeBean)) {
 			result.rejectValue("兩次密碼不一致", "確認密碼失敗");
 		}
-		
+		//確認validator有沒有抱錯
 		if(result.hasErrors()) {
 			List<FieldError> fieldErrors = result.getFieldErrors();
 			for(FieldError error : fieldErrors) {

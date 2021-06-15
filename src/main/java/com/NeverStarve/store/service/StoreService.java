@@ -10,4 +10,5 @@ public interface StoreService {
 	
 	Optional<StoreBean> findoneById(int id);
 
+	boolean accountExist(String storeAccount);
 }
