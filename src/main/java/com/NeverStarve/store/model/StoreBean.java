@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.data.annotation.Transient;
@@ -37,20 +38,26 @@ public class StoreBean {
 	String storeName;
 	@NotBlank
 	String storeAccount;
-	@Pattern(regexp = "^.*(?=.{8,})(?=.*\\d)(?=.*[a-zA-Z]).*$", message="至少8碼的英數字")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message="請輸入至少8個字包含一個英文及數字")
 	String storePassword;
 	@Transient
 	String storeCheckPassword;
+	@Transient
+	@NotBlank
+	String storeCity;
+	@Transient
+	@NotBlank
+	String storeTown;
 	@NotBlank
 	String storeAddress;
-	@Pattern(regexp = "^[0-9]{7,10}*$", message="只能填入數字")
+	@Pattern(regexp = "^[0-9]{7,12}$", message="只能填入數字")
 	String storePhone;
 	
 	@JsonIgnore
 	Blob storeImage;
 	@NotBlank
 	String storeType;
-	@Pattern(regexp = "^[0-9]*$", message="只能填入數字")
+	@NotNull
 	Integer seatNumber;
 	
 	@JsonIgnore

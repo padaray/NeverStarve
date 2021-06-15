@@ -27,6 +27,9 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	
 	Page<MemberBean> findByRegisterTimeBetweenAndAddressContaining(Pageable pageable, LocalDate start, LocalDate end, String address); //搜尋時間內註冊 和 限定城市會員 (有分頁)
 	
+	MemberBean findByEmailAndPassword(String email, String password);
+	
+	
 //	List<MemberBean> findByRegisterTimeBetween(Timestamp start,Timestamp end);
 //	
 //	List<MemberBean> findByRegisterTimeBetweenAndAddressContaining(Timestamp start,Timestamp end,String address);

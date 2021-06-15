@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.repository.StoreRepository;
 import com.NeverStarve.store.service.StoreService;
@@ -28,6 +29,23 @@ public class StoreServiceImpl implements StoreService {
 	public Optional<StoreBean> findoneById(int id) {
 		return storeRepository.findById(id);
 	}
+	
+	@Override
+	public boolean accountExist(String storeAccount) {
+		boolean exist = false;
+		List<StoreBean> beans = storeRepository.findByStoreAccount(storeAccount);
+		if (beans.size() > 0) {
+			exist = true;
+		}
+		return exist;
+	}
 
-
+	@Override
+	public List<StoreBean> findAll() {
+		return storeRepository.findAll();
+	}
+	
+	public StoreBean findByStoreAccountAndStorePassword(String storeAccount, String storePassword) {
+		return storeRepository.findByStoreAccountAndStorePassword(storeAccount, storePassword);
+	}
 }

@@ -18,23 +18,14 @@
 <title>店家登入</title>
 </head>
 <body>
-	<div class="container text-center" style="max-width: 700px">
-		<h3 class="page-header">店家登入</h3>
-			<div class="jumbotron">
-			<form th:action="@{/store/login}" method="post" th:object="${storeBean}">
-			<div class="form-group">
-				<label for="storeAccountId">帳號:</label>
-				<input type="text" name="storeAccount" id="storeAccountId" class="form-controller" th:field="*{storeAccount}">
-			</div>
-			<div class="form-group">
-				<label for="storePasswordId">密碼:</label>
-				<input type="text" name="storePassword" id="storePasswordId" class="form-controller" th:field="*{storePassword}">
-			</div>
-			<p>
-				<button type="submit" class="btn btn-primary text-center">送出</button>
-			</p>
-			</form>
-			</div>
+	<div class="container text-center">
+		<div class="jumbotron">
+			<h1 th:text="${session.userStore.storeName}"></h1>
+			<a href="#"><button>修改菜單</button></a>
+			<a href="#"><button>查看訂單</button></a>
+			<a href="#"><button>查看報表</button></a>
+		</div>
+		<a href="#" class="btn btn-danger" th:href="@{/logout}">登出</a>
 	</div>
 </body>
 </html>
