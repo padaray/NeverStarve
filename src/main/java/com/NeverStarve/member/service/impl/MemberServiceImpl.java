@@ -6,12 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import javax.servlet.ServletContext;
 
@@ -98,8 +99,10 @@ public class MemberServiceImpl implements MemberService {
 		setTotalcount(beans.getTotalElements());
 		List<MemberBean> list = beans.getContent();
 		for (MemberBean bean : list) {
+			bean.setTotalcount(beans.getTotalElements());
 			map.put(bean.getPkMemberId(), bean);
 		}
+	
 		return tobase64(map);
 	}
 
@@ -127,33 +130,89 @@ public class MemberServiceImpl implements MemberService {
 
 	}
 
-	// 搜尋註冊時間內的會員
+	// 搜尋註冊時間內的會員(無分頁)
 	@Override
 	public List<MemberBean> findByRegisterTimeBetween(String start, String end) {
+		LocalDate begin = LocalDate.parse(start);
+		LocalDate dateEnd = LocalDate.parse(end);
+		return	memberDao.findByRegisterTimeBetween(begin, dateEnd);
 		
-//		memberDao.findByRegisterTimeBetween(start, end);
-		return null;
 	}
+	
+	// 搜尋註冊時間內的會員(分頁)
+	@Override
+	public Map<Integer, MemberBean> findByRegisterTimeBetween(int pageNo, String start, String end) {
+		Map<Integer, MemberBean> map = new LinkedHashMap<>();
+		System.out.println("找時間");
+		LocalDate begin = LocalDate.parse(start);
+		LocalDate dateEnd = LocalDate.parse(end);
+		Page<MemberBean> beans = memberDao.findByRegisterTimeBetween(PageRequest.of(pageNo - 1, recordsPerPage), begin, dateEnd);
+		List<MemberBean> list = beans.getContent();
+		for (MemberBean bean : list) {
+			bean.setTotalcount(beans.getTotalElements());
+			map.put(bean.getPkMemberId(), bean);
+		}
+		return tobase64(map);
+	}
+	// 限定城市找尋時間內註冊的會員
+	@Override
+	public Map<Integer, MemberBean> findCityandRegisterTime(int pageNo, String start, String end, String address) {
+		Map<Integer, MemberBean> map = new LinkedHashMap<>();
+		System.out.println("找時間市區");
+		LocalDate begin = LocalDate.parse(start);
+		LocalDate dateEnd = LocalDate.parse(end);
+		Page<MemberBean> beans = memberDao.findByRegisterTimeBetweenAndAddressContaining(PageRequest.of(pageNo - 1, recordsPerPage), begin, dateEnd, address);
+		List<MemberBean> list = beans.getContent();
+		for (MemberBean bean : list) {
+			bean.setTotalcount(beans.getTotalElements());
+			map.put(bean.getPkMemberId(), bean);
+		}
+		return tobase64(map);
+	}
+	
+//	@Override
+//	public Map<Integer, MemberBean> getMemberData(int pageNo, String adderss) {
+//		Map<Integer, MemberBean> data = new LinkedHashMap<>();
+//
+//		if (adderss.isEmpty() ) {
+//			data = getPageMembers(pageNo);
+//		}
+//		data = findByAddressContaining(pageNo, adderss);
+//		return data;
+//	}
+	
 	
 	@Override
-	public Map<Integer, MemberBean> getMemberData(int pageNo, String adderss) {
+	public Map<Integer, MemberBean> getMemberData(int pageNo, String adderss, String start, String end) {
 		Map<Integer, MemberBean> data = new LinkedHashMap<>();
+			
+			
+			if (adderss.isEmpty() && start.isEmpty() ) {   			//	if(沒參數) {搜尋全部} 
+				data = getPageMembers(pageNo);
+				System.out.println("無條件");
+			}else if (!adderss.isEmpty() && start.isEmpty()) {    	//		else if(有city 無日期){ 搜尋城市} 
+				System.out.println("城市");
+				data = findByAddressContaining(pageNo, adderss);
+			}else if (adderss.isEmpty() && !start.isEmpty()) {		//		else if(有日期 無city) {搜尋時間內}		
+				data = findByRegisterTimeBetween(pageNo, start, end);
+			}else {													//		else: 有日期 有city     {搜尋地區and時間內}
+				data = findCityandRegisterTime(pageNo, start, end, adderss);
+			}
+			
+			return data;
 
-		if (adderss.isEmpty()) {
-			data = getPageMembers(pageNo);
-		}
-		data = findByAddressContaining(pageNo, adderss);
-		return data;
+
+
+
 	}
-	
 
 	@Override
 	public Map<Integer, MemberBean> findByAddressContaining(int pageNo,String adderss){
+		System.out.println("找地區");
 		Map<Integer, MemberBean> map = new LinkedHashMap<>();	
-		Page<MemberBean> beans 	=memberDao.findByAddressContaining(PageRequest.of(pageNo - 1, recordsPerPage), adderss);
+		Page<MemberBean> beans 	= memberDao.findByAddressContaining(PageRequest.of(pageNo - 1, recordsPerPage), adderss);
 		List<MemberBean> list = beans.getContent();
 		setTotalcount(beans.getTotalElements());
-		beans.getTotalElements();
 		for (MemberBean bean : list) {
 			bean.setTotalcount(beans.getTotalElements());
 			map.put(bean.getPkMemberId(), bean);
@@ -168,6 +227,8 @@ public class MemberServiceImpl implements MemberService {
 	public void setTotalcount(long totalcount) {
 		this.totalcount = totalcount;
 	}
+	
+	
 	
 	private byte[] toByteArrayJSON(String filepath) {
 		byte[] b = null;
@@ -239,6 +300,9 @@ public class MemberServiceImpl implements MemberService {
 		
 		return memberDao.findByEmailAndPassword(email, password);
 	}
+
+
+	
 
 
 
