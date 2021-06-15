@@ -233,6 +233,13 @@ public class MemberServiceImpl implements MemberService {
 		return memberMap;
 	}
 
+	
+	@Override
+	public MemberBean loginMember(String email, String password) {
+		
+		return memberDao.findByEmailAndPassword(email, password);
+	}
+
 
 
 }

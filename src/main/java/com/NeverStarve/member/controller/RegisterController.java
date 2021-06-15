@@ -2,6 +2,7 @@ package com.NeverStarve.member.controller;
 
 import java.time.LocalDate;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.service.MemberService;
@@ -29,7 +31,18 @@ public class RegisterController {
 		return "member/login";
 	}
 	
-	
+	@PostMapping("/login")
+	public String loginPost(@RequestParam String email,	@RequestParam String password,HttpSession session) {
+		MemberBean member =  memberService.loginMember(email, password);
+		if(member != null) {
+			session.setAttribute("member", member);
+			return "redirect:/";
+		}else {
+			
+		}
+		
+		return "member/login";
+	}
 	
 	
 	@GetMapping("/register")
@@ -42,9 +55,9 @@ public class RegisterController {
 	
 	
 	@PostMapping("/register")
-	public String registerPost(@Valid MemberBean memberBean ,BindingResult result ,Model model) {
+	public String registerPost(@Valid MemberBean memberBean,BindingResult result ) {
 		
-//		 檢查 memberId是否重複
+//		 檢查 memberId是否重複  
 		if (memberService.emailExists(memberBean.getEmail())) {
 			result.rejectValue("email", "", "信箱已存在，請重新輸入");
 		}
@@ -58,7 +71,8 @@ public class RegisterController {
 			return"member/register";
 		}
 		
-		LocalDate registerTime =LocalDate.now();		 
+		LocalDate registerTime =LocalDate.now();	
+		memberBean.setAddress(memberBean.getMemberCity()+memberBean.getMemberTown()+memberBean.getAddress());
 		memberBean.setRegisterTime(registerTime);
 		memberBean.setUserType("1");
 		memberService.save(memberBean);
@@ -76,6 +90,13 @@ public class RegisterController {
 		return false;
 	}
 	
+	@PostMapping("logout")
+	public String logot(HttpSession session) {
+		
+		session.removeAttribute("member");
+		
+		return "member/login";
+	}
 	
 	
 }

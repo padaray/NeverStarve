@@ -39,4 +39,11 @@ public class StoreServiceImpl implements StoreService {
 		}
 		return exist;
 	}
+
+	@Override
+	public List<StoreBean> findAll() {
+		return storeRepository.findAll();
+	}
+
+
 }

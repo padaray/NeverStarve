@@ -1,4 +1,4 @@
-package com.NeverStarve.member.repository;
+package com.NeverStarve.booking.repository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,7 +11,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.NeverStarve.member.model.MemberBean;
 
-public interface MemberRepository extends JpaRepository<MemberBean, Integer>,JpaSpecificationExecutor<MemberBean>,PagingAndSortingRepository<MemberBean, Integer> {
+public interface BookingRepository extends JpaRepository<MemberBean, Integer>,
+										   JpaSpecificationExecutor<MemberBean>,
+										   PagingAndSortingRepository<MemberBean, Integer> {
 	
 	List<MemberBean> findByAddressContaining(String address);
 	
@@ -24,9 +26,6 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	List<MemberBean> findByRegisterTimeBetweenAndAddressContaining(LocalDate start,LocalDate end,String address);
 	
 	Page<MemberBean> findByRegisterTimeBetweenAndAddressContaining(Pageable pageable,LocalDate start,LocalDate end,String address);
-	
-	MemberBean findByEmailAndPassword(String email, String password);
-	
 	
 //	List<MemberBean> findByRegisterTimeBetween(Timestamp start,Timestamp end);
 //	
