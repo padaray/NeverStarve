@@ -13,5 +13,7 @@ public interface StoreService {
 	
 	List<StoreBean> findAll();
 	
-
+	boolean accountExist(String storeAccount);
+	
+	StoreBean findByStoreAccountAndStorePassword(String storeAccount, String storePassword);
 }

@@ -42,6 +42,12 @@ public class StoreBean {
 	String storePassword;
 	@Transient
 	String storeCheckPassword;
+	@Transient
+	@NotBlank
+	String storeCity;
+	@Transient
+	@NotBlank
+	String storeTown;
 	@NotBlank
 	String storeAddress;
 	@Pattern(regexp = "^[0-9]{7,12}$", message="只能填入數字")
