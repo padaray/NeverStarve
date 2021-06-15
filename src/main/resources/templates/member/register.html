@@ -15,9 +15,12 @@
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!-- <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script th:src="@{/js/jquery.twzipcode.min.js}"></script>
+
 <style type="text/css">
 		  *{
-            padding: 0%;
+            padding: 0;
             margin: 0;
         }
 
@@ -82,6 +85,8 @@
         a:active {
 	    color: orange; /*點擊的颜色*/
         }
+        
+        p
 
 </style>
 
@@ -131,7 +136,10 @@
 
 				<div class="form-group">
 					<label for="addressId">地址</label>
-					<input type="text" name="address" id="addressId" class="form-control"  th:field="*{address}">
+					<div id="twzipcode">
+					</div>
+					<input type="text" name="address" id="addressId" class="form-control"  >
+					<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('memberCity')}" th:errors="*{memberCity}" style="margin-bottom: 0"></p>
 					<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
 				</div>
 				
@@ -162,10 +170,16 @@
 	</div>
 
 
-
-
-
-
+<script>
+$("#twzipcode").twzipcode({
+// countySel: "臺北市", // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+// districtSel: "大安區", // 地區預設值
+zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
+css: ["city form-control", "town form-control"], // 自訂 "城市"、"地區" class 名稱
+countyName: "memberCity", // 自訂城市 select 標籤的 name 值
+districtName: "memberTown" // 自訂地區 select 標籤的 name 值
+});
+</script>
 
 
 
