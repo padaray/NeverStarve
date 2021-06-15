@@ -2,6 +2,7 @@ package com.NeverStarve.store.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +60,28 @@ public class StoreController {
 	//登入頁面頁面
 	@GetMapping("/login")
 	public String loginPage() {
-		return "";
+		return "store/login";
 	}
+	
+	//登入帳號
+	@PostMapping("/login")
+	public String login(@RequestParam String storeAccount,
+						@RequestParam String storePassword,
+						HttpSession session) {
+		StoreBean storeBean = storeService.findByStoreAccountAndStorePassword(storeAccount, storePassword);
+		if(storeBean != null) {
+			session.setAttribute("storeUser", storeBean);
+			return "storeIndex";
+		}
+		return "store/login";
+	}
+	
+	//登出帳號
+		@GetMapping("/logout")
+		public String logout(HttpSession session) {
+			session.removeAttribute("storeUser");
+			return "store/login";
+		}
 	
 	//確認密碼是否依樣
 	public boolean comfirmPassword(StoreBean storeBean) {

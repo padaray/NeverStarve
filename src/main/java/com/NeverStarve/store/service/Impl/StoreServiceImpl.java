@@ -44,6 +44,8 @@ public class StoreServiceImpl implements StoreService {
 	public List<StoreBean> findAll() {
 		return storeRepository.findAll();
 	}
-
-
+	
+	public StoreBean findByStoreAccountAndStorePassword(String storeAccount, String storePassword) {
+		return storeRepository.findByStoreAccountAndStorePassword(storeAccount, storePassword);
+	}
 }
