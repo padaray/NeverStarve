@@ -46,8 +46,8 @@ public class RestfulController {
 	}
 
 	@GetMapping("/findByRegisterTimeBetween/{begin}/{end}")
-	public List<MemberBean> findByRegisterTimeBetween(@PathVariable String begin, @PathVariable String end) {
-		return memberservice.findByRegisterTimeBetween(begin, end);
+	public List<MemberBean> findByRegisterTimeBetween(@PathVariable String start, @PathVariable String end) {
+		return memberservice.findByRegisterTimeBetween(start, end);
 	}
 
 	@GetMapping("/findByAddressLike/{city}")

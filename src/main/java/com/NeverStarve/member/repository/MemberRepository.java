@@ -13,17 +13,19 @@ import com.NeverStarve.member.model.MemberBean;
 
 public interface MemberRepository extends JpaRepository<MemberBean, Integer>,JpaSpecificationExecutor<MemberBean>,PagingAndSortingRepository<MemberBean, Integer> {
 	
-	List<MemberBean> findByAddressContaining(String address);
+	List<MemberBean> findByAddressContaining(String address); 					//限定城市尋找會員 (無分頁)
 	
-	List<MemberBean> findByEmail(String email);
+	List<MemberBean> findByEmail(String email);									//驗證帳號有無重複 依照Email找尋會員						
 	
-	Page<MemberBean> findByAddressContaining(Pageable pageable,String adderss);
+	List<MemberBean> findByRegisterTimeBetween(LocalDate start, LocalDate end);	//時間內註冊的所有會員 (無分頁)
+	
+	List<MemberBean> findByRegisterTimeBetweenAndAddressContaining(LocalDate start, LocalDate end, String address); //搜尋時間內註冊 和 限定城市會員 (無分頁)
 
-	List<MemberBean> findByRegisterTimeBetween(LocalDate start,LocalDate end);
+	Page<MemberBean> findByAddressContaining(Pageable pageable, String adderss); 					//搜尋地區會員 (有分頁)
 	
-	List<MemberBean> findByRegisterTimeBetweenAndAddressContaining(LocalDate start,LocalDate end,String address);
+	Page<MemberBean> findByRegisterTimeBetween(Pageable pageable, LocalDate start, LocalDate end); 	//搜尋時間內註冊會員 (有分頁)
 	
-	Page<MemberBean> findByRegisterTimeBetweenAndAddressContaining(Pageable pageable,LocalDate start,LocalDate end,String address);
+	Page<MemberBean> findByRegisterTimeBetweenAndAddressContaining(Pageable pageable, LocalDate start, LocalDate end, String address); //搜尋時間內註冊 和 限定城市會員 (有分頁)
 	
 //	List<MemberBean> findByRegisterTimeBetween(Timestamp start,Timestamp end);
 //	

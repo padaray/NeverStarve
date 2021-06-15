@@ -32,11 +32,9 @@ public class MemberPageController {
 			,@RequestParam(value = "city", required = false)String city) {
 
 		if (pageNo == null) {
-			pageNo = 1;
-			
+			pageNo = 1;			
 		}		
 		Map<Integer, MemberBean> memberMap = memberService.getPageMembers(pageNo);
-//		tobase64(memberMap);
 		model.addAttribute("pagecounts",memberService.getTotalcount()); //取得取回來的總筆數
 		model.addAttribute("counts",memberService.getRecordCounts()); //取得資料庫共有幾筆
 		model.addAttribute("pageNo", String.valueOf(pageNo));
@@ -44,32 +42,21 @@ public class MemberPageController {
 		// 將讀到的一頁資料放入request物件內，成為它的屬性物件
 		model.addAttribute("products_DPP", memberMap);
 		model.addAttribute("SearchResult","所有會員");
-		// 使用Cookie來儲存目前讀取的網頁編號，Cookie的名稱為memberId + "pageNo"
-		// -----------------------
-//		Cookie pnCookie = new Cookie(memberId + "pageNo", String.valueOf(pageNo));
-		// 設定Cookie的存活期為30天
-//		pnCookie.setMaxAge(30 * 24 * 60 * 60);
-		// 設定Cookie的路徑為 Context Path
-//		pnCookie.setPath(request.getContextPath());
-		// 將Cookie加入回應物件內
-//		response.addCookie(pnCookie);
-
 		return "backstage/MemberPagListBoot";
 	}
 
 	@GetMapping("/PageCityMember")
-	public @ResponseBody Map<Integer, MemberBean> PageCityMember(Model model, HttpServletRequest request, HttpServletResponse response,RedirectAttributes ra,
-			@RequestParam(value = "pageNo", required = false) Integer pageNo,@RequestParam(value = "city", required = false)String city) {
+	public @ResponseBody Map<Integer, MemberBean> PageCityMember(HttpServletRequest request, HttpServletResponse response,RedirectAttributes ra,
+		@RequestParam(value = "pageNo", required = false) Integer pageNo, @RequestParam(value = "city", required = false)String city,
+		@RequestParam(value = "start", required = false) String start, @RequestParam(value = "end", required = false) String end){
+	
 
 		if (pageNo == null) {
 			pageNo = 1;
 		} 
-		return  memberService.getMemberData(pageNo, city);	
-	}
+		return  memberService.getMemberData(pageNo, city , start, end);	
+	}	
 	
-	
-	
-//	
 //	@GetMapping("/PageCityMember")
 //	public @ResponseBody Map<Integer, MemberBean> PageCityMember(Model model, HttpServletRequest request, HttpServletResponse response,RedirectAttributes ra,
 //			@RequestParam(value = "pageNo", required = false) Integer pageNo,@RequestParam(value = "city", required = false)String city) {
@@ -97,10 +84,5 @@ public class MemberPageController {
 //		model.addAttribute("pageNo", String.valueOf(pageNo));
 //		model.addAttribute("totalPages", memberService.getTotalPages());	// 將讀到的一頁資料放入request物件內，成為它的屬性物件
 //		return memberMap;
-//	}
-//	
-//	
-//	
-	
-	
+//	}		
 	}
