@@ -20,13 +20,13 @@ import com.NeverStarve.member.service.MemberService;
 
 @Controller
 @SessionAttributes({ "pageNo", "products_DPP" })
-@RequestMapping("/Member")
+@RequestMapping("/Backstage/Member")
 public class MemberPageController {
 	
 	@Autowired
 	MemberService memberService;
 
-	@GetMapping("/DisplayPageProducts")
+	@GetMapping("/ShowMember")
 	public String displayPageProducts(Model model, HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "pageNo", required = false) Integer pageNo
 			,@RequestParam(value = "city", required = false)String city) {

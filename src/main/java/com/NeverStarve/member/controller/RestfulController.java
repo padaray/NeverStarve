@@ -27,12 +27,11 @@ public class RestfulController {
 		return memberservice.getMamberById(id);
 	}
 
-	@PostMapping("/save")
+	@PostMapping("/save")   //更新可以用
 	public String save(@RequestBody MemberBean bean) {
 		memberservice.save(bean);
-
-		return "redirect:/getAllMembers";
-
+		
+		return "redirect:/getAllMembers"; //導向頁面要重新導向
 	}
 
 	@GetMapping("/getAllMembers")

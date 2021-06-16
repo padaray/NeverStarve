@@ -303,9 +303,13 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.findByEmailAndPassword(email,password);
 	}
 
+	@Override
+	public long getCityCount(String address) {
+		return memberDao.countByAddressContaining(address);
+	} 
+
 
 	
-
 
 
 }

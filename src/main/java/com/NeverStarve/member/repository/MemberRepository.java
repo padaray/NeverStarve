@@ -30,6 +30,8 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	
 	MemberBean findByEmailAndPassword(String email,String password);
 	
+	Long countByAddressContaining(String address); 
+	
 	
 //	List<MemberBean> findByRegisterTimeBetween(Timestamp start,Timestamp end);
 //	
