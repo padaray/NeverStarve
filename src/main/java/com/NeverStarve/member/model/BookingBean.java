@@ -35,8 +35,7 @@ public class BookingBean {
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "FK_Store_Id")
 	private StoreBean storeBean;
-	
-	
+		
 	String memberName;
 	String storeName;
 	Integer bookingNum ;

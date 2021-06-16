@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
@@ -21,7 +21,7 @@
 	<div class="container text-center" style="max-width: 700px">
 		<h3 class="page-header">店家登入</h3>
 			<div class="jumbotron">
-			<form action="#" method="post" th:object="${storeBean}">
+			<form th:action="@{/store/login}" method="post" th:object="${storeBean}">
 			<div class="form-group">
 				<label for="storeAccountId">帳號:</label>
 				<input type="text" name="storeAccount" id="storeAccountId" class="form-controller" th:field="*{storeAccount}">
