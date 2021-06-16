@@ -47,5 +47,8 @@ public interface MemberService {
 	void setRecordsPerPage(int recordsPerPage);
 
 	long getTotalcount();
+	
+	long getCityCount(String address);
+
 
 }
