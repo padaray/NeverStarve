@@ -9,32 +9,71 @@
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <title>這是購物車</title>
 <style type="text/css">
+	.food_shopcar{
+		border-top:1px solid #d9d9d9;
+		background:rgba(255,255,255,9);
+		height:50px;
+		line-height:50px;
+		width:94%;
+		padding:0 3%;
+	}
+	.food_shopcar .car {
+    padding-left: 36px;
+    background: url(../images/shopcar.png) no-repeat left 45%;
+    background-size: auto 60%;
+	}
+
+	.fl {
+    float: left;
+	}
+	
+	.food_shopcar .btn {
+    margin: 8px 0;
+	}
+	.fr {
+    float: right;
+	}
 </style>
 <script>
 	$(function() {
+		
 		$(".add").click(function() {
-			var t = $("#text_box");
+// 		   設定一個變數t去尋找數量	
+			var t = $(this).prev();
 			t.val(parseInt(t.val()) + 1)
-			setTotal();
+			setOneTotal($(this).parent());
+			setAllTotal();
 		})
 		$(".min").click(function() {
-			var t = $("#text_box");
+			var t = $(this).next();
 			t.val(parseInt(t.val()) - 1)
 			if (parseInt(t.val()) < 0) {
 				t.val(0);
 			}
-			setTotal();
+			setOneTotal($(this).parent());
+			setAllTotal();
 		})
 
-		function setTotal(){
+		function setOneTotal(object){
 			var s=0;
 			
-			console.log(s);
-			s+=parseInt($("#text_box").val())*parseFloat($("#price").text());
-			$("#total").html(s.toFixed(1));
+			s+=parseInt(object.children().eq(1).val())*parseFloat(object.prev().text());
+			object.next().children().eq(0).html(s.toFixed(1));
 			
 			}
-			setTotal();
+		
+		function setAllTotal () {
+			
+			var a=0;
+			var total = $(".onetotal");
+			var totallength =$("#tab").find(".onetotal").length;
+			for(i=0; i<totallength ; i++){
+			 a += parseInt(total.eq(i).text())
+				 
+			}
+				$("#alltotal").text(a)
+			
+		}
 })
 </script>
 </head>
@@ -43,12 +82,14 @@
 	<table id="tab" style="border: 5px; border-color: black;">
 		<thead>
 			<tr>
-				<th width="300">商品</th>
-				<th width="300">商品信息</th>
+				<th width="150">編號</th>
+				<th width="150">商品</th>
+				<th width="150">商品信息</th>
 				<th width="150">單價</th>
 				<th width="200">數量</th>
-				<th width="200">總金額</th>
-				<th width="80">操作</th>
+				<th width="200">單價總金額</th>
+<!-- 				<th width="80">操作</th> -->
+
 			</tr>
 
 
@@ -59,31 +100,28 @@
 			<td>
 			</td>
 
-				<td>
-				<div style="padding-left: 60px;">
-						颜色分类：
-						<div></div>
-						尺码：
-						<div></div>
-					</div>
-				</td>
-
-				<td><span  id="price" class="price">1</span></td>
+				<tr th:each="menu,iterStat : ${menu}">
+					<td th:text="${iterStat.count}"></td>
+					<td th:text="${menu.dishName}"></td>
+					<td th:text="${menu.dishIntroduction}"></td>
+					<td  id="price" class="price" th:text="${menu.dishPrice}"></td>	
 				<td>
 				
 				<input class="min" name="" value="-"  type="button"/>
-				<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="1" disabled="disabled"/>
+				<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="0" disabled="disabled"/>
 				<input class="add" name="" type="button" value="+"/>
 				
 				</td>
-				
-				
-				<td><label id="total"></label></td>
-				<td><a>刪除</a></td>
-			</tr>
-		</tbody>
 
+				<td ><label class="onetotal" id="onetotal">0</label>元</td>
+<!-- 				<td><a>刪除</a></td>						 -->
+				</tr>
+
+		</tbody>
 	</table>
-	
+	<section class="fixed_bottom food_shopcar" >
+		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
+ 		<div class="btn orgbtn fr" ><a href="javascript:void(0);" id="save" onclick="javascript:onlineMenu.saveMenu();">選好了</a></div>
+	</section>
 </body>
 </html>

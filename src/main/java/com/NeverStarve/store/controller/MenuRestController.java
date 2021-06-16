@@ -40,7 +40,7 @@ public class MenuRestController {
 	public String getMenuByStroeId(@PathVariable Integer id,Model model){
 		List<MenuBean> MenuByStorId = menuService.getMenuByStroeId(id);
 		model.addAttribute("menu",MenuByStorId);
-		return "store/testGetMbsi";
+		return "test/testcrat";
 	}
 	
 	
