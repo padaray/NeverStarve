@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Backstage</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  <!-- i標籤小圖 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />
+<link rel="shortcut icon"  th:href="@{/favicon.ico}"/>	
+<script  th:src="@{/js/echarts.min.js}"></script>
+<style type="text/css">
+.block{
+	margin:50px ;
+	float: left;
+	width: 400px;
+	height:400px;
+	background-color: lightblue;
+	padding: 5px;
+	
+}
+.center{
+	width:1000px;
+	margin:auto;
+}
+.but1{
+	position: absolute;
+	top:300px;
+	left:100px;
+}
+
+</style>	
+</head>
+<body>
+	<div th:insert="Generic :: Header"></div>
+	<div th:insert="backstage/BackstageHeader :: Header"></div>
+		<a th:href="@{/Backstage/init}"><button class="but1">一鍵新增</button></a>
+	<div class="center">
+		<a th:href="@{/Backstage/Member/ShowMember}"><div class="block" id="member">我是會員區塊</div></a>
+		<div class="block">我是店家區塊</div>
+		<div class="block">我是報表區塊</div>
+    <script type="text/javascript" th:inline="javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('member'), 'dark');
+		
+        var tip =/*[[${tip}]]*/ 
+        console.log(tip);
+        var newtip =/*[[${newtip}]]*/
+        console.log(newtip);
+       	var keeLong=/*[[${keeLong}]]*/
+       	console.log(keeLong);
+        var Kaohsiung =/*[[${Kaohsiung}]]*/
+    	console.log();
+        var Taoyuan =/*[[${Taoyuan}]]*/
+    	console.log();
+        var Taichung =/*[[${Taichung}]]*/
+    	console.log();
+        
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '查詢會員入口'
+            },
+            tooltip: {},
+            legend: {
+                data:['使用人數']
+            },
+            xAxis: {
+                data: ["台北市","新北市","基隆市","桃園市","台中市","高雄市"]
+            },
+            yAxis: {},
+            series: [{
+                name: '使用人數',
+                type: 'bar',
+                data: [tip ,newtip ,keeLong , Taoyuan, Taichung, Kaohsiung]
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+	</div>
+</body>
+</html>

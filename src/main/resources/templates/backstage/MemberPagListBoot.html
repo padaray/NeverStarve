@@ -100,13 +100,18 @@ $(function(){
 	
 	$("#but00").click(function(){
 		var v=$("#city").val()
-		pag=1
 		start=$("#start").val()
 		end=$("#end").val()
+		if((start.length != 0 && end.length == 0 )||(start.length == 0 && end.length != 0)){
+			alert("請設定條件，或是清空日期");
+		}else{
+			
+		pag=1
+		
 		$.ajax({
 			type:"GET",
 			contentType:"application/json",
-			url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+			url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
 			data:{"pageNo":1,"city":v,"start":start,"end":end},  //輸入傳值		
 			dataType:"JSON", 
 			async: true,
@@ -134,17 +139,21 @@ $(function(){
 					
 			}
 			});
+		}
 	});
 	
 	$("#but0").click(function(){
 		v=$("#city").val()
-		pag-=1
 		start=$("#start").val()
 		end=$("#end").val()
+		if((start.length != 0 && end.length == 0 )||(start.length == 0 && end.length != 0)){
+			alert("請設定條件，或是清空日期");
+		}else{
+		pag-=1
 		$.ajax({
 			type:"GET",
 			contentType:"application/json",
-			url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+			url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
 			data:{"pageNo":pag,"city":v,"start":start,"end":end},  //輸入傳值		
 			dataType:"JSON", 
 			async: true,
@@ -173,17 +182,21 @@ $(function(){
 				$("#but1").attr("disabled", false);
 			}
 			});
+		}
 	});
 	
 	$("#but1").click(function(){
 		v=$("#city").val()
 		start=$("#start").val()
 		end=$("#end").val()
-		pag+=1
+		if((start.length != 0 && end.length == 0 )||(start.length == 0 && end.length != 0)){
+			alert("請設定條件，或是清空日期");
+		}else{
+		pag+=1 
 		$.ajax({
 		type:"GET",
 		contentType:"application/json",
-		url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+		url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
 		data:{"pageNo":pag,"city":v,"start":start,"end":end},  //輸入傳值		
 		dataType:"JSON", 
 		async: true,
@@ -209,17 +222,21 @@ $(function(){
 		
 		}
 		});
+		}
 	});
 	
 	$("#but2").click(function(){
 		v=$("#city").val()
 		start=$("#start").val()
 		end=$("#end").val()
+		if((start.length != 0 && end.length == 0 )||(start.length == 0 && end.length != 0)){
+			alert("請設定條件，或是清空日期");
+		}else{
 		pag = tl
 		$.ajax({
 			type:"GET",
 			contentType:"application/json",
-			url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+			url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
 			data:{"pageNo":pag,"city":v,"start":start,"end":end},  //輸入傳值		
 			dataType:"JSON", 
 			async: true,
@@ -246,10 +263,10 @@ $(function(){
 
 				}
 			});
+		}
 	});
 	
 	$("#sele").click(function(){
-		alert($("#start").val())
 		v=$("#city").val()
 		start=$("#start").val()
 		end=$("#end").val()
@@ -259,7 +276,7 @@ $(function(){
 			$.ajax({
 				type:"GET",
 				contentType:"application/json",
-				url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+				url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
 				data:{"pageNo":1,"city":v,"start":start,"end":end},  //輸入傳值		
 				dataType:"JSON", 
 				async: true,
@@ -320,7 +337,7 @@ $(function(){
 			$.ajax({
 				type:"GET",
 				contentType:"application/json",
-				url:"http://localhost:9527/NeverStarve/Member/PageCityMember",
+				url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
 				data:{"pageNo":1,"city":"","start":"","end":""},  //輸入傳值		
 				dataType:"JSON", 
 				async: true,
@@ -433,6 +450,7 @@ $(function(){
 </head>
 <body class="article_type" th:fragment="article_type" th:inline="text" >
 	<div th:insert="Generic :: Header"></div>
+	<div th:insert="backstage/BackstageHeader :: Header"></div>
 	<div>
 		<h1 class="center tit"  id="tit">[[${SearchResult}]]</h1>
 		<h2 id="resl" class="center tit" style="margin-top: 20px">結果共:[[${pagecounts}]]筆</h2>	
@@ -455,7 +473,7 @@ $(function(){
 		</div> 
 		
 		<div style="margin-top: 20px" class="center">	
-			<select name="city" id="city" >			
+			<select name="city" id="city"  class="form-select" style="width: 200px;margin: 10px auto">			
 				<option value="所有" disabled selected >請選擇城市</option>
 				<option value="台北市">台北市</option>
 				<option>基隆市</option>
@@ -483,7 +501,7 @@ $(function(){
 				</thead>
 				<tbody id="tbody">
 					<tr th:each="member,loopStatus: ${products_DPP}">
-						<th valign="middle"><a id="a" th:inline="text" th:href='@{${member.value.pkMemberId}}'>[[${member.value.pkMemberId}]] </a></th>
+						<th valign="middle"><a id="a" th:inline="text" th:href="@{'/Member/'+${member.value.pkMemberId}}">[[${member.value.pkMemberId}]] </a></th>
 						<td valign="middle">[[${member.value.name}]] </td>
 						<td valign="middle">[[${member.value.address}]]</td>
 						<td valign="middle">[[${member.value.email}]] </td>
