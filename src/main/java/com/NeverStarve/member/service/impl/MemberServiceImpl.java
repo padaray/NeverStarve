@@ -15,12 +15,14 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.repository.MemberRepository;
 import com.NeverStarve.member.service.MemberService;
@@ -75,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
 	public MemberBean queryMember(String email) {
 		MemberBean mb = null;
 
-		List<MemberBean> beans = memberDao.findByEmail(email);
+		List<MemberBean> beans = memberDao.findByEmail( email);
 		if (beans.size() > 0) {
 			mb = beans.get(0);
 		}
@@ -298,7 +300,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberBean loginMember(String email, String password) {
 		
-		return memberDao.findByEmailAndPassword(email, password);
+		return memberDao.findByEmailAndPassword(email,password);
 	}
 
 	@Override

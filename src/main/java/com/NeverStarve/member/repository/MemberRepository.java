@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.member.model.MemberBean;
 
 public interface MemberRepository extends JpaRepository<MemberBean, Integer>,JpaSpecificationExecutor<MemberBean>,PagingAndSortingRepository<MemberBean, Integer> {
@@ -27,7 +28,7 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	
 	Page<MemberBean> findByRegisterTimeBetweenAndAddressContaining(Pageable pageable, LocalDate start, LocalDate end, String address); //搜尋時間內註冊 和 限定城市會員 (有分頁)
 	
-	MemberBean findByEmailAndPassword(String email, String password);
+	MemberBean findByEmailAndPassword(String email,String password);
 	
 	Long countByAddressContaining(String address); 
 	
