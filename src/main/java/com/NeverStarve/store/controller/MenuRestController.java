@@ -36,12 +36,12 @@ public class MenuRestController {
 //	return menuService.getMenuByStroeId(id);
 //	}
 //	
-	@GetMapping("/getMenuByStoreId/{id}")
-	public String getMenuByStroeId(@PathVariable Integer id,Model model){
-		List<MenuBean> MenuByStorId = menuService.getMenuByStroeId(id);
-		model.addAttribute("menu",MenuByStorId);
-		return "test/testcrat";
-	}
+//	@GetMapping("/getMenuByStoreId/{id}")
+//	public String getMenuByStroeId(@PathVariable Integer id,Model model){
+//		List<MenuBean> MenuByStorId = menuService.getMenuByStroeId(id);
+//		model.addAttribute("menu",MenuByStorId);
+//		return "test/testcrat";
+//	}
 	
 	
 }
