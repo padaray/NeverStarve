@@ -16,13 +16,13 @@ public interface BookingRepository extends JpaRepository<BookingTableBean, Integ
 										   PagingAndSortingRepository<BookingTableBean, Integer>
 {
 	
-	List<BookingTableBean> findByMemberId(String memberId);
+//	List<BookingTableBean> findByMemberId(String memberId);
 	
-	List<BookingTableBean> findByAddressContaining(String address);
+//	List<BookingTableBean> findByAddressContaining(String address);
 	
-	List<BookingTableBean> findByEmail(String email);
+//	List<BookingTableBean> findByEmail(String email);
 	
-	Page<BookingTableBean> findByAddressContaining(Pageable pageable,String adderss);
+//	Page<BookingTableBean> findByAddressContaining(Pageable pageable,String adderss);
 
 //	List<MemberBean> findByRegisterTimeBetween(LocalDate start,LocalDate end);
 	
