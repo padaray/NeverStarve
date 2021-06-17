@@ -32,6 +32,8 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	
 	Long countByAddressContaining(String address); 
 	
+	MemberBean findCookieByEmail(String email);
+	
 	
 //	List<MemberBean> findByRegisterTimeBetween(Timestamp start,Timestamp end);
 //	
