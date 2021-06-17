@@ -3,19 +3,26 @@ package com.NeverStarve.booking.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "BookingItems")
+//@Entity
+//@Table(name = "BookingItems")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingItemBean {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	Integer seqNo; //序號
 	
 	Integer bookingNo; //預約單號
@@ -25,4 +32,8 @@ public class BookingItemBean {
 	Integer PeopleNum; //預約人數
 	
 	String Description; //店家預約資訊
+	
+	@ManyToOne
+	@JoinColumn(name = "pkBookingNo")
+	BookingTableBean bookingTableBean;
 }
