@@ -1,4 +1,4 @@
-package com.NeverStarve.member.controller;
+package com.NeverStarve.backStage.controller;
 
 import java.util.Map;
 

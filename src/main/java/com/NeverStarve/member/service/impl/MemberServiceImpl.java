@@ -15,14 +15,12 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.repository.MemberRepository;
 import com.NeverStarve.member.service.MemberService;

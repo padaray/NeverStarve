@@ -1,4 +1,4 @@
-package com.NeverStarve.home.controller;
+package com.NeverStarve.backStage.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class Backstage {
 	@GetMapping("/")
 	public String index(Model  model) {	
 		Long keeLong=memberService.getCityCount("基隆市");
-		Long tip=memberService.getCityCount("台北市");
+		Long tip=memberService.getCityCount("臺北市");
 		Long newtip=memberService.getCityCount("新北市");
 		Long Taoyuan=memberService.getCityCount("桃園市");
 		Long Taichung=memberService.getCityCount("台中市");

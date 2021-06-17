@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.member.model.MemberBean;
 
 public interface MemberRepository extends JpaRepository<MemberBean, Integer>,JpaSpecificationExecutor<MemberBean>,PagingAndSortingRepository<MemberBean, Integer> {
@@ -30,7 +29,11 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	
 	MemberBean findByEmailAndPassword(String email,String password);
 	
-	Long countByAddressContaining(String address); 
+	Long countByAddressContaining(String address);    //回傳有幾筆數量
+
+	Long countByEmailContaining(String email);    //回傳有幾筆數量
+	
+	List<MemberBean> findByEmailContaining(String email);	//模糊搜尋會員信箱
 	
 	
 //	List<MemberBean> findByRegisterTimeBetween(Timestamp start,Timestamp end);
