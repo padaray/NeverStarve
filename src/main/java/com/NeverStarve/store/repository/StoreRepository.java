@@ -11,4 +11,6 @@ public interface StoreRepository extends JpaRepository<StoreBean, Integer> {
 	List<StoreBean> findByStoreAccount(String storeAccount);
 	
 	StoreBean  findByStoreAccountAndStorePassword(String storeAccount, String storePassword);
+	
+	StoreBean  findCookieByStoreAccount(String storeAccount);
 }

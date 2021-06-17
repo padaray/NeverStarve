@@ -16,4 +16,6 @@ public interface StoreService {
 	boolean accountExist(String storeAccount);
 	
 	StoreBean findByStoreAccountAndStorePassword(String storeAccount, String storePassword);
+	
+	StoreBean  findCookieByStoreAccount(String storeAccount);
 }

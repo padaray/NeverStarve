@@ -48,4 +48,11 @@ public class StoreServiceImpl implements StoreService {
 	public StoreBean findByStoreAccountAndStorePassword(String storeAccount, String storePassword) {
 		return storeRepository.findByStoreAccountAndStorePassword(storeAccount, storePassword);
 	}
+
+	@Override
+	public StoreBean findCookieByStoreAccount(String storeAccount) {
+		return storeRepository.findCookieByStoreAccount(storeAccount);
+	}
+	
+	
 }
