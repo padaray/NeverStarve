@@ -65,6 +65,5 @@ public class StoreBean {
 	private Set<MenuBean> menus =new LinkedHashSet<>();
 	
 	
-
 	
 }
