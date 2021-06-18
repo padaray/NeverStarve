@@ -1,9 +1,6 @@
 package com.NeverStarve.orders.model;
 
-import java.time.LocalDate;
-import java.util.Set;
-
-import com.NeverStarve.member.model.MemberBean;
+import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShoppingCar {
+public class ShoppingCar implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	Integer productID;       	//產品的ID
 	Double  productOnePrice; 	//產品的單價
