@@ -81,9 +81,38 @@
 <script >
 $(function() {
 	$("#save").click(function(){
-		var	vm = new Vue({
-			el:'#save'
-		})
+// 		var	vm = new Vue({
+// 			el:'#save'
+// 		})
+		//把有數量的東西，用迴圈抓取出來
+		var saveCart = [];
+		//抓取用Th標籤遍歷出來的物件數量
+			var  allProductlength =$("#tab").find(".allProduct").length;
+			for(i=0; i < allProductlength; i++){
+				//宣告一個變數去接所有遍歷出來的物件
+				var allProduct = $(".allProduct");
+				//用物件裡有一個叫.text_box裡面的值來判斷是否有大於0
+				if(allProduct.find(".text_box").eq(i).val()>0){
+					//{}是一個物件
+					saveCart[saveCart.length] = {
+							"productID" :allProduct.find(".dishID").eq(i).text(),    
+							"productOnePrice" : allProduct.find(".price").eq(i).text(),
+							"productQuantity" : allProduct.find(".text_box").eq(i).val() ,
+							"productOneTotal" : allProduct.find(".onetotal").eq(i).text(),};
+					
+				}	
+			}
+			// saveCart[saveCart.length] = 將等號右側的值放入陣列最後一個位置
+			// array的Length會比索引值(Index)大1
+			saveCart[saveCart.length] = $("#alltotal").text();
+			for(j=0; j<saveCart.length-1; j++){
+			console.log("ID = "      + saveCart[j].productID);
+			console.log("Price ="    + saveCart[j].productOnePrice);
+			console.log("Quantity =" + saveCart[j].productQuantity);
+			console.log("OneTotal =" + saveCart[j].productOneTotal);				
+			}
+			//陣列的長度-1會等於陣列的最後一個索引值
+			console.log("AllTotal =" +saveCart[saveCart.length-1]);
 	})
 	
 
@@ -112,17 +141,18 @@ $(function() {
 			<tr>
 			<td>
 			</td>
-
-				<tr th:each="menu,iterStat : ${menu}">
+				
+				<tr class="allProduct" th:each="menu,iterStat : ${menu}">
+					<td class="dishID" style="display: none" th:text="${menu.pkDishId}"></td>
 					<td th:text="${iterStat.count}"></td>
-					<td th:text="${menu.dishName}"></td>
-					<td th:text="${menu.dishIntroduction}"></td>
+					<td class="dishName" th:text="${menu.dishName}"></td>
+					<td class="dishIntroduction" th:text="${menu.dishIntroduction}"></td>
 					<td  id="price" class="price" th:text="${menu.dishPrice}"></td>	
 				<td>
 				
 				<input class="min" name="" value="-"  type="button"/>
 				<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="0" disabled="disabled"/>
-				<input class="add" name="" type="button" value="+"/>
+				<input class="add" name="" value="+" type="button" />
 				
 				</td>
 
@@ -134,7 +164,7 @@ $(function() {
 	</table>
 	<section class="fixed_bottom food_shopcar" >
 		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
- 		<div class="btn orgbtn fr" ><a href="" id="save" >確定好了</a></div>
+ 		<div class="btn orgbtn fr" ><p  id="save" >確定好了</p></div>
 	</section>
 </body>
 </html>
