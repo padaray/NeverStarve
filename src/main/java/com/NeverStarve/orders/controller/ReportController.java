@@ -20,7 +20,7 @@ public class ReportController {
 	}
 	private List<List<Object>> getChartData() { 
 	        return List.of(
-	                List.of("Mushrooms",1),
+	                List.of("滷肉飯",1),
 	                List.of("Onions", 1),
 	                List.of("Olives", 1),
 	                List.of("Zucchini", 1),

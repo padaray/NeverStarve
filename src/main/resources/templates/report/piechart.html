@@ -26,7 +26,7 @@
          data.addColumn('number', 'Slices');
          data.addRows([
              /*[# th:each="row : ${chartData}"]*/
-             [[${row}]],
+             [[${ row }]],
              /*[/]*/
          ]);
 
@@ -46,6 +46,9 @@
    
 <!--Div that will hold the pie chart-->
 <div id="chart_div"></div>  
+
+
+
 
 
 </body>
