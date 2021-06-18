@@ -1,6 +1,6 @@
 package com.NeverStarve.member.controller;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.service.MemberService;
-import com.NeverStarve.store.model.StoreBean;
 
 @Controller
 @RequestMapping("/Member")
@@ -60,6 +59,14 @@ public class LoginController {
 		
 		if(member != null) {
 			model.addAttribute("member" , member);
+//			Date date = null;  //DATE轉字串 轉DATE
+//				SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//				String str = sdf.format(new Date());
+//				 date=sdf.parse(str);
+			member.setLongTime(new Date());
+			member.setMemberCity("1");
+			member.setMemberTown("1");
+			memberService.save(member);
 		}else {
 			// NG, 登入失敗, userid與密碼的組合錯誤，放相關的錯誤訊息到 errorMsgMap 之內
 			result.rejectValue("emailOrPasswordError", "", "帳號或密碼錯誤");
@@ -130,58 +137,7 @@ public class LoginController {
 	}
 	
 	
-	
-	
-	
-	
-//	@GetMapping("/register")
-//	public String register( @CookieValue(value="email", required = false, defaultValue = "")String email ,Model model) {
-//		
-//		//確認登入後不能進入註冊頁面
-//		if(checkCookie(email, model)) {
-//			return "redirect:/" ;
-//		}
-//		
-//		model.addAttribute("memberBean",new MemberBean());
-//		
-//		return "member/register";
-//	}
-	
-	
-//	@PostMapping("/register")
-//	public String registerPost(@Valid MemberBean memberBean,BindingResult result ) {
-//		
-////		 檢查 memberId是否重複  
-//		if (memberService.emailExists(memberBean.getEmail())) {
-//			result.rejectValue("email", "", "信箱已存在，請重新輸入");
-//		}
-//		
-//		if(!confirmPassword(memberBean)) {
-//			result.rejectValue("checkPassword","confirmError" ,"密碼不一致");
-//		}
-//		
-//		if(result.hasErrors()) {
-//			return "member/register";
-//		}
-//		
-//		LocalDate registerTime =LocalDate.now();	
-//		memberBean.setAddress(memberBean.getMemberCity()+memberBean.getMemberTown()+memberBean.getAddress());
-//		memberBean.setRegisterTime(registerTime);
-//		memberBean.setUserType("1");
-//		memberService.save(memberBean);
-//		return "redirect:/Member/login";
-//	}
-	
 
-	
-	
-//	public boolean confirmPassword(MemberBean memberBean) {
-//		
-//		if(memberBean.getPassword().equals(memberBean.getCheckPassword())) {
-//			return true;
-//		}
-//		return false;
-//	}
 	
 	@GetMapping("/logout")
 	public String logout(HttpSession session,HttpServletRequest request ,
