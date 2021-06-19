@@ -34,7 +34,6 @@ public class OrderListBean implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkOrderListId; 		//
 	
-	
 	String product_name; 		//商品名稱
 	String quantity ;			//商品數量
 	@JsonIgnore
