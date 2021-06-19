@@ -72,7 +72,7 @@ String userType;
 
 LocalDate registerTime;
 //Timestamp registerTime;
-Date longTime;
+Date longTime;//登入時間
 @JsonIgnore
 Blob coverImage;
 
