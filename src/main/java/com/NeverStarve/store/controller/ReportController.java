@@ -29,13 +29,13 @@ import com.NeverStarve.store.service.StoreService;
 public class ReportController {
 	@Autowired ReportRepository reportRepository;
 	
-	public class String2LocalDateConverter implements Converter<String, LocalDate> {
-	    @Override
-	    public LocalDate convert(String s) {
-	        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	        return LocalDate.parse(s, fmt);
-	    }
-	}
+//	public class String2LocalDateConverter implements Converter<String, LocalDate> {
+//	    @Override
+//	    public LocalDate convert(String s) {
+//	        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//	        return LocalDate.parse(s, fmt);
+//	    }
+//	}
 	
 //	private static final Random RANDOM = new Random(System.currentTimeMillis());
 	@GetMapping("/testpiechart")
@@ -63,7 +63,7 @@ public class ReportController {
 	@PostMapping("/quanty")
 	@ResponseBody
 	public List<OrderListBean> getQuanty(Integer pkStoreId,HttpSession session,LocalDate date){
-//		Integer pkStoreId=getpkStoreId(session);
+//		Integer pkStoreId=getpkStoreId(session); //addquantity
 		return reportRepository.getquantity(pkStoreId,date);
 	}
 	
