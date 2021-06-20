@@ -61,16 +61,16 @@ public class ReportController {
 		return mystorebean.getPkStoreId();
 	}
 	
-	@PostMapping("/quanty")
-	@ResponseBody
-	public List<OrderListBean> getQuanty(Integer pkStoreId,HttpSession session,LocalDate date){
-		
-		Integer pkStoreId=getpkStoreId(session); //addquantity
-		
-		mystorebean.get
-		
-		return reportRepository.getquantity(pkStoreId,date);
-		
-	}
+//	@PostMapping("/quanty")
+//	@ResponseBody
+//	public List<OrderListBean> getQuanty(Integer pkStoreId,HttpSession session,LocalDate date){
+//		
+//		Integer pkStoreId=getpkStoreId(session); //addquantity
+//		
+//		mystorebean.get
+//		
+//		return reportRepository.getquantity(pkStoreId,date);
+//		
+//	}
 	
 }
