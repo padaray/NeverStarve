@@ -22,7 +22,14 @@ public  interface ReportRepository extends JpaRepository<OrderListBean, Integer>
    		+ "where ORDERS.storeId=?1 and ORDERS.orderDate = ?2 ", nativeQuery = true)
    @Transactional
    List<OrderListBean> getquantity(Integer pkStoreId ,LocalDate date );
-  
+//	我要從日期還有店家ID，這是我的條件
+//	findbystoreId
+	
+//   先從orderbean那張表拿到orderdate，
+//   
+//   商品數量和商品名稱 orderlist
+//   
+   
 //	StoreBean  findByStoreAccountAndStorePassword(         ,       );
 //	findbyshopidanddate
 

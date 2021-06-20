@@ -65,6 +65,7 @@ public class StoreBean {
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<MenuBean> menus =new LinkedHashSet<>();
 	
-	
+	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
+	private Set<OrderBean > order =new LinkedHashSet<>();
 	
 }

@@ -56,6 +56,7 @@ public class ReportController {
 	}
 	
 	private Integer getpkStoreId(HttpSession session) {
+		
 		StoreBean mystorebean=(StoreBean) session.getAttribute("storeUser");
 		return mystorebean.getPkStoreId();
 	}
@@ -63,8 +64,14 @@ public class ReportController {
 	@PostMapping("/quanty")
 	@ResponseBody
 	public List<OrderListBean> getQuanty(Integer pkStoreId,HttpSession session,LocalDate date){
-//		Integer pkStoreId=getpkStoreId(session); //addquantity
+		
+		
+		Integer pkStoreId=getpkStoreId(session); //addquantity
+		
+		mystorebean.get
+		
 		return reportRepository.getquantity(pkStoreId,date);
+		
 	}
 	
 }
