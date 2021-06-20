@@ -37,7 +37,10 @@ public class OrderController {
 	//讓前端送回JSON給後端可以用@RequestBody
 	@ResponseBody
 	public void saveShoppingCar(@RequestBody List <ShoppingCar> car) {
-		System.out.println(car);
+		
+		for(int i=0; i<car.size(); i++) {
+			System.out.println(car.get(i));	
+		}
 		this.car = car;
 	}
 	
