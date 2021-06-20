@@ -34,7 +34,7 @@ public class OrderBean implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkOrderId; // 訂單ID
-	String storeId; // 商家ID
+	String storeId;    // 商家ID
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_MemberBean_Id")

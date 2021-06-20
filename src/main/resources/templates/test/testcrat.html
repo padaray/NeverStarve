@@ -2,9 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <title>這是購物車</title>
@@ -81,9 +79,7 @@
 <script >
 $(function() {
 	$("#save").click(function(){
-// 		var	vm = new Vue({
-// 			el:'#save'
-// 		})
+		var b1 =false;
 		//把有數量的東西，用迴圈抓取出來
 		var saveCart = [];
 		//抓取用Th標籤遍歷出來的物件數量
@@ -94,17 +90,20 @@ $(function() {
 				//用物件裡有一個叫.text_box裡面的值來判斷是否有大於0
 				if(allProduct.find(".text_box").eq(i).val()>0){
 					//{}是一個物件
+					
 					saveCart[saveCart.length] = {
 							"productID" :allProduct.find(".dishID").eq(i).text(),    
 							"productOnePrice" : allProduct.find(".price").eq(i).text(),
 							"productQuantity" : allProduct.find(".text_box").eq(i).val() ,
-							"productOneTotal" : allProduct.find(".onetotal").eq(i).text(),};
-					
+							"productOneTotal" : allProduct.find(".onetotal").eq(i).text(),
+							"productAllTotal" :  $("#alltotal").text()
+							};
+						b1 = true;
 				}	
 			}
 			// saveCart[saveCart.length] = 將等號右側的值放入陣列最後一個位置
 			// array的Length會比索引值(Index)大1
-			saveCart[saveCart.length] = $("#alltotal").text();
+// 			saveCart[saveCart.length] = $("#alltotal").text();
 			for(j=0; j<saveCart.length-1; j++){
 			console.log("ID = "      + saveCart[j].productID);
 			console.log("Price ="    + saveCart[j].productOnePrice);
@@ -112,10 +111,26 @@ $(function() {
 			console.log("OneTotal =" + saveCart[j].productOneTotal);				
 			}
 			//陣列的長度-1會等於陣列的最後一個索引值
-			console.log("AllTotal =" +saveCart[saveCart.length-1]);
-	})
-	
+// 			console.log("AllTotal =" +saveCart[saveCart.length-1]);
+			if(b1){
+			$.ajax({ type: "POST", 
+					url: "http://localhost:9527/NeverStarve/Order/saveShoppingCar",
+					data: JSON.stringify(saveCart), dataType: "json", 
+					contentType: "application/json"
+			
+			});		
+			var b2 = confirm('前往結帳畫面!!!，若要繼續點餐請按取消按鈕謝謝~');
 
+			if (b2) {
+			    alert('你按了確定按鈕');
+			} else {
+			    alert('你按了取消按鈕');
+			}
+			}
+	})
+
+	
+	
 })
 </script>
 </head>
@@ -164,7 +179,7 @@ $(function() {
 	</table>
 	<section class="fixed_bottom food_shopcar" >
 		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
- 		<div class="btn orgbtn fr" ><p  id="save" >確定好了</p></div>
+ 		<div class="btn orgbtn fr" ><p  id="save" >存入購物車</p></div>
 	</section>
 </body>
 </html>

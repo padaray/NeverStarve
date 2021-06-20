@@ -12,10 +12,8 @@ import lombok.NoArgsConstructor;
 public class ShoppingCar implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	Integer StoreID;			//找店家的ID
 	Integer productID;       	//產品的ID
-	Double  productOnePrice; 	//產品的單價
 	Integer productQuantity;	//產品的數量
-	Double  productOneTotal;    //產品的單價總額
-	Double  productAllTotal;	//訂單的總金額
 
 }
