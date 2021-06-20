@@ -65,7 +65,6 @@ public class ReportController {
 	@ResponseBody
 	public List<OrderListBean> getQuanty(Integer pkStoreId,HttpSession session,LocalDate date){
 		
-		
 		Integer pkStoreId=getpkStoreId(session); //addquantity
 		
 		mystorebean.get

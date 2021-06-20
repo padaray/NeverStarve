@@ -1,5 +1,8 @@
 package com.NeverStarve.store.service;
 
-public interface reportService {
+public interface ReportService {
 
+	
+	
+	
 }
