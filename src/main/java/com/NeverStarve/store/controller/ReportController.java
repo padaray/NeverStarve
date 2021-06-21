@@ -20,6 +20,7 @@ import com.NeverStarve.orders.model.OrderBean;
 import com.NeverStarve.orders.model.OrderListBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.repository.ReportRepository;
+import com.NeverStarve.store.service.ReportService;
 import com.NeverStarve.store.service.StoreService;
 
 
@@ -28,7 +29,7 @@ import com.NeverStarve.store.service.StoreService;
 @RequestMapping("/Report")
 public class ReportController {
 	@Autowired ReportRepository reportRepository;
-	
+	@Autowired ReportService reportService;
 //	public class String2LocalDateConverter implements Converter<String, LocalDate> {
 //	    @Override
 //	    public LocalDate convert(String s) {
@@ -55,22 +56,19 @@ public class ReportController {
 	        );
 	}
 	
-	private Integer getpkStoreId(HttpSession session) {
+	private Integer getpkStoreId(HttpSession session) {//回傳對應的店家ID，從session拿到
 		
 		StoreBean mystorebean=(StoreBean) session.getAttribute("storeUser");
+//		mystorebean.getOrder()
 		return mystorebean.getPkStoreId();
 	}
 	
-//	@PostMapping("/quanty")
-//	@ResponseBody
-//	public List<OrderListBean> getQuanty(Integer pkStoreId,HttpSession session,LocalDate date){
-//		
-//		Integer pkStoreId=getpkStoreId(session); //addquantity
-//		
-//		mystorebean.get
-//		
-//		return reportRepository.getquantity(pkStoreId,date);
-//		
-//	}
+	@PostMapping("/quanty")
+	@ResponseBody
+	public List<OrderListBean> getOrderListAllQuanty(HttpSession session){
+//		Integer pkStoreId1=getpkStoreId(session); //addquantity
+		return reportService.getOrderListAll(session);
+		
+	}
 	
 }
