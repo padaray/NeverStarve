@@ -1,35 +1,23 @@
 package com.NeverStarve.store.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-//import java.util.Random;
-
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Converter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.NeverStarve.orders.model.OrderBean;
-import com.NeverStarve.orders.model.OrderListBean;
-import com.NeverStarve.store.model.StoreBean;
-import com.NeverStarve.store.repository.ReportRepository;
 import com.NeverStarve.store.service.ReportService;
-import com.NeverStarve.store.service.StoreService;
+import com.NeverStarve.orders.model.OrderListBean;
 
-
-
+ 
 @Controller
 @RequestMapping("/Report")
 public class ReportController {
-	@Autowired ReportRepository reportRepository;
 	@Autowired ReportService reportService;
+	
 //	public class String2LocalDateConverter implements Converter<String, LocalDate> {
 //	    @Override
 //	    public LocalDate convert(String s) {
@@ -56,14 +44,14 @@ public class ReportController {
 	        );
 	}
 	
-	private Integer getpkStoreId(HttpSession session) {//回傳對應的店家ID，從session拿到
-		
-		StoreBean mystorebean=(StoreBean) session.getAttribute("storeUser");
-//		mystorebean.getOrder()
-		return mystorebean.getPkStoreId();
-	}
+//	private Integer getpkStoreId(HttpSession session) {//回傳對應的店家ID，從session拿到
+//		
+//		StoreBean mystorebean=(StoreBean) session.getAttribute("storeUser");
+////		mystorebean.getOrder()
+//		return mystorebean.getPkStoreId();
+//	}
 	
-	@PostMapping("/quanty")
+	@PostMapping("/allquanty")
 	@ResponseBody
 	public List<OrderListBean> getOrderListAllQuanty(HttpSession session){
 //		Integer pkStoreId1=getpkStoreId(session); //addquantity
