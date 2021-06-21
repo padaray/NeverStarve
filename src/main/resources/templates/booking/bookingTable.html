@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- i標籤小圖 -->
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->
+<link rel="shortcut icon"  th:href="@{/favicon.ico}"/> <!-- 網站小圖 -->
+
+<title>線上訂位</title>
+</head>
+<body>
+	<div th:insert="Generic :: Header"></div>
+	<div class="container" style="max-width: 700px; margin-top: 50px">
+		<h3 class="page-header">線上訂位</h3>
+		<div class="jumbotron text-left">
+			<p>
+				<strong>請選擇用餐日期、時間及人數</strong>
+			</p>
+			<div>
+				<form action="#" th:action="@{/Booking/bookingPost}" method="post">
+					<!-- 				<form action="#" method="post"> -->
+					<div class="form-group">
+						<label for="storeNameId">預約餐廳</label>
+						<!-- 						<input type="text" name="storeName" id="storeNameId" class="form-control"> -->
+						<p id="storeNameId" class="form-control">餐廳名稱</p>
+						<!-- 						<p id="storeNameId" class="form-control">${store.name}</p> -->
+					</div>
+					<div class="form-group">
+						<label for="bookingDateId">用餐日期</label> <input type="text"
+							name="bookingDate" id="bookingDateId" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="bookingTimeId">用餐時間</label> <input type="text"
+							name="bookingTime" id="bookingTimeId" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="bPeopleNumId">用餐人數</label> <input type="text"
+							name="bookingNum" id="bPeopleNumId" class="form-control">
+					</div>
+					<p>
+						<input type="checkbox" name="confirm" th:checked="false">若確認預約資訊無誤，請勾選
+					</p>
+					<p>
+						<button type="submit" class="btn btn-primary" th:disabled="false">立即預約</button>
+					</p>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

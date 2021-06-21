@@ -6,11 +6,13 @@ import com.NeverStarve.booking.model.BookingTableBean;
 
 public interface BookingService {
 
-	void persistBooking(BookingTableBean bookingTableBean);
+	void persistBooking(BookingTableBean btb);
+	
+	BookingTableBean save(BookingTableBean btb);
 	
 	BookingTableBean getBooking(Integer BookingNo);
 	
-	List<BookingTableBean> getAllBooking();
+	List<BookingTableBean> getAllBookings();
 	
-	List<BookingTableBean> getMemberBooking();
+	List<BookingTableBean> getMemberBookings(Integer pkMemberId);
 }

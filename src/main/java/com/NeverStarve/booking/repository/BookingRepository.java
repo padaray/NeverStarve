@@ -15,6 +15,7 @@ public interface BookingRepository extends JpaRepository<BookingTableBean, Integ
 										   JpaSpecificationExecutor<BookingTableBean>,
 										   PagingAndSortingRepository<BookingTableBean, Integer>
 {
+
 	
 //	List<BookingTableBean> findByMemberId(String memberId);
 	
