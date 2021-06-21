@@ -124,11 +124,12 @@ public class RegisterController {
 		}
 		
 		if(result.hasErrors()) {
+			System.out.println("註冊失敗");
 			return "member/register";
 		}
 		
 		LocalDate registerTime =LocalDate.now();	
-		memberBean.setAddress(memberBean.getMemberCity()+memberBean.getMemberTown()+memberBean.getAddress());
+		memberBean.setAddress(memberBean.getMemberCity()+" "+memberBean.getMemberTown()+" "+memberBean.getAddress());
 		memberBean.setRegisterTime(registerTime);
 		memberBean.setUserType("1");
 		memberService.save(memberBean);
