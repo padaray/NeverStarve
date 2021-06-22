@@ -38,15 +38,19 @@
 						<!-- 						<p id="storeNameId" class="form-control">${store.name}</p> -->
 					</div>
 					<div class="form-group">
-						<label for="bookingDateId">用餐日期</label> <input type="text"
-							name="bookingDate" id="bookingDateId" class="form-control">
+						<label for="bookingDateId">用餐日期</label> 
+<!-- 						<input type="text" -->
+<!-- 							name="bookingDate" id="bookingDateId" class="form-control"> -->
+						<input type="text" id="datepicker">
 					</div>
 					<div class="form-group">
-						<label for="bookingTimeId">用餐時間</label> <input type="text"
+						<label for="bookingTimeId">用餐時間</label> 
+						<input type="text"
 							name="bookingTime" id="bookingTimeId" class="form-control">
 					</div>
 					<div class="form-group">
-						<label for="bPeopleNumId">用餐人數</label> <input type="text"
+						<label for="bPeopleNumId">用餐人數</label> 
+						<input type="text"
 							name="bookingNum" id="bPeopleNumId" class="form-control">
 					</div>
 					<p>
@@ -59,5 +63,15 @@
 			</div>
 		</div>
 	</div>
+	
+	<script>
+        $( "#datepicker" ).datepicker({
+          showOn: "button",
+          buttonImage: "images/calendar.jpg",      
+          buttonImageOnly:true ,
+          buttonText: "請選擇日期",
+          dateFormat: "yy-mm-dd"
+        });
+    </script>
 </body>
 </html>
