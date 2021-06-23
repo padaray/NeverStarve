@@ -21,7 +21,8 @@
 	<div class="container text-center">
 		<div class="jumbotron">
 			<h1 th:text="${session.storeUser.storeName}"></h1>
-			<a href="#"><button>修改菜單</button></a>
+			<a href="#" th:href="@{/store/modifyInfo}"><button>修改資料</button></a>
+			<a href="#" th:href="@{/store/menu}"><button>修改菜單</button></a>
 			<a href="#"><button>查看訂單</button></a>
 			<a href="#"><button>查看報表</button></a>
 		</div>

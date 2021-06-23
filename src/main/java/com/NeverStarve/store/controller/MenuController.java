@@ -21,55 +21,32 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.NeverStarve.member.model.LoginBean;
+import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
+import com.NeverStarve.store.service.MenuService;
 import com.NeverStarve.store.service.StoreService;
 
 @Controller
-@SessionAttributes({"storeUser"})
+@SessionAttributes({"menuList"})
 @RequestMapping("/store")
-public class StoreController {
+public class MenuController {
 
+	@Autowired MenuService menuService;
+	
 	@Autowired StoreService storeService;
-	
-	//店家首頁
-	@GetMapping("/storeIndex")
-	public String storeIndex(HttpServletRequest request, Model model) {
-		if(!checkCookie(request, model)) {
-			return "store/login";
-		}
-		return "store/storeIndex";
+	//抓取菜單
+	@GetMapping("/menu")
+	public String getMenu(HttpServletRequest request, Model model) {
+		model.addAttribute("storeUser", new StoreBean());  //初始化model的storeUser
+		checkCookie(request, model);  //用cookie建立model
+		//把抓到的storeId丟給後端抓菜單
+		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
+		List<MenuBean> menuList = menuService.getMenuByStoreBean(storeBean);
+		model.addAttribute("menuList", menuList);
+		return "store/menu";
 	}
 	
-	//修改店家詳細資料頁面
-	@GetMapping("/modifyInfo")
-	public String modifyInfoPage(HttpServletRequest request, Model model) {
-		if(!checkCookie(request, model)) {
-			model.addAttribute("storeUser", new StoreBean());
-		}
-		return "store/modifyInfo";
-		
-	}
-	
-	//修改店家詳細資料頁面
-	@PostMapping("/modifyInfo")
-	public String modifyInfo(StoreBean storeBean, BindingResult result) {
-	//確認兩次密碼輸入一樣
-		if(comfirmPassword(storeBean)) {
-			result.rejectValue("storeCheckPassword","confirmError" ,"密碼不一致");
-		}	
-		storeBean.setPkStoreId(storeBean.getPkStoreId());
-		storeService.save(storeBean);
-		return "redirect:/store/storeIndex";
-	}
-	//確認密碼是否依樣
-	public boolean comfirmPassword(StoreBean storeBean) {
-		if(storeBean.getStorePassword().equals(storeBean.getStoreCheckPassword())){
-			return false;
-		}
-		return true;
-		
-	}
-	
+	@PostMapping("/addDish")
 	
 	//確認有沒有cookie
 	public boolean checkCookie(HttpServletRequest request, Model model){
@@ -85,5 +62,4 @@ public class StoreController {
 		 }
 		 return false;
 	}
-	
 }

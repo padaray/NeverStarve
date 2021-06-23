@@ -18,69 +18,51 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" />
 <script src="/js/jquery.twzipcode.min.js"></script>
-<style>
-/* .zipcode { */
-/*     color: #fff; */
-/* } */
-/* .county { */
-/* 	width: 200px; */
-/* 	display: flex; */
-/* 	justify-content: center; */
-/* } */
-/* .district { */
-/* 	width: 200px; */
-/* 	display: flex; */
-/* } */
-</style>
-<title>店家註冊</title>
+<title>修改資料</title>
 </head>
 <body>
 	<div class="container text-left" style="max-width: 500px">
-		<h3 class="page-header">店家註冊</h3>
+		<h3 class="page-header">資料修改</h3>
 		<div class="jumbotron">
-			<form th:action="@{/store/register}" method="post" th:object="${storeBean}" enctype="multipart/form-data">
+			<form th:action="@{/store/modifyInfo}" method="post" th:object="${storeUser}" enctype="multipart/form-data">
+				<input type="hidden" name="pkStoreId" th:field="*{pkStoreId}">
 				<div class="form-group">
 					<label for="storeAccountId">帳號:</label> 
 					<input type="text" name="storeAccount" id="storeAccountId" class="form-control" th:field="*{storeAccount}">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeAccount')}" th:errors="*{storeAccount}"></p>
 				</div>
 				<div class="form-group">
-					<label for="storePasswordId">密碼:</label> 
+					<label for="storePasswordId">修改密碼:</label> 
 					<input type="text" name="storePassword" id="storePasswordId" class="form-control" th:field="*{storePassword}">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storePassword')}" th:errors="*{storePassword}"></p>
 				</div>
 				<div class="form-group">
 					<label for="storeCheckPasswordId">確認密碼:</label> 
-					<input type="text" name="storeCheckPassword" id="storeCheckPasswordId" class="form-control" th:field="*{storeCheckPassword}">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeCheckPassword')}" th:errors="*{storeCheckPassword}"></p>					
+					<input type="text" name="storeCheckPassword" id="storeCheckPasswordId" class="form-control">
+					<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('storeCheckPassword')}" th:errors="*{storeCheckPassword}"></p>
 				</div>
 				<div class="form-group">
 					<label for="storeNameId">店家名稱:</label> 
 					<input type="text" name="storeName" id="storeNameId" class="form-control" th:field="*{storeName}">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeName')}" th:errors="*{storeName}"></p>
 				</div>
 				<div class="form-group">
 					<label for="storeAddressId">地址:</label>
-					<!-- 外掛的台灣縣市選擇器 -->
-					<div id="twzipcode"></div>
-					<input type="text" name="storeAddress" id="storeAddressId" class="form-control">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeAddress')}" th:errors="*{storeAddress}"></p>
+					<input type="text" name="storeAddress" id="storeAddressId" class="form-control" th:field="*{storeAddress}">
 					
 				</div>
 				<div class="form-group">
 					<label for="storePhoneId">電話:</label> 
 					<input type="text" name="storePhone" id="storePhoneId" class="form-control" th:field="*{storePhone}">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storePhone')}" th:errors="*{storePhone}"></p>
 				</div>
 				<div class="form-group">
 					<label for="storeTypeId">菜色種類:</label> 
 					<input type="text" name="storeType" id="storeTypeId" class="form-control" th:field="*{storeType}">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeType')}" th:errors="*{storeType}"></p>
 				</div>
 				<div class="form-group">
 					<label for="seatNumberId">座位數量:</label> 
 					<input type="text" name="seatNumber" id="seatNumberId" class="form-control" th:field="*{seatNumber}">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('seatNumber')}" th:errors="*{seatNumber}"></p>
+				</div>
+				<div class="form-group">
+					<label for="storeImageId">商家照片:</label> 
+					<input type="file" name="storeImage1" id="storeImageId" class="form-control">
 				</div>
 				<p>
 					<button type="submit" class="btn btn-primary text-center">送出</button>

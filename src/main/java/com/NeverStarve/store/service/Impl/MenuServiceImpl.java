@@ -28,8 +28,8 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public List<MenuBean> getMenuByStroeId(Integer id) {
-		StoreBean storeBean = storeRepository.getById(id);
+	public List<MenuBean> getMenuByStoreBean(StoreBean storeBean) {
+//		StoreBean storeBean = storeRepository.getById(id);
 		return menuRepository.findByStoreBean(storeBean);
 	}
 
