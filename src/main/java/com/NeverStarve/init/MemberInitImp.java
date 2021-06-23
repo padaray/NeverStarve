@@ -44,6 +44,7 @@ public class MemberInitImp implements MemberInitins  {
 		while ((line = br.readLine()) != null) {
 			String[] sa = line.split("\\|");
 			MemberBean bean = new MemberBean();
+			bean.setPersonId(sa[0]);
 			bean.setName(sa[1]);
 			String pswd = sa[2];
 			bean.setPassword(pswd);

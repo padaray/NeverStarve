@@ -3,6 +3,7 @@ package com.NeverStarve.store.service;
 import java.util.List;
 
 import com.NeverStarve.store.model.MenuBean;
+import com.NeverStarve.store.model.StoreBean;
 
 public interface MenuService {
 	
@@ -11,4 +12,6 @@ public interface MenuService {
 	List<MenuBean> getMenuByStroeId(Integer id);
 	
 	MenuBean getMenuById(Integer id);
+
+  List<MenuBean> getMenuByStoreBean(StoreBean storeBean);
 }
