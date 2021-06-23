@@ -9,4 +9,6 @@ public interface MenuService {
 	MenuBean save(MenuBean menuBean);
 	
 	List<MenuBean> getMenuByStroeId(Integer id);
+	
+	MenuBean getMenuById(Integer id);
 }

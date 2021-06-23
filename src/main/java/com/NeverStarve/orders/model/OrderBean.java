@@ -35,10 +35,10 @@ public class OrderBean implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkOrderId; // 訂單ID
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_StoreBean_Id")
 	private StoreBean storeBean; // 建立與會員的關聯
-
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_MemberBean_Id")

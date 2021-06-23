@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.6.0.js"
+	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<title>結帳畫面</title>
+<script type="text/javascript">
+
+	$.ajax({ type: "GET", 
+			url: "[[@{/Order/getShoppingCar}]]",
+			dataType: "json", 
+			contentType: "application/json",
+			 success: function (response) { 
+				 $.each(response, function(index, element){
+					 $('#info').append(
+							'<tr><td  class="p" style="display: none">'+ element.pkDishId + '</td>'+
+        					'<td>'+ element.dishName+'</td>'+
+        					'<td>'+ '價格：'+element.dishPrice+'</td>'+
+          					'<td>'+ '數量：<input  class="min" name="" value="-" type="button"/>'+
+    						'<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="'+element.quantity+'" disabled="disabled"/>'+
+       						'<input class="add" name="" value="+" type="button" /></td>'+
+         					'<td>'+ '單價總額：'+element.dishPrice*element.quantity+'</td>'+
+         					'<td><button class="delete">刪除</button></td></tr>')
+// 					  $('#info').append($('<tr>').append(
+// 							  	$('<td>',
+// 							  	{text: element.pkDishId}),
+// 							  	$('<td>', 
+// 					            {text: element.dishName}),
+// 							  	$('<td>', 
+// 					            {text: '價格：'+element.dishPrice}),
+// 			                    $('<td>', 
+// 			                    {html: '數量：'+
+// 			                    	'<input  class="min" name="" value="-"  type="button"/>'+
+// 			        				'<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="'+element.quantity+'" disabled="disabled"/>'+
+// 				        			'<input class="add" name="" value="+" type="button" />'}),
+// 			                    $('<td>',
+// 			                    {text: '單價總額：'+element.dishPrice*element.quantity}),
+// 			                    $('<td>',
+// 					            {html: '<button class="delete">刪除</button>'}),
+// 			                    ));
+				 }
+			 )}
+			
+		});	
+</script>
+
+<script>
+$(function() {
+$(".min").click(function(){
+	var min = $(this).next().val();
+	if(min == 1){
+		DeleteProduct()
+	}else{
+		min	--;
+	}
+	$(this).next().val(min)
+})
+$(".add").click(function(){
+var add = $(this).prev().val();
+ add ++;
+ $(this).prev().val(add);
+
+})
+$(".delete").click(DeleteProduct)
+function DeleteProduct(){
+	
+	var b2 = confirm ("確定要刪除該筆資料嗎?")
+	if(b2){
+		$(this).parent().parent().remove();
+		var menuID = $(this).parent().parent().find(".p").text()
+		$.ajax({ type: "GET", 
+			url: "[[@{/Order//deleteProduct/}]]"+ menuID
+			
+	});		
+	}
+}
+$("#save").click(function(){
+	
+	
+})
+
+})	
+</script>
+
+</head>
+<body>
+	<div style="text-align: center;">
+		<table id="tablejia1" class="" width="100%" cellpadding="0"
+			cellspacing="0" border="0" style='text-align: center;'>
+			<tr>
+				<td><font size="5" background="#fff" style="padding: 0 0 0 4%;">您的訂單</font></td>
+			</tr>
+		</table>
+
+		<div style="overflow: hidden; height: 42vh; overflow-y: scroll">
+			<table class="table table-striped" width="100%" cellpadding="0"
+				cellspacing="0" border="0">
+				<tbody id="info">
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<section class="fixed_bottom food_shopcar" >
+		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
+ 		<div class="btn orgbtn fr" ><p  id="save" >送出訂單	</p></div>
+	</section>
+</body>
+</html>

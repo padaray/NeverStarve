@@ -42,6 +42,7 @@
 			t.val(parseInt(t.val()) + 1)
 			setOneTotal(object);
 			setAllTotal();
+			$(this).attr("disabled",false);
 		})
 		$(".min").click(function() {
 			var t = $(this).next();
@@ -114,7 +115,8 @@ $(function() {
 // 			console.log("AllTotal =" +saveCart[saveCart.length-1]);
 			if(b1){
 			$.ajax({ type: "POST", 
-					url: "http://localhost:9527/NeverStarve/Order/saveShoppingCar",
+						
+					url: "[[@{/Order/saveShoppingCar}]]",
 					data: JSON.stringify(saveCart), dataType: "json", 
 					contentType: "application/json"
 			
@@ -122,9 +124,11 @@ $(function() {
 			var b2 = confirm('前往結帳畫面!!!，若要繼續點餐請按取消按鈕謝謝~');
 
 			if (b2) {
-			    alert('你按了確定按鈕');
+				
+				window.location ="[[@{/Order/order}]]"
+			    alert('將跳轉到結帳畫面');
 			} else {
-			    alert('你按了取消按鈕');
+			    alert('請繼續選擇您的餐點');
 			}
 			}
 	})
@@ -145,7 +149,6 @@ $(function() {
 				<th width="150">單價</th>
 				<th width="200">數量</th>
 				<th width="200">單價總金額</th>
-<!-- 				<th width="80">操作</th> -->
 
 			</tr>
 
@@ -165,14 +168,13 @@ $(function() {
 					<td  id="price" class="price" th:text="${menu.dishPrice}"></td>	
 				<td>
 				
-				<input class="min" name="" value="-"  type="button"/>
+				<input  class="min" name="" value="-"  type="button"/>
 				<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="0" disabled="disabled"/>
 				<input class="add" name="" value="+" type="button" />
 				
 				</td>
 
-				<td ><label class="onetotal" id="onetotal">0</label>元</td>
-<!-- 				<td><a>刪除</a></td>						 -->
+				<td ><label class="onetotal" id="onetotal">0.0</label>元</td>
 				</tr>
 
 		</tbody>

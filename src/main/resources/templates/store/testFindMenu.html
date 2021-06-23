@@ -30,7 +30,7 @@
 			<tbody>
 				<tr th:each="store,iterStat : ${store}">
 					<td th:text="${iterStat.count}"></td>
-					<td><a th:href="@{'/MenuRest/getMenuByStoreId/' + ${store.pkStoreId}}" th:text="${store.storeName}"></a></td>
+					<td><a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}" th:text="${store.storeName}"></a></td>
 					<td th:text="${store.storeName}"></td>					
 				</tr>
 				
