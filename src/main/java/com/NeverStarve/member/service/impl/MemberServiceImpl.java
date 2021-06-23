@@ -55,7 +55,15 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberBean updateMember(MemberBean bean) {
-		
+		bean.setAddress(bean.getMemberCity()+" "+bean.getMemberTown()+" "+bean.getAddress());
+		MemberBean orinigBean = memberDao.findById(bean.getPkMemberId()).get();
+		if(orinigBean.getFileName()!=null) {			
+		bean.setCoverImage(orinigBean.getCoverImage());
+		bean.setFileName(orinigBean.getFileName());
+		}
+		bean.setLongTime(orinigBean.getLongTime());
+		bean.setRegisterTime(orinigBean.getRegisterTime());
+		bean.setUnpaid_amount(orinigBean.getUnpaid_amount());		
 		return memberDao.save(bean);
 	}
 
@@ -299,6 +307,12 @@ public class MemberServiceImpl implements MemberService {
 	public MemberBean loginMember(String email, String password) {
 		
 		return memberDao.findByEmailAndPassword(email,password);
+	}
+	
+	@Override
+	public MemberBean cookieLogin(String email) {
+		
+		return memberDao.findCookieByEmail(email);
 	}
 
 	@Override

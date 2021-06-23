@@ -268,6 +268,5 @@ public class StoreLoginController {
 //			e.printStackTrace();
 //		}
 //		return b;
-//	}
 	
 }

@@ -130,7 +130,7 @@ $(function(){
 				var url
 				$.each(data, function(index, element){ 
 					$('<tr>').appendTo("#tbody")
-					.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+					.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
 					.append($('<td valign="middle">').text(element.name))
 					.append($('<td valign="middle">').text(element.address))
 					.append($('<td valign="middle">').text(element.email))
@@ -172,7 +172,7 @@ $(function(){
 				var url
 				$.each(data, function(index, element){ 
 					$('<tr>').appendTo("#tbody")
-					.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+					.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
 					.append($('<td valign="middle">').text(element.name))
 					.append($('<td valign="middle">').text(element.address))
 					.append($('<td valign="middle">').text(element.email))
@@ -215,7 +215,7 @@ $(function(){
 			var url
 			$.each(data, function(index, element){ 
 				$('<tr>').appendTo("#tbody")
-				.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+				.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
 				.append($('<td valign="middle">').text(element.name))
 				.append($('<td valign="middle">').text(element.address))
 				.append($('<td valign="middle">').text(element.email))
@@ -253,7 +253,7 @@ $(function(){
 				$("#tbody").empty();
 				$.each(data, function(index, element){ 
 					$('<tr>').appendTo("#tbody")
-					.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+					.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
 					.append($('<td valign="middle">').text(element.name))
 					.append($('<td valign="middle">').text(element.address))
 					.append($('<td valign="middle">').text(element.email))
@@ -297,7 +297,7 @@ $(function(){
 					$.each(data, function(index, element){ 
 						totalcount=element.totalcount					
 						$('<tr>').appendTo("#tbody")
-						.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+						.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
 						.append($('<td valign="middle">').text(element.name))
 						.append($('<td valign="middle">').text(element.address))
 						.append($('<td valign="middle">').text(element.email))
@@ -359,7 +359,7 @@ $(function(){
 					$.each(data, function(index, element){ 
 						totalcount = element.totalcount					
 						$('<tr>').appendTo("#tbody")
-						.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+						.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
 						.append($('<td valign="middle">').text(element.name))
 						.append($('<td valign="middle">').text(element.address))
 						.append($('<td valign="middle">').text(element.email))
@@ -422,7 +422,7 @@ $(function(){
 				$.each(data, function(index, element){ 
 					totalcount = element.totalcount					
 					$('<tr>').appendTo("#tbody")
-					.append("<th valign='middle'><a id='a' th:inline='text' href='/NeverStarve/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
+					.append("<th valign='middle'><a id='a' th:inline='text'  target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
 					.append($('<td valign="middle">').text(element.name))
 					.append($('<td valign="middle">').text(element.address))
 					.append($('<td valign="middle">').text(element.email))
@@ -540,7 +540,7 @@ $(function(){
 				</thead>
 				<tbody id="tbody">
 					<tr th:each="member,loopStatus: ${products_DPP}">
-						<th valign="middle"><a id="a" th:inline="text" th:href="@{'/Member/'+${member.value.pkMemberId}}">[[${member.value.pkMemberId}]] </a></th>
+						<th valign="middle"><a id="a" th:inline="text"  target="_blank" th:href="@{'/Backstage/Member/'+${member.value.pkMemberId}}">[[${member.value.pkMemberId}]] </a></th>
 						<td valign="middle">[[${member.value.name}]] </td>
 						<td valign="middle">[[${member.value.address}]]</td>
 						<td valign="middle">[[${member.value.email}]] </td>

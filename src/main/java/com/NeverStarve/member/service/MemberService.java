@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.member.model.MemberBean;
 
 public interface MemberService {
@@ -51,5 +50,5 @@ public interface MemberService {
 	
 	long getCityCount(String address);
 
-
+	public MemberBean cookieLogin(String email);
 }

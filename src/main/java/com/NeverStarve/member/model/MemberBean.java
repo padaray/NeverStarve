@@ -57,10 +57,10 @@ String checkPassword;
 @NotBlank(message = "地址不得空白")
 String address;
 @Transient
-@NotBlank(message = "請選擇縣市地區")
+//@NotBlank(message = "請選擇縣市地區")
 String memberCity;
 @Transient
-@NotBlank
+//@NotBlank
 String memberTown;
 @NotBlank
 @Email(message = "必須是形式完整的電子郵件")
@@ -72,7 +72,7 @@ String userType;
 
 LocalDate registerTime;
 //Timestamp registerTime;
-Date longTime;
+Date longTime;//登入時間
 @JsonIgnore
 Blob coverImage;
 

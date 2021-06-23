@@ -17,7 +17,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-
 import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -64,7 +63,7 @@ public class StoreBean implements Serializable{
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<MenuBean> menus =new LinkedHashSet<>();
 	
-	
-
+	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
+	private Set<OrderBean> order =new LinkedHashSet<>();
 	
 }

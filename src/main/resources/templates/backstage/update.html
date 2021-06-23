@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http:/www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title>會員資料異動</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script type="text/javascript" src="/NeverStarve/js/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+	crossorigin="anonymous">
+<!-- 首頁樣式 -->
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />
+<!-- 網頁小圖 -->
+<link rel="shortcut icon" th:href="@{/favicon.ico}" />
+<!-- 地區外掛 -->
+<script th:src="@{/js/jquery.twzipcode.min.js}"></script>
+<style type="text/css">
+</style>
+<script  type="text/javascript" th:inline="javascript">
+
+$(function () {
+	var pkid = /*[[${member.pkMemberId}]]*/
+    $('#submitbutton').click(function (e) {
+    	
+    	if(window.confirm("確認修改內容")){
+    		//alert(“確定”);
+    		
+        //Prevent default submission of form
+        e.preventDefault();
+ 
+        //Remove previous errors
+        $('input').next('span').remove();
+ 
+        $.post({
+            url: 'http://localhost:9527/NeverStarve/Backstage/Member/update',
+            data: $('#updateForm').serialize(),
+            success: function (res) {
+                if (res.validated) {
+                    //take your successful action here; you may want to redirect to another page
+                    $('h3').after('<span class="error" style="color: green;" >更新成功</span>')
+                } else {
+                    $.each(res.errorMessages, function (key, value) {
+                        $('input[name=' + key + ']').after('<span class="error" style="color: red;" >' + value + '</span>');
+                    });
+                }
+            }
+        })
+        return true;
+		}else{
+		//alert(“取消”);
+		return false;
+		} 
+        
+        
+    });
+ 
+});
+
+</script>
+<style type="text/css">
+.tit{
+	font-weight: 600;
+}
+</style>
+</head>
+<body th:inline="text">
+	<div th:insert="Generic :: Header"></div>
+	<div th:insert="backstage/BackstageHeader :: Header"></div>
+
+	<div th:inline="text" class="container"
+		style="max-width: 600px; margin-top: 50px;">
+		<div class="tit">
+			<h3 class="page-header" th:text="${member.name}"></h3>
+		</div>
+		<div class="jumbotron text-center">
+			<form id="updateForm" method="post" th:object="${member}" >
+				<input style="display:none" type="text"  th:field="*{pkMemberId}"> 
+				<div class="form-group" style="width: 250px; float:left; align-items: center;">
+					<label for="nameId">用戶姓名</label> <input type="text" name="name"
+						id="nameId" class="form-control" th:field="*{name}">
+					<p class="form-control-static text-danger" 
+						th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+				</div >
+				<div  style="align-items: center;">
+					<label for="userType">會員狀態</label>
+					<select name="userType" id="userType" th:field="*{userType}"  class="form-select" style="width: 200px; margin:auto; align-items: center;">									
+						<option value="-1">停權</option>
+						<option value="0">管理員</option>
+						<option value="1">普通會員</option>					
+						<option value="2">高級會員</option>
+						<option value="3">黃金會員</option>
+						<option value="4">白金會員</option>
+					</select>			
+				</div>
+				
+				<div class="form-group">
+					<label for="email">帳號(E-MAIL)</label> <input type="text" readonly
+						name="email" id="email" class="form-control" th:field="*{email}">
+					<p class="form-control-static text-danger"
+						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+				</div>
+
+				<div class="form-group">
+					<label for="passwordId">密碼</label> <input type="text"
+						name="password" id="passwordId" class="form-control"
+						th:field="*{password}">
+					<p class="form-control-static text-danger"
+						th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+				</div>
+
+
+				<div class="form-group">
+					<label for="personIdId">身分證字號</label> <input type="text"
+						name="personId" id="personIdId" class="form-control"
+						th:field="*{personId}">
+					<p class="form-control-static text-danger"
+						th:if="${#fields.hasErrors('personId')}" th:errors="*{personId}"></p>
+				</div>
+				<div class="form-group">
+					<label for="mobilePhoneId">手機</label> <input type="text"
+						name="mobilePhone" id="mobilePhoneId" class="form-control"
+						th:field="*{mobilePhone}">
+					<p class="form-control-static text-danger"
+						th:if="${#fields.hasErrors('mobilePhone')}"
+						th:errors="*{mobilePhone}"></p>
+				</div>
+
+				<div class="form-group">
+					<label for="addressId">地址</label>
+					<div id="twzipcode"></div>
+					<input type="text" name="address" id="addressId"
+						class="form-control">
+					<p class="form-control-static text-danger"
+						th:if="${#fields.hasErrors('memberCity')}"
+						th:errors="*{memberCity}" style="margin-bottom: 0"></p>
+					<p class="form-control-static text-danger"
+						th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
+				</div>
+
+				<p class="text-center">
+					<button id="submitbutton" type="button" class="btn btn-primary">確認修改</button>
+					<input onclick="window.close();" value="關閉視窗" class="btn btn-primary" type="button">
+				</p>
+			</form>
+		</div>
+		<!-- 		<div th:object="${member}"> <p>Nationality: <span th:text="*{name}">XXXX</span>.</p> </div> -->
+	</div>
+	<script th:inline="javascript">
+		var adders=/*[[${member.address}]]*/
+		first= adders.indexOf(" ") //取第一個空白處索引直
+		end =adders.lastIndexOf(" ") //取第二個 空白處索引直
+		var city =adders.substr(0, first) //城市=第零個位置取到第一個空白處不含空白
+		var town =adders.substring(first+1, end) //區 =第一個空白處+1 不取空白 取到第二個空白 不含空白
+		var add =adders.substr(end+1) //地址等於 第二個空白不含空白 取以後
+		
+		$("#addressId").val(add)
+		
+	
+		$("#twzipcode").twzipcode({
+			countySel: city, // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+			districtSel: town , // 地區預設值
+			zipcodeIntoDistrict : true, // 郵遞區號自動顯示在地區
+			css : [ "city form-select", "town form-control" ], // 自訂 "城市"、"地區" class 名稱
+			countyName : "memberCity", // 自訂城市 select 標籤的 name 值
+			districtName : "memberTown" // 自訂地區 select 標籤的 name 值
+		});
+// 		$(".town").css('display', 'none');	
+		$(".city")
+				.prepend("<option value='0' disabled >請選擇城市</option>");
+		// $(".city option [index= '0'] ").remove(); 
+		$(".city").css({
+			"width" : "200px",
+			"margin" : "0px auto",
+			"float" : "left",
+			"align-items": "center"
+		});
+		$(".town").css({
+			"width" : "200px",
+			"margin" : "10px auto",		
+			"align-items": "center"
+		});
+	</script>
+
+</body>
+</html>
