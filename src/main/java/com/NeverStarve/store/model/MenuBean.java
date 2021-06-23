@@ -48,4 +48,6 @@ public class MenuBean {
 	@Transient
 	Integer quantity;
 	
+	
+	
 }
