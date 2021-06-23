@@ -23,6 +23,12 @@
 <script  type="text/javascript" th:inline="javascript">
 
 $(function () {
+	
+	$("#updateForm").change(function(){
+		 $('#submitbutton').attr('disabled', false);
+	})	
+	
+	
 	var pkid = /*[[${member.pkMemberId}]]*/
     $('#submitbutton').click(function (e) {
     	
@@ -40,10 +46,12 @@ $(function () {
             data: $('#updateForm').serialize(),
             success: function (res) {
                 if (res.validated) {
-                    //take your successful action here; you may want to redirect to another page
-                    $('h3').after('<span class="error" style="color: green;" >更新成功</span>')
+                    //take your successful action here; you may want to redirect to another page         
+                    $("#prompt").html('<span class="error" style="color: green;" >更新成功</span>')
+                    $('#submitbutton').attr('disabled', true);
                 } else {
-                    $.each(res.errorMessages, function (key, value) {
+                	  $("#prompt").html('<span class="error" style="color: red;" >更新失敗</span>')
+                    $.each(res.errorMessages, function (key, value) {                   	
                         $('input[name=' + key + ']').after('<span class="error" style="color: red;" >' + value + '</span>');
                     });
                 }
@@ -74,6 +82,7 @@ $(function () {
 	<div th:inline="text" class="container"
 		style="max-width: 600px; margin-top: 50px;">
 		<div class="tit">
+			<spend id="prompt"></spend>
 			<h3 class="page-header" th:text="${member.name}"></h3>
 		</div>
 		<div class="jumbotron text-center">
@@ -142,7 +151,7 @@ $(function () {
 				</div>
 
 				<p class="text-center">
-					<button id="submitbutton" type="button" class="btn btn-primary">確認修改</button>
+					<button disabled="disabled" id="submitbutton" type="button" class="btn btn-primary">確認修改</button>
 					<input onclick="window.close();" value="關閉視窗" class="btn btn-primary" type="button">
 				</p>
 			</form>
