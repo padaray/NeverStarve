@@ -33,4 +33,9 @@ public class MenuServiceImpl implements MenuService {
 		return menuRepository.findByStoreBean(storeBean);
 	}
 
+	@Override
+	public MenuBean getMenuById(Integer id) {
+		return menuRepository.getById(id);
+	}
+
 }

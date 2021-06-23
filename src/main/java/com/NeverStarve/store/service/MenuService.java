@@ -9,5 +9,9 @@ public interface MenuService {
 	
 	MenuBean save(MenuBean menuBean);
 	
-	List<MenuBean> getMenuByStoreBean(StoreBean storeBean);
+	List<MenuBean> getMenuByStroeId(Integer id);
+	
+	MenuBean getMenuById(Integer id);
+
+  List<MenuBean> getMenuByStoreBean(StoreBean storeBean);
 }
