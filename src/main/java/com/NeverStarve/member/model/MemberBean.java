@@ -83,6 +83,7 @@ Double unpaid_amount;
 long totalcount;
 @Transient
 String bas64;
+
 @Transient
 private MultipartFile memberImage;
 
