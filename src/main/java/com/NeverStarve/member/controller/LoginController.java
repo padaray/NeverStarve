@@ -81,7 +81,7 @@ public class LoginController {
 //		}
 		processCookies(bean, request, response);
 		
-		return "redirect:/";
+		return "redirect:/Member/memberDetail";
 	}
 	
 	
@@ -143,11 +143,9 @@ public class LoginController {
 	public String logout(HttpSession session,HttpServletRequest request ,
 			HttpServletResponse response , Model model, SessionStatus status,
 			@CookieValue(value="email", required = false, defaultValue = "")String email) {
-		
 		if(checkCookie(email, model)) {
 			deleteCookies(request, response);
 		}
-		
 		if(model.getAttribute("member") != null) {
 			
 			status.setComplete();   // 移除@SessionAttributes({"member"}) 標示的屬性物件
@@ -161,7 +159,7 @@ public class LoginController {
 //	@GetMapping("/memberDetail")
 //	public String memberDetail() {
 //		
-//		return" member/memberDetail";
+//		return"member/memberDetail";
 //		
 //	}
 	

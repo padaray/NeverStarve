@@ -5,6 +5,7 @@ import java.util.Map;
 public class MemberResponse {
 	
 	private boolean validated;
+	
 	private Map<String, String> errorMessages;
 	
 	public boolean isValidated() {

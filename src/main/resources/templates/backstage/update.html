@@ -91,8 +91,6 @@ $(function () {
 				<div class="form-group" style="width: 250px; float:left; align-items: center;">
 					<label for="nameId">用戶姓名</label> <input type="text" name="name"
 						id="nameId" class="form-control" th:field="*{name}">
-					<p class="form-control-static text-danger" 
-						th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
 				</div >
 				<div  style="align-items: center;">
 					<label for="userType">會員狀態</label>
@@ -109,16 +107,12 @@ $(function () {
 				<div class="form-group">
 					<label for="email">帳號(E-MAIL)</label> <input type="text" readonly
 						name="email" id="email" class="form-control" th:field="*{email}">
-					<p class="form-control-static text-danger"
-						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
 				</div>
 
 				<div class="form-group">
 					<label for="passwordId">密碼</label> <input type="text"
 						name="password" id="passwordId" class="form-control"
 						th:field="*{password}">
-					<p class="form-control-static text-danger"
-						th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
 				</div>
 
 
@@ -126,16 +120,11 @@ $(function () {
 					<label for="personIdId">身分證字號</label> <input type="text"
 						name="personId" id="personIdId" class="form-control"
 						th:field="*{personId}">
-					<p class="form-control-static text-danger"
-						th:if="${#fields.hasErrors('personId')}" th:errors="*{personId}"></p>
 				</div>
 				<div class="form-group">
 					<label for="mobilePhoneId">手機</label> <input type="text"
 						name="mobilePhone" id="mobilePhoneId" class="form-control"
 						th:field="*{mobilePhone}">
-					<p class="form-control-static text-danger"
-						th:if="${#fields.hasErrors('mobilePhone')}"
-						th:errors="*{mobilePhone}"></p>
 				</div>
 
 				<div class="form-group">
@@ -143,11 +132,6 @@ $(function () {
 					<div id="twzipcode"></div>
 					<input type="text" name="address" id="addressId"
 						class="form-control">
-					<p class="form-control-static text-danger"
-						th:if="${#fields.hasErrors('memberCity')}"
-						th:errors="*{memberCity}" style="margin-bottom: 0"></p>
-					<p class="form-control-static text-danger"
-						th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
 				</div>
 
 				<p class="text-center">
