@@ -53,7 +53,7 @@
 <!-- 						<p id="storeNameId" class="form-control">${store.name}</p> -->
 					</div>
 					<div class="form-group">
-						<label for="bookingDateId">用餐日期</label> 
+						<label for="datepicker">用餐日期</label> 
 <!-- 						<input type="text" -->
 <!-- 							name="bookingDate" id="bookingDateId" class="form-control"> -->
 
@@ -84,17 +84,33 @@
 						<label for="bookingTimeId">用餐時間</label> 
 						<input type="text"
 							name="bookingTime" id="bookingTimeId" class="form-control">
+					<p> </p>
 					</div>
 					<div class="form-group">
 						<label for="bPeopleNumId">用餐人數</label> 
-						<input type="text"
-							name="bookingNum" id="bPeopleNumId" class="form-control">
+<!-- 						<input type="text" -->
+<!-- 							name="bookingNum" id="bPeopleNumId" class="form-control"> -->
+							
+						<select name="bookingNum" id="bPeopleNumId" class="form-control">
+							<option value="1">1</option>
+							<option value="2" selected="selected">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+						</select>
+					<p> </p>
 					</div>
 					<p>
-						<input type="checkbox" name="confirm" th:checked="false">若確認預約資訊無誤，請勾選
+						<input id="confirmSubmitId" type="checkbox" name="confirm" th:checked="false" value="1">
+						<label for="confirmSubmitId">已確認預約資訊無誤</label>
 					</p>
 					<p>
-						<button type="submit" class="btn btn-primary" th:disabled="false">立即預約</button>
+						<button id="submitBookingId" type="submit" class="btn btn-primary" disabled>立即預約</button>
 					</p>
 				</form>
 			</div>
@@ -129,6 +145,10 @@
       });
 	
 	$("#dater button").addClass("btn btn-secondary");
+	
+	$("#confirmSubmitId").click(function(){
+		  $("#submitBookingId").prop("disabled", !$("#confirmSubmitId:checked").length);
+		});
     </script>
 </body>
 </html>
