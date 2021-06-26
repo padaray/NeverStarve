@@ -85,5 +85,6 @@ public class StoreController {
 		 }
 		 return false;
 	}
+	@GetMapping("/findAll")
 	
 }
