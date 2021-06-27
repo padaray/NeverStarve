@@ -11,9 +11,9 @@
 
 <body>
       <div th:insert="Generic :: Header"></div>
+	<div th:if = "${session.member!=null}">
       <div th:if="${session.member.userType=='0'}" th:insert="backstage/BackstageHeader :: Header"></div>
       
-	<div th:if = "${session.member!=null}">
 		<p ><span th:text="用戶姓名+${session.member.name}">用戶姓名</span></p>
 		<p ><span th:text="用戶狀態 +${session.member.userType}">用戶狀態</span></p>
 		<p th:text="註冊時間+${session.member.registerTime}">註冊時間</p>
@@ -24,6 +24,8 @@
 			<span th:case="3">白金會員</span>			 
 		</p>
 	</div>
+	
+	
 			
 
 </body>

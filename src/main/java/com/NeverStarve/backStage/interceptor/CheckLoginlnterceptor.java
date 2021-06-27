@@ -13,6 +13,6 @@ public class CheckLoginlnterceptor implements WebMvcConfigurer {
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(adm).addPathPatterns("/Backstage/**");
+//		registry.addInterceptor(adm).addPathPatterns("/Backstage/**");
 	}
 }
