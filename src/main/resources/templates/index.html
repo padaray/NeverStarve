@@ -11,9 +11,11 @@
 
 <body>
       <div th:insert="Generic :: Header"></div>
-      
 	<div th:if = "${session.member!=null}">
+      <div th:if="${session.member.userType=='0'}" th:insert="backstage/BackstageHeader :: Header"></div>
+      
 		<p ><span th:text="用戶姓名+${session.member.name}">用戶姓名</span></p>
+		<p ><span th:text="用戶狀態 +${session.member.userType}">用戶狀態</span></p>
 		<p th:text="註冊時間+${session.member.registerTime}">註冊時間</p>
 		<p th:switch=${session.member.userType}>
 			<span th:case="0">管理員</span>
@@ -22,7 +24,9 @@
 			<span th:case="3">白金會員</span>			 
 		</p>
 	</div>
-			<a th:if = "${session.member!=null}" class="btn btn-warning" th:href="@{/Member/logout}">登出</a>
+	
+	
+			
 
 </body>
 </html>

@@ -87,6 +87,7 @@ $(function () {
 		</div>
 		<div class="jumbotron text-center">
 			<form id="updateForm" method="post" th:object="${member}" >
+				<input type="hidden" name="_method" value="put">
 				<input style="display:none" type="text"  th:field="*{pkMemberId}"> 
 				<div class="form-group" style="width: 250px; float:left; align-items: center;">
 					<label for="nameId">用戶姓名</label> <input type="text" name="name"
@@ -154,9 +155,9 @@ $(function () {
 		
 	
 		$("#twzipcode").twzipcode({
-			countySel: city, // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
-			districtSel: town , // 地區預設值
 			zipcodeIntoDistrict : true, // 郵遞區號自動顯示在地區
+			countySel: city , // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+			districtSel: town, // 地區預設值
 			css : [ "city form-select", "town form-control" ], // 自訂 "城市"、"地區" class 名稱
 			countyName : "memberCity", // 自訂城市 select 標籤的 name 值
 			districtName : "memberTown" // 自訂地區 select 標籤的 name 值
@@ -176,6 +177,7 @@ $(function () {
 			"margin" : "10px auto",		
 			"align-items": "center"
 		});
+		
 	</script>
 
 </body>

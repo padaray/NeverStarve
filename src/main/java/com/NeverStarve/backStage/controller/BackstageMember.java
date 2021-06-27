@@ -14,7 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,7 +54,7 @@ public class BackstageMember {
 //	
 //	}
 	
-	@PostMapping(value = "/update")
+	@PutMapping(value = "/update")
 	@ResponseBody
 	public MemberResponse updateMember(@ModelAttribute @Valid MemberBean memberBean,
 								BindingResult result,@RequestParam(value = "pkid", required = false) Integer pkid) {

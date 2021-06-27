@@ -80,6 +80,11 @@ public class LoginController {
 //			nextPath = "/";
 //		}
 		processCookies(bean, request, response);
+		String type = member.getUserType();
+		if (type.equals("0")) {
+			return "redirect:/Backstage/";
+		}
+		
 		
 		return "redirect:/Member/memberDetail";
 	}
