@@ -26,6 +26,7 @@
                 </form>
             </div>           
            	<a th:href="@{/Member/login}" type="button" class="btn btn-primary longin" th:if ="${session.member == null}">登入</a>
+           	<a th:if = "${session.member!=null}" class="btn btn-warning" th:href="@{/Member/logout}">登出</a>           
         </div>
 	</header>
 	
