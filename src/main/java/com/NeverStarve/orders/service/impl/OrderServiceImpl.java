@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.NeverStarve.orders.model.OrderBean;
+import com.NeverStarve.orders.model.OrderListBean;
+import com.NeverStarve.orders.repository.OrderListRepository;
 import com.NeverStarve.orders.repository.OrderRepository;
 import com.NeverStarve.orders.service.OrderService;
 import com.NeverStarve.store.model.MenuBean;
@@ -26,9 +28,11 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private MenuRepository 	menuRepository;
 	
+	@Autowired
+	private OrderListRepository orderListRepository;
 
 	@Override
-	public OrderBean save(OrderBean orderBean) {
+	public OrderBean update(OrderBean orderBean) {
 		return orderRepository.save(orderBean);
 	}
 
@@ -58,6 +62,24 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return menuBeans;
 	}
+
+
+
+	@Override
+	public boolean saveOrderBeanAndOrderList(OrderBean orderBean, 
+			List<OrderListBean> orderList) {
+			orderRepository.save(orderBean);
+			for(OrderListBean ordL :orderList) {
+				//跟OrderBean做綁定
+				ordL.setOrderBean(orderBean);
+				orderListRepository.save(ordL);
+			}
+			return false;
+	}
+
+
+
+	
 
  
 
