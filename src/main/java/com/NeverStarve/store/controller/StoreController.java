@@ -86,5 +86,10 @@ public class StoreController {
 		 return false;
 	}
 	@GetMapping("/findAll")
+	public String findAll(Model model){
+	List<StoreBean> storeall = storeService.findAll();
+		model.addAttribute("store",storeall);
+		return "store/testFindMenu";
+	}
 	
 }
