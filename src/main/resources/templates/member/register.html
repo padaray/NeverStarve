@@ -143,6 +143,7 @@
 					<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('memberCity')}" th:errors="*{memberCity}" style="margin-bottom: 0"></p>
 					<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
 				</div>
+				
 				<div>
 					<label for="photoId">會員照片</label>
 					<input type="file" name="memberImage"  id="photoId">
