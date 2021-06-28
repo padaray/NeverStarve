@@ -1,5 +1,6 @@
 package com.NeverStarve.store.service.Impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,11 +38,11 @@ public class ReportServiceImpl implements ReportService {
 		StoreBean storeBean = storeRepository.getById(pkStoreId1); //透過 鬍鬚張ID找到對應的鬍鬚張的StoreBean
 		List<OrderBean> orderBean= orderRepository.findByStoreBean(storeBean);//透過鬍鬚張的storebean找到屬於鬍鬚張的訂單，有很多個訂單所以
 		//要用list去存
-		List<OrderListBean> orderListBean = null;
+		List<OrderListBean> orderListBean = new ArrayList<OrderListBean>();
 		for( OrderBean var: orderBean  ) { //將每筆訂單的訂單詳細存入orderListBean裡面
 			orderListBean.add((OrderListBean) var.getOrderListBean());  
 		}
-//		List<OrderListBean>  orderListBean= orderBean.getOrderListBean();//透過鬍鬚張的訂單找到鬍鬚張的訂單詳細
+        //透過鬍鬚張的訂單找到鬍鬚張的訂單詳細
 		return orderListBean;
 	}
 
