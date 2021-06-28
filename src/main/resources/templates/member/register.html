@@ -17,7 +17,8 @@
 <!-- <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script th:src="@{/js/jquery.twzipcode.min.js}"></script>
-
+<!-- 網頁小圖 -->
+<link rel="shortcut icon" th:href="@{/favicon.ico}" />
 <style type="text/css">
 		  *{
             padding: 0;
@@ -99,7 +100,7 @@
 	<div class="container" style="max-width: 600px; margin-top: 50px">
 		<h3 class="page-header">會員註冊</h3>
 		<div class="jumbotron text-center">
-			<form th:action="@{/Member/register}" method="post" th:object="${memberBean}">
+			<form th:action="@{/Member/register}" method="post" th:object="${memberBean}"  enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="emailId">帳號(E-MAIL)</label>
 					<input type="text" name="email" id="emailId" class="form-control"  th:field="*{email}">
@@ -142,7 +143,10 @@
 					<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('memberCity')}" th:errors="*{memberCity}" style="margin-bottom: 0"></p>
 					<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
 				</div>
-				
+				<div>
+					<label for="photoId">會員照片</label>
+					<input type="file" name="memberImage"  id="photoId">
+				</div>
 				
 					<p class="text-center">
 						<button type="submit" class="btn btn-primary">註冊</button>

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.NeverStarve.orders.model.OrderBean;
+import com.NeverStarve.store.model.MenuBean;
 
 public interface OrderService {
 	
@@ -11,6 +12,7 @@ public interface OrderService {
 	
 	OrderBean save(OrderBean orderBean);
 	
-	public List<OrderBean> findAll();
-
+	List<OrderBean> findAll();
+	
+	List<MenuBean> getOrderList(String[] menuIdList);
 }
