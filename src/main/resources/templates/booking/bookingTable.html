@@ -83,17 +83,27 @@
 					<div class="form-group">
 						<label for="bookingTimeId">用餐時間</label> 
 <!-- 						<input type="text" -->
-<!-- 							name="bookingTime" id="bookingTimeId" class="form-control"> -->
+<!-- 							name="bookingTime" id="bookingTimeId" class="form-control" > -->
 						<br>
-						<input type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="12:00">
-						<input type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="13:00">
-						<input type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="14:00">
+						<div data-toggle="buttons" class="btn-group-toggle" >
+							<label class="btn btn-outline-info">
+								<input type="radio" name="bookingTime" id="t1200" value="12:00">12:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="radio" name="bookingTime" id="t1300" value="13:00">13:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="radio" name="bookingTime" id="t1300" value="14:00">14:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="radio" name="bookingTime" id="t1300" value="15:00">15:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="radio" name="bookingTime" id="t1300" value="16:00">16:00
+							</label>
+						</div>
 <!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="12:00">12:00</button>	 -->
 <!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="13:00">13:00</button>	 -->
-<!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="14:00">14:00</button>	 -->
-<!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="15:00">15:00</button>	 -->
-<!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="16:00">16:00</button>	 -->
-<!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="17:00">17:00</button>	 -->
 							
 					<p> </p>
 					</div>
@@ -139,6 +149,7 @@
 <!--     <script th:src="@{/js/main.js}"></script> -->
 	
 	<script>
+	//jQ-ui的月曆工具
 	$( "#datepicker" ).datepicker({
         showOn: "button",
 //         buttonImage : "https://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
@@ -156,11 +167,14 @@
         minDate: new Date() // 最小日期設定，未設定參數即表示今日
       });
 	
+	//月曆按鈕樣式
 	$("#dater button").addClass("btn btn-secondary");
 	
+	//確認資料按鈕綁定送出按鈕的disabled功能
 	$("#confirmSubmitId").click(function(){
 		  $("#submitBookingId").prop("disabled", !$("#confirmSubmitId:checked").length);
 		});
+	
     </script>
 </body>
 </html>
