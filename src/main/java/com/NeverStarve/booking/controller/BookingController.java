@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +26,10 @@ public class BookingController {
 	}
 	
 	@PostMapping("/bookingPost")
-	public String postBooking(BookingTableBean btb) {
+	public String postBooking(BookingTableBean btb, Model model) {
 		
 		btb.setPostTime(new Date());
+		model.addAttribute("btb", btb);
 		
 		bookingService.save(btb);
 				
