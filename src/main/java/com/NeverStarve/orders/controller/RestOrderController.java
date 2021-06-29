@@ -25,11 +25,7 @@ public class RestOrderController {
 		return orderService.findByPkOrderId(pkOrderId);
 	}
 	
-	@PostMapping("/save")
-	OrderBean save(OrderBean orderBean) {
-	
-		return orderService.save(orderBean);
-	}
+
 	@GetMapping("/findall")
 	List<OrderBean> findll(){
 		return orderService.findAll();

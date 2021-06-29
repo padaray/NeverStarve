@@ -9,13 +9,7 @@ import com.NeverStarve.store.model.StoreBean;
 public interface OrderRepository extends JpaRepository<OrderBean, Integer> {
 
 List<OrderBean> findByStoreBean(StoreBean storebean);
-//	List<OrderBean> findBypkOrderId(Integer Id); //why use List??
+
 	
-//	List<OrderBean> findBy shopid????
-	
-//	List<OrderBean> findByOrderDate(Date orderDate );
-//	List<OrderBean> findAllBeans();
-	
-//	List<OrderBean> findByStoreBean(StoreBean storebean );
 	
 }

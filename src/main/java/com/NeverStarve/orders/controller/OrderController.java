@@ -1,5 +1,6 @@
 package com.NeverStarve.orders.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.NeverStarve.member.model.MemberBean;
+import com.NeverStarve.member.service.MemberService;
 import com.NeverStarve.orders.model.OrderBean;
+import com.NeverStarve.orders.model.OrderListBean;
 import com.NeverStarve.orders.model.ShoppingCar;
+import com.NeverStarve.orders.repository.OrderListRepository;
+import com.NeverStarve.orders.service.OrderListService;
 import com.NeverStarve.orders.service.OrderService;
 import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.service.MenuService;
@@ -31,7 +37,11 @@ public class OrderController {
 	OrderService orderservice;
 	@Autowired
 	MenuService menuService;
-
+	@Autowired
+	MemberService memberService;
+	@Autowired
+	OrderListService orderListService;
+	
 	private String productIDName = "productIDName";
 	private String productQuantityName = "productQuantityName";
 
@@ -45,7 +55,9 @@ public class OrderController {
 			// 指定回傳內容一定要為JSON
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	// 讓前端送回JSON給後端可以用@RequestBody
-	public void saveShoppingCar(@RequestBody List<ShoppingCar> car, HttpServletResponse response,HttpServletRequest request) {
+	@ResponseBody
+	public void saveShoppingCar(@RequestBody List<ShoppingCar> car, 
+			HttpServletResponse response,HttpServletRequest request) {
 		// 設定一個變數去接購物車的產品ID
 		String productID = "";
 		String productQuantity = "";
@@ -154,8 +166,6 @@ public class OrderController {
 
 				}
 			}
-			System.out.println("紀1:"+productNewID);
-			System.out.println("紀2:"+productNewQuantity);
 			// 前面名稱，後面是值
 			Cookie carProductID = new Cookie(this.productIDName, productNewID);
 			Cookie carProductQuantity = new Cookie(this.productQuantityName, productNewQuantity);
@@ -169,11 +179,47 @@ public class OrderController {
 		}
 
 	}
-	@PostMapping(value = "/saveOrder",
+	
+	@PostMapping(value = "/saveOrder/{alltotal}/{addres}",
 				consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void saveOrder(@RequestBody List<OrderBean> order) {
+	@ResponseBody
+	public void saveOrder(@RequestBody List<OrderListBean> orderList,
+						@PathVariable int alltotal,
+						@PathVariable String addres,
+						HttpServletRequest request) {
+		for(int i = 0; i<orderList.size(); i++) {
+			orderList.get(i).setMenuBean(menuService.getMenuById(orderList.get(i).getMenuID()));
+		}
 		
+		OrderBean orderBean = new OrderBean();
+		orderBean.setStoreBean(orderList.get(0).getMenuBean().getStoreBean());
+		Cookie[] cookieList = request.getCookies();
+		if (cookieList != null) {
+			for (Cookie cookie : cookieList) {
+				if(cookie.getName().equals("userId")) {
+					orderBean.setMemberBean(memberService.getMamberById(Integer.valueOf(cookie.getValue())).get());
+				}
+			}
+		}
+		orderBean.setTotalCost(Double.valueOf(alltotal));
+		orderBean.setOrderDate(LocalDate.now());
+		orderBean.setShipping_address(addres);
+		orderservice.saveOrderBeanAndOrderList(orderBean, orderList);
 	}
 	
+	@GetMapping(value = "/getaddresByID",
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public Optional<MemberBean> getMaddresById(HttpServletRequest request) {
+		Cookie[] cookieList = request.getCookies();
+		if (cookieList != null) {
+			for (Cookie cookie : cookieList) {
+				if(cookie.getName().equals("userId")) {
+					return	memberService.getMamberById(Integer.valueOf(cookie.getValue()));
+				}
+			}
+		}
+		return null;
+	}
 	
 }
