@@ -38,7 +38,7 @@ public class OrderListBean implements Serializable{
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "FK_MenuBean_Id")
 	private MenuBean menuBean; 	//取得菜單的Bean
-	String quantity ;			//商品數量
+	Integer quantity ;			//商品數量
 	@JsonIgnore
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "FK_OrderBean_Id")

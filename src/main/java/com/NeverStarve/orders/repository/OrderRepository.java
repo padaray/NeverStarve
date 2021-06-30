@@ -10,6 +10,7 @@ public interface OrderRepository extends JpaRepository<OrderBean, Integer> {
 
 List<OrderBean> findByStoreBean(StoreBean storebean);
 
+List<OrderBean> findOrderByMember();
 	
 	
 }

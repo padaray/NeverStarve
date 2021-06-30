@@ -24,7 +24,6 @@ import com.NeverStarve.member.service.MemberService;
 import com.NeverStarve.orders.model.OrderBean;
 import com.NeverStarve.orders.model.OrderListBean;
 import com.NeverStarve.orders.model.ShoppingCar;
-import com.NeverStarve.orders.repository.OrderListRepository;
 import com.NeverStarve.orders.service.OrderListService;
 import com.NeverStarve.orders.service.OrderService;
 import com.NeverStarve.store.model.MenuBean;
@@ -134,7 +133,8 @@ public class OrderController {
 	// 0623刪除購物車餅乾內對應的食物
 	@GetMapping("/deleteProduct/{id}")
 	// 先取出購物車餅乾裡對應的食物，在寫一個刪除後的餅乾回去
-	public void deleteCookieMenuById(@PathVariable String id, HttpServletRequest request,
+	public void deleteCookieMenuById(@PathVariable String id, 
+			HttpServletRequest request,
 			HttpServletResponse response) {
 		Cookie[] cookieList = request.getCookies();
 		if (cookieList != null) {
@@ -180,31 +180,57 @@ public class OrderController {
 
 	}
 	
-	@PostMapping(value = "/saveOrder/{alltotal}/{addres}",
+	@PostMapping(value = "/saveOrder/{addres}",
 				consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void saveOrder(@RequestBody List<OrderListBean> orderList,
-						@PathVariable int alltotal,
+	public void saveOrder(@RequestBody List<OrderListBean> orderListBeanList,
 						@PathVariable String addres,
-						HttpServletRequest request) {
-		for(int i = 0; i<orderList.size(); i++) {
-			orderList.get(i).setMenuBean(menuService.getMenuById(orderList.get(i).getMenuID()));
+						HttpServletRequest request,
+						HttpServletResponse response) {
+		for(int i = 0; i<orderListBeanList.size(); i++) {
+			orderListBeanList.get(i).setMenuBean(menuService.getMenuById(orderListBeanList.get(i).getMenuID()));
 		}
 		
 		OrderBean orderBean = new OrderBean();
-		orderBean.setStoreBean(orderList.get(0).getMenuBean().getStoreBean());
+		orderBean.setStoreBean(orderListBeanList.get(0).getMenuBean().getStoreBean());
 		Cookie[] cookieList = request.getCookies();
+		Cookie productIDCookie = null;
+		Cookie productQuantityCookie = null;
 		if (cookieList != null) {
 			for (Cookie cookie : cookieList) {
 				if(cookie.getName().equals("userId")) {
 					orderBean.setMemberBean(memberService.getMamberById(Integer.valueOf(cookie.getValue())).get());
 				}
+				//找到我要找的餅乾
+				if(cookie.getName().equals(productIDName)) {
+					productIDCookie = cookie;
+				}
+				if(cookie.getName().equals(productQuantityName)) {
+					productQuantityCookie = cookie;
+				}
+				
 			}
 		}
-		orderBean.setTotalCost(Double.valueOf(alltotal));
+		//用後端把總價送回前端
+		Double alltotal=0.0;
+		for( OrderListBean i:orderListBeanList) {
+			//取得總價
+		 	alltotal += i.getQuantity()*i.getMenuBean().getDishPrice();
+		}
+		orderBean.setTotalCost(alltotal);
 		orderBean.setOrderDate(LocalDate.now());
 		orderBean.setShipping_address(addres);
-		orderservice.saveOrderBeanAndOrderList(orderBean, orderList);
+		
+		if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
+			productIDCookie.setMaxAge(0);
+			productQuantityCookie.setMaxAge(0);	
+			productIDCookie.setPath(request.getContextPath());
+			productQuantityCookie.setPath(request.getContextPath());
+			response.addCookie(productIDCookie);
+			response.addCookie(productQuantityCookie);
+		}
+	
+		
 	}
 	
 	@GetMapping(value = "/getaddresByID",
