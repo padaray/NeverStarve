@@ -54,6 +54,12 @@ public class StoreBean implements Serializable{
 	
 	@JsonIgnore
 	Blob storeImage;
+	
+	String storeImageName;
+	
+	@Transient
+	String base64;
+
 	@NotBlank
 	String storeType;
 	@NotNull
