@@ -80,7 +80,10 @@ public class LoginController {
 //			nextPath = "/";
 //		}
 		processCookies(member, request, response);
-		
+		String type = member.getUserType();
+		if (type.equals("0")) {
+			return "redirect:/Backstage/";
+		}
 		return "redirect:/Member/memberDetail";
 	}
 	

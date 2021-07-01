@@ -2,12 +2,12 @@ package com.NeverStarve.orders.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,12 +21,17 @@ import com.NeverStarve.store.model.StoreBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "ORDERS")
-@Data
+//@Data
+@Getter
+@Setter
+@ToString(exclude={"memberBean","OrderListBean","storeBean"})
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderBean implements Serializable {
@@ -36,7 +41,7 @@ public class OrderBean implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkOrderId; // 訂單ID
 	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_StoreBean_Id")
 	private StoreBean storeBean; // 建立與會員的關聯
 	@JsonIgnore
@@ -50,7 +55,7 @@ public class OrderBean implements Serializable {
 	Integer trading; // 交易成功的判斷
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "orderBean")
+	@OneToMany(mappedBy = "orderBean", fetch =FetchType.LAZY)
 	private Set<OrderListBean> OrderListBean = new LinkedHashSet<>(); // 建立與會員的關聯
 
 	// 訂單編號 日期 總價 訂單狀態 付款狀態

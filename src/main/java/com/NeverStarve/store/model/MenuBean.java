@@ -21,10 +21,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 @Entity
 @Table(name ="MENU")
 @Data
+@ToString(exclude={"storeBean"})
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuBean {
@@ -41,7 +43,8 @@ public class MenuBean {
 	Blob dishPicture;
 	
 	@JsonIgnore
-	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, 
+            optional = false,fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_Store_Id")
 	private StoreBean storeBean;
 

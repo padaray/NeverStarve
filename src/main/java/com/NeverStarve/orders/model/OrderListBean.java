@@ -1,7 +1,6 @@
 package com.NeverStarve.orders.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -18,12 +17,15 @@ import com.NeverStarve.store.model.MenuBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name ="ORDERList")
-@Data
+//@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderListBean implements Serializable{
