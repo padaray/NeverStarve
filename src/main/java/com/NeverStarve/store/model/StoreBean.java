@@ -11,13 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import org.springframework.data.annotation.Transient;
-
-import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -55,6 +53,12 @@ public class StoreBean {
 	
 	@JsonIgnore
 	Blob storeImage;
+	
+	String storeImageName;
+	
+	@Transient
+	String base64;
+
 	@NotBlank
 	String storeType;
 	@NotNull

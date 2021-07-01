@@ -1,15 +1,10 @@
 package com.NeverStarve.booking.repository;
 
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.NeverStarve.booking.model.BookingTableBean;
-import com.NeverStarve.member.model.MemberBean;
 
 public interface BookingRepository extends JpaRepository<BookingTableBean, Integer>,
 										   JpaSpecificationExecutor<BookingTableBean>,
