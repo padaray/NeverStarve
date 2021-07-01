@@ -10,7 +10,6 @@
 <script th:src="@{/js/jquery.twzipcode.min.js}"></script>
 <title>結帳畫面</title>
 <script >
-
 	$.ajax({ type: "GET", 
 			url: "[[@{/Order/getShoppingCar}]]",
 			dataType: "json", 
@@ -26,30 +25,15 @@
        						'<input class="add" name="" value="+" type="button" /></td>'+
          					'<td class="onetotal">'+ '單價總額：'+element.dishPrice*element.quantity+'</td>'+
          					'<td><button class="delete">刪除</button></td></tr>')
-// 					  $('#info').append($('<tr>').append(
-// 							  	$('<td>',
-// 							  	{text: element.pkDishId}),
-// 							  	$('<td>', 
-// 					            {text: element.dishName}),
-// 							  	$('<td>', 
-// 					            {text: '價格：'+element.dishPrice}),
-// 			                    $('<td>', 
-// 			                    {html: '數量：'+
-// 			                    	'<input  class="min" name="" value="-"  type="button"/>'+
-// 			        				'<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="'+element.quantity+'" disabled="disabled"/>'+
-// 				        			'<input class="add" name="" value="+" type="button" />'}),
-// 			                    $('<td>',
-// 			                    {text: '單價總額：'+element.dishPrice*element.quantity}),
-// 			                    $('<td>',
-// 					            {html: '<button class="delete">刪除</button>'}),
-// 			                    ));
+
 				 }
 			 )}
 			
 		});	
-
+</script >
+<script >
 $(function() {
-	setAllTotal ();
+setAllTotal ();
 $(".min").click(function(){
 	var min = $(this).next().val();
 	var object = $(this).parent();
@@ -111,6 +95,8 @@ $("#save").click(function(){
 	
 	var  allProductlength =$("#tab").find(".allProduct").length;
 	
+	var  memberaddres =$("#addressId").val();
+	
 	for(i=0; i < allProductlength; i++){
 		
 		var allProduct = $(".allProduct");
@@ -128,11 +114,20 @@ $("#save").click(function(){
 		console.log("quantity =" + saveOrder[j].quantity);
 		}
 	
-	$.ajax({ type: "POST", 
-		url:"[[@{/Order/saveOrder}]]"+"/"+$("#alltotal").text()+"/"+$("#addressId").val(),
-		data: JSON.stringify(saveOrder), dataType: "json", 
-		contentType: "application/json"
-	});		
+	if(memberaddres == ""){
+		alert('地址不能為空白的唷!!!');
+
+	}else{
+		$.ajax({ type: "POST", 
+			url:"[[@{/Order/saveOrder}]]"+"/"+$("#addressId").val(),
+			data: JSON.stringify(saveOrder), dataType: "json", 
+			contentType: "application/json",
+		});	
+		alert('訂單成功送出!!!');
+		window.location = "[[@{/store/findAll}]]";
+		
+	}
+		
 })
 $("#maddres").click(function(){
 	$.ajax({ type: "GET", 
@@ -140,7 +135,6 @@ $("#maddres").click(function(){
 		dataType: "json", 
 		contentType: "application/json",
 		success: function (response) {
-// 			console.log(response.adderss==null)
 			$("#addressId").val(response.address)
 		}
 	});	

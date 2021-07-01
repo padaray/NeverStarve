@@ -68,13 +68,18 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean saveOrderBeanAndOrderList(OrderBean orderBean, 
 			List<OrderListBean> orderList) {
-			orderRepository.save(orderBean);
-			for(OrderListBean ordL :orderList) {
-				//跟OrderBean做綁定
-				ordL.setOrderBean(orderBean);
-				orderListRepository.save(ordL);
+			try {
+				orderRepository.save(orderBean);
+				for(OrderListBean ordL :orderList) {
+					//跟OrderBean做綁定
+					ordL.setOrderBean(orderBean);
+					orderListRepository.save(ordL);
+				}
+				return true;
+			} catch (Exception e) {
+				return false;
 			}
-			return false;
+			
 	}
 
 
