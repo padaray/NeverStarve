@@ -16,6 +16,9 @@
 <!-- 網頁小圖 -->
 <link rel="shortcut icon"  th:href="@{/favicon.ico}"/>
 
+<!-- bootStrap icon -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
 <!-- CSS 時間相關 -->
 <link rel="stylesheet" href="/NeverStarve/css/classic.css">
 <link rel="stylesheet" href="/NeverStarve/css/classic.date.css">
@@ -55,6 +58,16 @@
 	top:270px;
 	right:80px;
 }
+
+	 #order:hover {
+	   color: gold;	 /*  移動到連接的颜色 */
+
+      }
+ 
+      #order:active {
+	    color: orange; /*點擊的颜色*/
+       }
+
 
 </style>
 <script type="text/javascript" th:inline="javascript">
@@ -473,9 +486,11 @@ $(function(){
 						
 	};
 	
-	
-	
-
+	$("#tbody").on("click","#order",function(){
+		var tr        = $(this).closest('tr');
+		var id    = tr.find('th:eq(0)').text();
+		window.open('http://localhost:9527/NeverStarve/Backstage/Member/order/'+id, '_blank', 'toolbar=0, location=no, menubar=0, height=500,  width=900, top=100px, left=500px');
+		});
 	
 })
 
@@ -536,6 +551,7 @@ $(function(){
 					<th>會員等級</th>
 					<th>註冊時間</th>
 					<th>會員圖片</th>
+					<th>訂單</th>
 					</tr>		
 				</thead>
 				<tbody id="tbody">
@@ -549,6 +565,7 @@ $(function(){
 						<td valign="middle">[[${member.value.userType}]] </td>
 						<td valign="middle">[[${member.value.registerTime}]] </td>
 						<td ><img height="120" th:src='${member.value.bas64}'> </td>
+						<td ><i  id="order" class="bi bi-card-text" style="font-size: 50px; "></i></td>
 					</tr>
 				</tbody>
 			</table>

@@ -20,4 +20,6 @@ public class OrderListServiceImpl implements OrderListService {
 	public OrderListBean save(OrderListBean orderListBean) {
 		return orderListRepository.save(orderListBean);
 	}
+
+
 }

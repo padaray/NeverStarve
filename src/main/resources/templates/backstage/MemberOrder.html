@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>訂單</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script type="text/javascript" src="/NeverStarve/js/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+<!-- 首頁樣式 -->
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />
+
+<!-- 網頁小圖 -->
+<link rel="shortcut icon"  th:href="@{/favicon.ico}"/>
+<!-- bootStrap icon -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+<style type="text/css">
+.table{
+	margin:auto ;
+	margin-top:20px;  	
+	width: 80%;
+	text-align:center;
+	align-items: center
+	
+}
+.erro{
+	margin:auto ;
+	margin-top:20px;  	
+	width: 80%;
+	text-align:center;
+	align-items: center;
+	font-weight: 800;
+}
+
+	#order:hover {
+	   color: gold;	 /*  移動到連接的颜色 */
+
+      }
+ 
+	#order:active {
+	    color: orange; /*點擊的颜色*/
+       }
+</style>
+
+<script type="text/javascript" th:inline="javascript" >
+$(function(){
+	$("#tbody").on("click","#order",function(){
+	var tr        = $(this).closest('tr');
+	var id    = tr.find('td:eq(0)').text();
+	window.open('http://localhost:9527/NeverStarve/Backstage/Member/list/'+id, '_blank', 'toolbar=0, location=no, menubar=0, height=400,  width=800, top=120px, left=520px');
+	});
+	
+	
+})
+
+
+
+
+</script>
+</head>
+<body>
+	<div th:inline="text" th:if="${!orderSet .isEmpty()}">
+		<table width=400px; class="table table-striped table-dark ">
+			<thead>
+					<tr>
+						<th>訂單編號</th>
+						<th>金額</th>
+						<th>成立日期</th>
+						<th>地址</th>
+						<th>訂單狀態</th>
+						<th>訂單狀態</th>
+						<th>詳細資訊</th>
+					</tr>		
+			</thead>
+			<tbody id="tbody">
+					<tr th:each="order, loopStatus: ${orderSet}">
+						<td valign="middle" >[[${order.pkOrderId}]]</td>
+						<td valign="middle">[[${order.totalCost}]]</td>
+						<td valign="middle">[[${order.orderDate}]] </td>
+						<td valign="middle">[[${order.shipping_address}]] </td>						
+						<td valign="middle">[[${order.trading}]] </td>
+						<td valign="middle">[[${order.order_note}]] </td>
+						<td ><i  id="order" class="bi bi-card-text" style="font-size: 50px; "></i></td>
+					</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:unless="${!orderSet .isEmpty()}">
+   		<div ><h2 class="erro">暫無訂單資訊</h2></div>
+	</div>
+</body>
+</html>
