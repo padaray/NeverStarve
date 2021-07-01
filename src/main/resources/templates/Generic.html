@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>NeverStarve</title>
 </head>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">	
@@ -18,17 +20,17 @@
             </div>
             
             <div class="logodiv">
-            	<a th:href="@{/Booking/}" type="button" class="btn btn-dark">訂位系統</a>
+            	<a th:href="@{/Booking/}" type="button" class="btn btn-dark"><i class='fa fa-calendar'></i> 訂位系統</a>
             	<a th:href="@{/Booking/}" type="button" class="btn btn-dark">訂位系統</a>
            	<a th:href="@{/Member/login}" type="button" class="btn btn-primary longin" th:if ="${session.member == null}">登入</a>
            	<a th:if = "${session.member!=null}" class="btn btn-warning longin" th:href="@{/Member/logout}">登出</a>           
             </div>
 
             <div class="headform">
-                <form role="search" >
+                <form role="search" class="form-inline">
                     <div class="form-group">
-                        <input type="text"  />    
-                        <button type="submit" class="select"><i class="fa fa-search"></i></button>
+                        <input type="text" class="form-control" placeholder="搜尋"/>    
+                        <button type="submit" class="select btn btn-light"><i class="fa fa-search"></i></button>
                     </div>                                                   
                 </form>
             </div> 

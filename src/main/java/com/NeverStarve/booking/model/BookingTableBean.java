@@ -31,7 +31,7 @@ public class BookingTableBean {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkBookingNo;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "FK_Member_Id")
 	private MemberBean memberBean;
 	

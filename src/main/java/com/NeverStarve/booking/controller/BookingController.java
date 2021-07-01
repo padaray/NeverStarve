@@ -38,6 +38,12 @@ public class BookingController {
 	@PostMapping("/bookingPost")
 	public String postBooking(BookingTableBean btb, Model model) {
 		
+		//取得會員的id傳進預約資料表中
+		//BookingTableBean的memberBean的cascadeType需改成cascade.MERGE
+		MemberBean memberBean =(MemberBean) model.getAttribute("member"); 
+//		Integer memberId = memberBean.getPkMemberId();
+		btb.setMemberBean(memberBean);
+		
 		btb.setPostTime(new Date());
 		model.addAttribute("btb", btb);
 		

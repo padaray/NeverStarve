@@ -41,12 +41,16 @@
 	<div class="container" style="max-width: 700px; margin-top: 50px">
 		<h3 class="page-header">線上訂位</h3>
 		<div class="jumbotron text-left">
-			<p >用戶姓名：<span th:text="${session.member.name}"></span></p>
+			<p ><span th:text="${session.member.name}"></span>，您好！歡迎使用本平台訂位系統！</p>
 			<p>
 				<strong>請選擇用餐日期、時間及人數</strong>
-			</p>
+			</p><hr>
 			<div>
 				<form action="#" th:action="@{/Booking/bookingPost}" method="post">
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="Member_Id_Id">會員ID(測試)</label> -->
+<!-- 						<input type="hidden" name="memberBean" id="Member_Id_Id" class="form-control" th:value="${session.member.pkMemberId}" > -->
+<!-- 					</div> -->
 					<div class="form-group">
 						<label for="storeNameId">預約餐廳</label>
 <!-- 						<input type="text" name="storeName" id="storeNameId" class="form-control" readonly> -->
