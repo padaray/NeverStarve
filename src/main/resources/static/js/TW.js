@@ -1,5 +1,5 @@
 jQuery(function($){
-     $.datepicker.regional['zh-CN'] = {
+     $.datepicker.regional['zh-TW'] = {
         clearText: '清除',
         clearStatus: '清除已選日期',
         closeText: '關閉',
@@ -29,5 +29,5 @@ jQuery(function($){
         firstDay: 1,
         initStatus: '請選擇日期',
         isRTL: false};
-        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $.datepicker.setDefaults($.datepicker.regional['zh-TW']);
     });

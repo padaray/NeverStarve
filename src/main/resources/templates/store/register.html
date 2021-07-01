@@ -36,9 +36,9 @@
 </head>
 <body>
 	<div class="container text-left" style="max-width: 500px">
-		<h3 class="page-header">會員註冊</h3>
+		<h3 class="page-header">店家註冊</h3>
 		<div class="jumbotron">
-			<form th:action="@{/store/register}" method="post" th:object="${storeBean}">
+			<form th:action="@{/store/register}" method="post" th:object="${storeBean}" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="storeAccountId">帳號:</label> 
 					<input type="text" name="storeAccount" id="storeAccountId" class="form-control" th:field="*{storeAccount}">

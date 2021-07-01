@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
 
@@ -37,17 +39,23 @@ public class BookingTableBean {
 	@JoinColumn(name = "FK_Store_Id")
 	private StoreBean storeBean;
 	
-	String memberName;
+//	String memberName;
 	
-	String storeName;
+//	String storeName;
 	
-	Integer bookingNum;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date bookingDate;
 	
-	Date bookingDate;
+	@DateTimeFormat(pattern = "HH:mm")
+	private Date bookingTime;
+
+	private Integer bookingNum;
 	
-	Double	totalAmount;
+	private Date postTime; //送出預約的時間紀錄
+
+//	Double	totalAmount;
 	
-	String	cancelTag;
+//	String	cancelTag;
 	
 	
 }

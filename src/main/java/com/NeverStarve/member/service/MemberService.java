@@ -50,5 +50,5 @@ public interface MemberService {
 	
 	long getCityCount(String address);
 
-
+	public MemberBean cookieLogin(String email);
 }

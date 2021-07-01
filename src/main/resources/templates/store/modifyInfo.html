@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+	crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" />
+<script src="/js/jquery.twzipcode.min.js"></script>
+<title>修改資料</title>
+</head>
+<body>
+	<div class="container text-left" style="max-width: 500px">
+		<h3 class="page-header">資料修改</h3>
+		<div class="jumbotron">
+			<form th:action="@{/store/modifyInfo}" method="post" th:object="${storeUser}" enctype="multipart/form-data">
+				<input type="hidden" name="pkStoreId" th:field="*{pkStoreId}">
+				<div class="form-group">
+					<label for="storeAccountId">帳號:</label> 
+					<input type="text" name="storeAccount" id="storeAccountId" class="form-control" th:field="*{storeAccount}">
+				</div>
+				<div class="form-group">
+					<label for="storePasswordId">修改密碼:</label> 
+					<input type="text" name="storePassword" id="storePasswordId" class="form-control" th:field="*{storePassword}">
+				</div>
+				<div class="form-group">
+					<label for="storeCheckPasswordId">確認密碼:</label> 
+					<input type="text" name="storeCheckPassword" id="storeCheckPasswordId" class="form-control">
+					<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('storeCheckPassword')}" th:errors="*{storeCheckPassword}"></p>
+				</div>
+				<div class="form-group">
+					<label for="storeNameId">店家名稱:</label> 
+					<input type="text" name="storeName" id="storeNameId" class="form-control" th:field="*{storeName}">
+				</div>
+				<div class="form-group">
+					<label for="storeAddressId">地址:</label>
+					<input type="text" name="storeAddress" id="storeAddressId" class="form-control" th:field="*{storeAddress}">
+					
+				</div>
+				<div class="form-group">
+					<label for="storePhoneId">電話:</label> 
+					<input type="text" name="storePhone" id="storePhoneId" class="form-control" th:field="*{storePhone}">
+				</div>
+				<div class="form-group">
+					<label for="storeTypeId">菜色種類:</label> 
+					<input type="text" name="storeType" id="storeTypeId" class="form-control" th:field="*{storeType}">
+				</div>
+				<div class="form-group">
+					<label for="seatNumberId">座位數量:</label> 
+					<input type="text" name="seatNumber" id="seatNumberId" class="form-control" th:field="*{seatNumber}">
+				</div>
+				<div class="form-group">
+					<label for="storeImageId">商家照片:</label> 
+					<input type="file" name="storeImage1" id="storeImageId" class="form-control">
+				</div>
+				<p>
+					<button type="submit" class="btn btn-primary text-center">送出</button>
+				</p>
+			</form>
+		</div>
+	</div>
+<script>
+$("#twzipcode").twzipcode({
+	countySel: "臺北市", // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+	districtSel: "大安區", // 地區預設值
+	zipcodeIntoDistrict: true,  // 郵遞區號自動顯示在地區
+	css: ["county form-control", "district form-control", "zipcode form-control"], // 自訂 "城市"、"地區" class 名稱
+	countyName: "storeCity", // 自訂城市 select 標籤的 name 值
+	districtName: "storeTown" // 自訂地區 select 標籤的 name 值
+	});
+</script>
+</body>
+</html>

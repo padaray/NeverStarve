@@ -1,28 +1,130 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
 <meta charset="UTF-8">
-<title>NeverStarve</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />
-<link rel="shortcut icon"  th:href="@{/favicon.ico}"/>		
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script th:src="@{/js/jquery.twzipcode.min.js}"></script>
+<!-- 網頁小圖 -->
+<link rel="shortcut icon" th:href="@{/favicon.ico}" />
 </head>
 
+<!-- <body> -->
+<!--       <div th:insert="Generic :: Header"></div> -->
+<!--       <div class="container" style="max-width: 600px; margin-top: 50px"> -->
+<!-- 	<div th:if = "${session.member!=null}" class="jumbotron text-center"> -->
+<!-- 		<div><p >用戶姓名:<input th:value="${session.member.name}" type="text" name=name></p></div> -->
+<!-- 		<p th:text="用戶地址+':'+${session.member.address}"></p> -->
+<!-- 		<p th:text="註冊時間+${session.member.registerTime}">註冊時間</p> -->
+<!-- 		<p th:text="照片+${session.member.coverImage}"></p> -->
+<!-- 		<p th:switch=${session.member.userType}> -->
+<!-- 			<span th:case="0">管理員</span> -->
+<!-- 			<span th:case="1">一般會員</span> -->
+<!-- 			<span th:case="2">高級會員</span> -->
+<!-- 			<span th:case="3">白金會員</span>			  -->
+<!-- 		</p> -->
+<!-- 			<a th:if = "${session.member!=null}" class="btn btn-warning" th:href="@{/Member/logout}">登出</a> -->
+<!--       </div> -->
+<!-- 	</div> -->
+
+<!-- </body> -->
 
 <body>
-      <div th:insert="Generic :: Header"></div>
-      
-	<div>
-		<p ><span th:text="用戶姓名+${session.member.name}">用戶姓名</span></p>
-		<p th:text="註冊時間+${session.member.registerTime}">註冊時間</p>
-		<p th:switch=${session.member.userType}>
-			<span th:case="0">管理員</span>
-			<span th:case="1">一般會員</span>
-			<span th:case="2">高級會員</span>
-			<span th:case="3">白金會員</span>			 
-		</p>
+<div th:insert="Generic :: Header"></div>
+	<div class="container" style="max-width: 600px; margin-top: 50px">
+		<h3 class="page-header">會員資料修改</h3>
+		<div class="jumbotron text-center">
+			<form th:action="@{/Member/register}" method="post" enctype="multipart/form-data">
+				<div class="form-group">
+					<label for="emailId">帳號(E-MAIL)</label>
+					<input type="text" name="email" id="emailId" class="form-control"  th:value="${session.member.email}">
+				</div>
+				
+				<div class="form-group">
+					<label for="passwordId">密碼</label>
+					<input type="text" name="password" id="passwordId" class="form-control" th:value="${session.member.password}">
+				</div>
+				
+<!-- 				<div class="form-group"> -->
+<!-- 					<label for="checkPasswordId">確認密碼</label> -->
+<!-- 					<input type="text" name="checkPassword" id="checkPasswordId" class="form-control" th:field="*{checkPassword}"> -->
+<!-- 				</div> -->
+				
+				<div class="form-group">
+					<label for="nameId">用戶姓名</label>
+					<input type="text" name="name" id="nameId" class="form-control" th:value="${session.member.name}">
+				</div>
+				<div class="form-group">
+					<label for="personIdId">身分證字號</label>
+					<input type="text" name="personId" id="personIdId" class="form-control" th:value="${session.member.personId}">
+				</div>
+				<div class="form-group">
+					<label for="mobilePhoneId">手機</label>
+					<input type="text" name="mobilePhone" id="mobilePhoneId" class="form-control"  th:value="${session.member.mobilePhone}">
+				</div>
+
+				<div class="form-group">
+					<label for="addressId">地址</label>
+					<div id="twzipcode">
+					</div>
+					<input type="text" name="address" id="addressId" class="form-control"  th:value="${session.member.address}">
+				</div>
+<!-- 				<div> -->
+<!-- 					<label for="photoId">會員照片</label> -->
+<!-- 					<input type="file" name="memberImage"  id="photoId"> -->
+<!-- 				</div> -->
+				<div style="margin-top: 20px">
+					<p class="text-center">
+						<button type="submit" class="btn btn-primary">確認修改</button>
+					</p>
+				</div>	
+			</form>
+
+		</div>
+
+
 	</div>
 
+
+<script th:inline="javascript">
+
+var adders=/*[[${session.member.address}]]*/
+ alert(adders)
+	first= adders.indexOf(" ") //取第一個空白處索引直
+	end =adders.lastIndexOf(" ") //取第二個 空白處索引直
+	var city =adders.substr(0, first) //城市=第零個位置取到第一個空白處不含空白
+	var town =adders.substring(first+1, end) //區 =第一個空白處+1 不取空白 取到第二個空白 不含空白
+	var add =adders.substr(end+1) //地址等於 第二個空白不含空白 取以後
+	
+	$("#")
+	$("#addressId").val(add)
+
+
+$("#twzipcode").twzipcode({
+countySel: city, // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+districtSel: town, // 地區預設值
+zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
+css: ["city form-control", "town form-control"], // 自訂 "城市"、"地區" class 名稱
+countyName: "memberCity", // 自訂城市 select 標籤的 name 值
+districtName: "memberTown" // 自訂地區 select 標籤的 name 值
+});
+</script>
+
+
+
+
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 package com.NeverStarve.store.model;
 
+import java.io.Serializable;
 import java.sql.Blob;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -27,7 +29,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreBean {
+public class StoreBean implements Serializable{
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,10 +44,8 @@ public class StoreBean {
 	@Transient
 	String storeCheckPassword;
 	@Transient
-	@NotBlank
 	String storeCity;
 	@Transient
-	@NotBlank
 	String storeTown;
 	@NotBlank
 	String storeAddress;
@@ -68,7 +69,7 @@ public class StoreBean {
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<MenuBean> menus =new LinkedHashSet<>();
 	
-	
-
+	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
+	private Set<OrderBean> order =new LinkedHashSet<>();
 	
 }

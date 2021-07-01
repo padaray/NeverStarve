@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.NeverStarve.member.model.MemberBean;
+import com.NeverStarve.store.model.StoreBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -34,7 +35,10 @@ public class OrderBean implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkOrderId; // 訂單ID
-	String storeId; // 商家ID
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_StoreBean_Id")
+	private StoreBean storeBean; // 建立與會員的關聯
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_MemberBean_Id")

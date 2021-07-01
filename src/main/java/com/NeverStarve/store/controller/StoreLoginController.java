@@ -1,5 +1,11 @@
 package com.NeverStarve.store.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -9,16 +15,25 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.store.model.StoreBean;
@@ -52,14 +67,10 @@ public class StoreLoginController {
 		}
 		//確認兩次密碼輸入一樣
 		if(comfirmPassword(storeBean)) {
-			result.rejectValue("兩次密碼不一致", "確認密碼失敗");
+			result.rejectValue("storeCheckPassword","confirmError" ,"密碼不一致");
 		}
 		//確認validator有沒有抱錯
 		if(result.hasErrors()) {
-			List<FieldError> fieldErrors = result.getFieldErrors();
-			for(FieldError error : fieldErrors) {
-				System.out.println(error.getField() + ":" + error.getDefaultMessage() + ":" + error.getCode());
-			}
 			return "store/register";
 		}
 		storeService.save(storeBean);
@@ -174,5 +185,88 @@ public class StoreLoginController {
 		 }
 		 return false;
 	}
-	        	
+	
+	//上傳圖片到本地
+	public void uploadImage(MultipartFile multipartFile) {
+
+		try {
+			// 保存圖片
+			File file = new File("C:\\_JSP\\workspace\\NeverStarve2.0\\src\\main\\resources\\static\\images\\" + multipartFile.getOriginalFilename());
+			multipartFile.transferTo(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.setViewName("register");
+
+//		return modelAndView;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	//抓圖片
+//	@RequestMapping(value = "/getPicture/{bookId}", method = RequestMethod.GET)
+//	public ResponseEntity<byte[]> getPicture(HttpServletResponse resp, @PathVariable Integer bookId) {
+//		String filePath = "/resources/static/images/NoImage.jpg";
+//
+//		byte[] media = null;
+//		HttpHeaders headers = new HttpHeaders();
+//		String filename = "";
+//		int len = 0;
+//		BookBean bean = productService.getProductById(bookId);
+//		if (bean != null) {
+//			Blob blob = bean.getCoverImage();
+//			filename = bean.getFileName();
+//			if (blob != null) {
+//				try {
+//					len = (int) blob.length();
+//					media = blob.getBytes(1, len);
+//				} catch (SQLException e) {
+//					throw new RuntimeException("ProductController的getPicture()發生SQLException: " + e.getMessage());
+//				}
+//			} else {
+//				media = toByteArray(filePath);
+//				filename = filePath;
+//			}
+//		} else {
+//			media = toByteArray(filePath);
+//			filename = filePath;
+//		}
+//		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+//		String mimeType = context.getMimeType(filename);
+//		MediaType mediaType = MediaType.valueOf(mimeType);
+//		System.out.println("mediaType =" + mediaType);
+//		headers.setContentType(mediaType);
+//		ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
+//		return responseEntity;
+//	}
+	
+	
+	
+
+//	private byte[] toByteArray(String filepath) {
+//		byte[] b = null;
+//		String realPath = context.getRealPath(filepath);
+//		System.out.println(realPath);
+//		try {
+//			File file = new File(realPath);
+//			long size = file.length();
+//			b = new byte[(int) size];
+//			InputStream fis = context.getResourceAsStream(filepath);
+//			fis.read(b);
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return b;
+	
 }

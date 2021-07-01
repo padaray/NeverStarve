@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.6.0.js"
+	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.twzipcode.min.js}"></script>
+<title>結帳畫面</title>
+<script >
+	$.ajax({ type: "GET", 
+			url: "[[@{/Order/getShoppingCar}]]",
+			dataType: "json", 
+			contentType: "application/json",
+			 success: function (response) { 
+				 $.each(response, function(index, element){
+					 $('#info').append(
+							'<tr class="allProduct"><td  class="p" style="display: none">'+ element.pkDishId + '</td>'+
+        					'<td>'+ element.dishName+'</td>'+
+        					'<td>'+ '價格：'+element.dishPrice+'</td>'+
+          					'<td>'+ '數量：<input  class="min" name="" value="-" type="button"/>'+
+    						'<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="'+element.quantity+'" disabled="disabled"/>'+
+       						'<input class="add" name="" value="+" type="button" /></td>'+
+         					'<td class="onetotal">'+ '單價總額：'+element.dishPrice*element.quantity+'</td>'+
+         					'<td><button class="delete">刪除</button></td></tr>')
+
+				 }
+			 )}
+			
+		});	
+</script >
+<script >
+$(function() {
+setAllTotal ();
+$(".min").click(function(){
+	var min = $(this).next().val();
+	var object = $(this).parent();
+	if(min == 1){
+		DeleteProduct()
+	}else{
+		min	--;
+	}
+	$(this).next().val(min)
+	setOneTotal(object);
+	setAllTotal();
+})
+$(".add").click(function(){
+var object = $(this).parent();	
+var add = $(this).prev().val();
+ add ++;
+ $(this).prev().val(add);
+ setOneTotal(object);
+	setAllTotal();
+})
+
+function setOneTotal(object){
+	var s=0;
+	s+=parseInt(object.children().eq(1).val())*parseFloat(object.prev().text().substring(3));
+	object.next().html("單價總額："+s.toFixed(0));
+	
+	}
+
+
+function setAllTotal () {
+	
+	var a=0;
+	var total = $(".onetotal");
+	var totallength =$("#tab").find(".onetotal").length;
+	for(i=0; i<totallength ; i++){
+	 a += parseFloat(total.eq(i).text().substring(5))
+		 
+	}
+		$("#alltotal").text(a)
+	
+}
+
+
+$(".delete").click(DeleteProduct)
+function DeleteProduct(){
+	
+	var b2 = confirm ("確定要刪除該筆資料嗎?")
+	if(b2){
+		$(this).parent().parent().remove();
+		var menuID = $(this).parent().parent().find(".p").text()
+		$.ajax({ type: "GET", 
+			url: "[[@{/Order//deleteProduct/}]]"+ menuID
+			
+	});		
+	}
+}
+$("#save").click(function(){
+	var saveOrder = [];
+	
+	var  allProductlength =$("#tab").find(".allProduct").length;
+	
+	var  memberaddres =$("#addressId").val();
+	
+	for(i=0; i < allProductlength; i++){
+		
+		var allProduct = $(".allProduct");
+		
+		if(allProduct.find(".text_box").eq(i).val()>0){
+			
+			saveOrder[saveOrder.length] = {
+					"menuID" :allProduct.find(".p").eq(i).text(),    
+					"quantity" : allProduct.find(".text_box").eq(i).val() ,
+					};
+		}	
+	}
+	for(j=0; j<saveOrder.length; j++){
+		console.log("ID = "      + saveOrder[j].menuID);
+		console.log("quantity =" + saveOrder[j].quantity);
+		}
+	
+	if(memberaddres == ""){
+		alert('地址不能為空白的唷!!!');
+
+	}else{
+		$.ajax({ type: "POST", 
+			url:"[[@{/Order/saveOrder}]]"+"/"+$("#addressId").val(),
+			data: JSON.stringify(saveOrder), dataType: "json", 
+			contentType: "application/json",
+		});	
+		alert('訂單成功送出!!!');
+		window.location = "[[@{/store/findAll}]]";
+		
+	}
+		
+})
+$("#maddres").click(function(){
+	$.ajax({ type: "GET", 
+		url:"[[@{/Order/getaddresByID}]]",
+		dataType: "json", 
+		contentType: "application/json",
+		success: function (response) {
+			$("#addressId").val(response.address)
+		}
+	});	
+})
+
+
+})	
+</script>
+
+</head>
+<body th:object="${memberBean}">
+	<div style="text-align: center;">
+		<table id="tablejia1" class="" width="100%" cellpadding="0"
+			cellspacing="0" border="0" style='text-align: center;'>
+			<tr>
+				<td><font size="5" background="#fff" style="padding: 0 0 0 4%;">您的訂單</font></td>
+			</tr>
+		</table>
+
+		<div style="overflow: hidden; height: 42vh; overflow-y: scroll">
+			<table id="tab" class="table table-striped" width="100%" cellpadding="0"
+				cellspacing="0" border="0">
+				<tbody id="info">
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<section class="fixed_bottom food_shopcar" >
+		<div class="form-group">
+					<label for="addressId">地址</label>
+					<div id="twzipcode">
+					</div>
+					<div class="btn orgbtn fr" ><p  id="maddres" >使用會員地址</p></div>
+					<input type="text" name="address" id="addressId" class="form-control">
+					<p class= "form-control-static text-danger"  style="margin-bottom: 0"></p>
+					<p class= "form-control-static text-danger" ></p>
+		</div>
+		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
+ 		<div class="btn orgbtn fr" ><p  id="save" >送出訂單	</p></div>
+	</section>
+</body>
+</html>

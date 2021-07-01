@@ -35,6 +35,8 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	
 	List<MemberBean> findByEmailContaining(String email);	//模糊搜尋會員信箱
 	
+	MemberBean findCookieByEmail(String email);
+	
 	
 //	List<MemberBean> findByRegisterTimeBetween(Timestamp start,Timestamp end);
 //	
