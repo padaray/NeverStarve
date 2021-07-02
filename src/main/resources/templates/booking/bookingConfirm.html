@@ -37,7 +37,7 @@
 				<div class="" th:object="${btb}">
 					<h4>訂位資訊：</h4><hr>
 					<p >預約餐廳：<span ></span> </p>
-					<p >預約日期：<span th:utext="*{#dates.format(bookingDate,'yyyy/MM/dd')}"></span>
+					<p >預約日期：<span th:utext="*{#dates.format(bookingDate,'yyyy 年 MM 月 dd 日')}"></span>
 						(<span th:utext="*{#dates.dayOfWeekNameShort(bookingDate)}"></span>)
 					 </p>
 <!-- 					<p >預約日期：<span th:utext="*{bookingDate}"></span> </p> -->

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,12 +37,11 @@ public class BookingController {
 	}
 	
 	@PostMapping("/bookingPost")
-	public String postBooking(BookingTableBean btb, Model model) {
-		
+	public String postBooking(BookingTableBean btb, BindingResult result, Model model) {
+	
 		//取得會員的id傳進預約資料表中
-		//BookingTableBean的memberBean的cascadeType需改成cascade.MERGE
+		//BookingTableBean的memberBean的cascadeType需改成cascade.MERGE 或不做級聯操作
 		MemberBean memberBean =(MemberBean) model.getAttribute("member"); 
-//		Integer memberId = memberBean.getPkMemberId();
 		btb.setMemberBean(memberBean);
 		
 		btb.setPostTime(new Date());
