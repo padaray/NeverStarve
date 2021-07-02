@@ -39,7 +39,7 @@
 .table{
 	margin:auto ;
 	margin-top:20px;  	
-	width: 1300px;
+	width: 80%;
 	text-align:center;
 	align-items: center
 	
@@ -105,6 +105,10 @@ $(function(){
 	console.log(pag);
 	var t2 =/*[[${pagecounts}]]*/ //全部會員的 總個數
 	console.log(t2)
+	var ur=/*[[@{/Backstage/Member/PageCityMember}]]*/
+	console.log()
+	var emailurl= /*[[@{/Backstage/Member/SearchEmail}]]*/	
+	console.log()
 	var pag =1
 	var totalcount=t2 //預設搜尋出來的個數為 全部的
 	var recordsPerPage=5 //預設每個分頁的個數
@@ -132,7 +136,7 @@ $(function(){
 		$.ajax({
 			type:"GET",
 			contentType:"application/json",
-			url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
+			url:ur,
 			data:{"pageNo":1,"city":v,"start":start,"end":end},  //輸入傳值		
 			dataType:"JSON", 
 			async: true,
@@ -152,6 +156,7 @@ $(function(){
 					.append($('<td valign="middle">').text(element.userType))
 					.append($('<td valign="middle">').text(element.registerTime))
 					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
+					.append('<td ><i  id="order" class="bi bi-card-text" style="font-size: 50px; "></i></td>')
 					
 				})
 				
@@ -174,7 +179,7 @@ $(function(){
 		$.ajax({
 			type:"GET",
 			contentType:"application/json",
-			url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
+			url:ur,
 			data:{"pageNo":pag,"city":v,"start":start,"end":end},  //輸入傳值		
 			dataType:"JSON", 
 			async: true,
@@ -194,7 +199,7 @@ $(function(){
 					.append($('<td valign="middle">').text(element.userType))
 					.append($('<td valign="middle">').text(element.registerTime))
 					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
-					
+					.append('<td ><i  id="order" class="bi bi-card-text" style="font-size: 50px; "></i></td>')
 				})
 			
 				$("#but2").attr("disabled", false);
@@ -210,6 +215,7 @@ $(function(){
 		v=$(".city").val()
 		start=$("#start").val()
 		end=$("#end").val()
+		console.log
 		if((start.length != 0 && end.length == 0 )||(start.length == 0 && end.length != 0)){
 			alert("請設定條件，或是清空日期");
 		}else{
@@ -217,7 +223,8 @@ $(function(){
 		$.ajax({
 		type:"GET",
 		contentType:"application/json",
-		url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
+		url: ur,
+// 		url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
 		data:{"pageNo":pag,"city":v,"start":start,"end":end},  //輸入傳值		
 		dataType:"JSON", 
 		async: true,
@@ -237,7 +244,7 @@ $(function(){
 				.append($('<td valign="middle">').text(element.userType))
 				.append($('<td valign="middle">').text(element.registerTime))
 				.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
-				
+				.append('<td ><i  id="order" class="bi bi-card-text" style="font-size: 50px; "></i></td>')
 			})
 			init()
 		
@@ -257,7 +264,7 @@ $(function(){
 		$.ajax({
 			type:"GET",
 			contentType:"application/json",
-			url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
+			url:ur,
 			data:{"pageNo":pag,"city":v,"start":start,"end":end},  //輸入傳值		
 			dataType:"JSON", 
 			async: true,
@@ -275,7 +282,7 @@ $(function(){
 					.append($('<td valign="middle">').text(element.userType))
 					.append($('<td valign="middle">').text(element.registerTime))
 					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
-					
+					.append('<td ><i  id="order" class="bi bi-card-text" style="font-size: 50px; "></i></td>')
 				})	
 				init()
 			},
@@ -298,7 +305,7 @@ $(function(){
 			$.ajax({
 				type:"GET",
 				contentType:"application/json",
-				url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
+				url:ur,
 				data:{"pageNo":1,"city":v,"start":start,"end":end},  //輸入傳值		
 				dataType:"JSON", 
 				async: true,
@@ -319,7 +326,7 @@ $(function(){
 						.append($('<td valign="middle">').text(element.userType))
 						.append($('<td valign="middle">').text(element.registerTime))
 						.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
-						
+						.append('<td ><i  id="order" class="bi bi-card-text" style="font-size: 50px; "></i></td>')
 					})
 					if(v!=null){
 						$("#tit").text(v+"會員")
@@ -357,10 +364,11 @@ $(function(){
 		 $("#end").val("")
 		 $("#start").val("")
 		 $(".city").get(0).selectedIndex = 0;
+		 $("#semail").val("")
 			$.ajax({
 				type:"GET",
 				contentType:"application/json",
-				url:"http://localhost:9527/NeverStarve/Backstage/Member/PageCityMember",
+				url:ur,
 				data:{"pageNo":1,"city":"","start":"","end":""},  //輸入傳值		
 				dataType:"JSON", 
 				async: true,
@@ -381,7 +389,7 @@ $(function(){
 						.append($('<td valign="middle">').text(element.userType))
 						.append($('<td valign="middle">').text(element.registerTime))
 						.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
-						
+						.append('<td ><i  id="order" class="bi bi-card-text" style="font-size: 50px; "></i></td>')
 					})
 					if(v!=null){
 						$("#tit").text(v+"會員")
@@ -423,7 +431,7 @@ $(function(){
                  $.ajax({
 			type:"GET",
 			contentType:"application/json",
-			url:"http://localhost:9527/NeverStarve/Backstage/Member/SearchEmail",
+			url:emailurl,
 			data:{"email":suh},  //輸入傳值		
 			dataType:"JSON", 
 			async: true,
@@ -444,7 +452,7 @@ $(function(){
 					.append($('<td valign="middle">').text(element.userType))
 					.append($('<td valign="middle">').text(element.registerTime))
 					.append("<td><img  height='120' src='"+element.bas64 +"'/></td>")
-					
+					.append('<td ><i  id="order" class="bi bi-card-text" style="font-size: 50px; "></i></td>')
 				})
 				pag=1
 				tl=1
@@ -489,7 +497,8 @@ $(function(){
 	$("#tbody").on("click","#order",function(){
 		var tr        = $(this).closest('tr');
 		var id    = tr.find('th:eq(0)').text();
-		window.open('http://localhost:9527/NeverStarve/Backstage/Member/order/'+id, '_blank', 'toolbar=0, location=no, menubar=0, height=500,  width=900, top=100px, left=500px');
+		var orderURL= /*[[@{/Backstage/Member/order/}]]*/	
+		window.open( orderURL+id, '_blank', 'toolbar=0, location=no, menubar=0, height=500,  width=900, top=100px, left=500px');
 		});
 	
 })
