@@ -50,7 +50,8 @@ $(function(){
 	$("#tbody").on("click","#order",function(){
 	var tr        = $(this).closest('tr');
 	var id    = tr.find('td:eq(0)').text();
-	window.open('http://localhost:9527/NeverStarve/Backstage/Member/list/'+id, '_blank', 'toolbar=0, location=no, menubar=0, height=400,  width=800, top=120px, left=520px');
+	var orderURL= /*[[@{/Backstage/Member/list/}]]*/
+	window.open( orderURL+id, '_blank', 'toolbar=0, location=no, menubar=0, height=400,  width=800, top=120px, left=520px');
 	});
 	
 	
