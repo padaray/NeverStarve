@@ -1,7 +1,7 @@
 package com.NeverStarve.orders.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -51,9 +51,11 @@ public class OrderBean implements Serializable {
 	String shipping_address; // 購買者的地址
 	String order_note; // 訂單備註
 	Double totalCost; // 整個訂單的總價
-	LocalDate orderDate; // 購買日期
+	LocalDateTime orderDate; // 購買日期
 	Integer trading; // 交易成功的判斷
 
+
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "orderBean", fetch =FetchType.LAZY)
 	private Set<OrderListBean> OrderListBean = new LinkedHashSet<>(); // 建立與會員的關聯

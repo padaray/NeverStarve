@@ -1,6 +1,7 @@
 package com.NeverStarve.orders.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,6 +31,8 @@ import com.NeverStarve.orders.service.OrderService;
 import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.service.MenuService;
 
+import ecpay.payment.integration.domain.AioCheckOutALL;
+
 @Controller
 @RequestMapping("/Order")
 public class OrderController {
@@ -40,6 +44,8 @@ public class OrderController {
 	MemberService memberService;
 	@Autowired
 	OrderListService orderListService;
+	@Autowired
+    HttpSession session;
 	
 	private String productIDName = "productIDName";
 	private String productQuantityName = "productQuantityName";
@@ -179,26 +185,23 @@ public class OrderController {
 		}
 
 	}
-	
-	@PostMapping(value = "/saveOrder/{addres}",
+	//送出訂單
+	@PostMapping(value = {"/saveOrder/{addres}","/saveOrder"},
 				consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public void saveOrder(@RequestBody List<OrderListBean> orderListBeanList,
-						@PathVariable String addres,
+						@PathVariable(value = "addres",required = false) String addres,
 						HttpServletRequest request,
 						HttpServletResponse response) {
-		for(int i = 0; i<orderListBeanList.size(); i++) {
-			orderListBeanList.get(i).setMenuBean(menuService.getMenuById(orderListBeanList.get(i).getMenuID()));
-		}
-		
 		OrderBean orderBean = new OrderBean();
-		orderBean.setStoreBean(orderListBeanList.get(0).getMenuBean().getStoreBean());
 		Cookie[] cookieList = request.getCookies();
 		Cookie productIDCookie = null;
 		Cookie productQuantityCookie = null;
+		Cookie memberCookie = null;
 		if (cookieList != null) {
 			for (Cookie cookie : cookieList) {
 				if(cookie.getName().equals("userId")) {
+					memberCookie = cookie;
 					orderBean.setMemberBean(memberService.getMamberById(Integer.valueOf(cookie.getValue())).get());
 				}
 				//找到我要找的餅乾
@@ -211,25 +214,37 @@ public class OrderController {
 				
 			}
 		}
-		//用後端把總價送回前端
-		Double alltotal=0.0;
-		for( OrderListBean i:orderListBeanList) {
-			//取得總價
-		 	alltotal += i.getQuantity()*i.getMenuBean().getDishPrice();
-		}
-		orderBean.setTotalCost(alltotal);
-		orderBean.setOrderDate(LocalDate.now());
-		orderBean.setShipping_address(addres);
+		if(memberCookie != null) {
+			if(addres == null) {
+				addres = "";
+			}
+			for(int i = 0; i<orderListBeanList.size(); i++) {
+				orderListBeanList.get(i).setMenuBean(menuService.getMenuById(orderListBeanList.get(i).getMenuID()));
+			}
+			
+			orderBean.setStoreBean(orderListBeanList.get(0).getMenuBean().getStoreBean());
+			//用後端把總價送回前端
+			Double alltotal=0.0;
+			for( OrderListBean i:orderListBeanList) {
+				//取得總價
+			 	alltotal += i.getQuantity()*i.getMenuBean().getDishPrice();
+			}
+			orderBean.setTotalCost(alltotal);
+			orderBean.setOrderDate(LocalDateTime.now());
+			orderBean.setShipping_address(addres);
+			orderservice.getNewestOrderByMember(memberService.getMamberById(1).get());
+			
+			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
+				productIDCookie.setMaxAge(0);
+				productQuantityCookie.setMaxAge(0);	
+				productIDCookie.setPath(request.getContextPath());
+				productQuantityCookie.setPath(request.getContextPath());
+				response.addCookie(productIDCookie);
+				response.addCookie(productQuantityCookie);
+			}
 		
-		if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
-			productIDCookie.setMaxAge(0);
-			productQuantityCookie.setMaxAge(0);	
-			productIDCookie.setPath(request.getContextPath());
-			productQuantityCookie.setPath(request.getContextPath());
-			response.addCookie(productIDCookie);
-			response.addCookie(productQuantityCookie);
 		}
-	
+
 		
 	}
 	
@@ -248,6 +263,32 @@ public class OrderController {
 		return null;
 	}
 	
+//	//發送請求給綠界
+//	@PostMapping(value="/toPayECpay",
+//				consumes = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
+//	public AioCheckOutALL  aioCheckOutALL(HttpServletRequest request) {
+//		AioCheckOutALL aio = new AioCheckOutALL();
+//		Cookie[] cookieList = request.getCookies();
+//		if (cookieList != null) {
+//			for (Cookie cookie : cookieList) {
+//				if(cookie.getName().equals("userId")) {
+//					cookie.getValue();
+//				}
+//			}
+//		}
+//		aio.setMerchantID("2000132");
+//		aio.setMerchantTradeNo(merchantTradeNo);
+//	    aio.setMerchantTradeDate(merchantTradeDate);
+//		aio.setTotalAmount(totalAmount);
+//		aio.setTradeDesc(tradeDesc);
+//		aio.setItemName(itemName);
+//		aio.setReturnURL(returnURL);
+//		
+//		return null;
+//	}
+
 	
+
 	
 }
