@@ -5,6 +5,7 @@ import java.sql.Blob;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ import javax.validation.constraints.Pattern;
 
 import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +31,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class StoreBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -60,10 +63,10 @@ public class StoreBean implements Serializable{
 	Integer seatNumber;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
+	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private Set<MenuBean> menus =new LinkedHashSet<>();
-	
-	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
+	@JsonIgnore
+	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private Set<OrderBean> order =new LinkedHashSet<>();
 	
 }

@@ -9,6 +9,8 @@ import com.NeverStarve.store.model.StoreBean;
 
 public interface MenuRepository extends JpaRepository<MenuBean, Integer> {
 	
+	
 	List<MenuBean> findByStoreBean(StoreBean storeBean);
-
+	
+	
 }
