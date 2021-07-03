@@ -28,23 +28,19 @@ public class StoreOrderListServiceImpl implements StoreOrderListService {
 		
 		Map<String, Integer> resultMap = new HashMap<String, Integer>();
 		List<OrderBean> orderList = storeOrderRepository.findByStoreBean(storeBean);
-		
 		for (OrderBean orderbean : orderList) {
-		
 			System.out.println("###XXX"+orderbean.getPkOrderId());
-			
 			for (OrderListBean orderListBean : orderbean.getOrderListBean()) {
-				System.out.println("###XXX"+orderListBean.getPkOrderListId());
+//				System.out.println("###XXX"+orderListBean.getPkOrderListId());
 				
 				String dishName = orderListBean.getMenuBean().getDishName();
 				Integer quantity = orderListBean.getQuantity();
-				System.out.println(dishName);
-				System.out.println(quantity);
+//				System.out.println(dishName);
+//				System.out.println(quantity);
 				resultMap.put(dishName, resultMap.getOrDefault(dishName, 0) + quantity);
-
 			}
 		}
-		resultMap.put("ss",6);
+//		resultMap.put("ss",6);
 		return resultMap;
 	}
 

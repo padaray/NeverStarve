@@ -1,6 +1,7 @@
 package com.NeverStarve.orders.model;
 
 import java.io.Serializable;
+import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -17,17 +18,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.NeverStarve.member.model.MemberBean;
+import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "ORDERS")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
