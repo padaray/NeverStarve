@@ -41,7 +41,9 @@ public class BookingServiceImpl implements BookingService {
 
 		
 	}
-	
+
+	@Transactional
+	@Override
 	public BookingTableBean save(BookingTableBean btb) {
 		return bookingRepository.save(btb);
 		
