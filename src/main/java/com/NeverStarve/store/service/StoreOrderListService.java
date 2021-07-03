@@ -4,8 +4,8 @@ import java.util.Map;
 
 import com.NeverStarve.store.model.StoreBean;
 
-public interface ReportService {
+public interface StoreOrderListService {
 	
-	public Map<String, Integer> getQuantity(StoreBean mystorebean);
+	Map<String, Integer> getOrderListByStoreBean(StoreBean storeBean);
 	
 }

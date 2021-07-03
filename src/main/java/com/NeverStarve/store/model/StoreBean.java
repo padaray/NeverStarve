@@ -5,6 +5,7 @@ import java.sql.Blob;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,6 +36,7 @@ import lombok.ToString;
 @ToString(exclude={"menus","order"})
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class StoreBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	

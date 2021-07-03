@@ -1,6 +1,7 @@
 package com.NeverStarve.store.model;
 
 import java.sql.Blob;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,18 +17,20 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 @Entity
 @Table(name ="MENU")
-@Data
-@ToString(exclude={"storeBean"})
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuBean {
