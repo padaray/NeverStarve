@@ -27,21 +27,40 @@ public class MenuServiceImpl implements MenuService {
 		return menuRepository.save(menuBean);
 	}
 
+	//用cookie找到storeBean再去抓菜單
 	@Override
 	public List<MenuBean> getMenuByStoreBean(StoreBean storeBean) {
-//		StoreBean storeBean = storeRepository.getById(id);
 		return menuRepository.findByStoreBean(storeBean);
 	}
 
+	//育霆用的
 	@Override
 	public MenuBean getMenuById(Integer id) {
 		return menuRepository.getById(id);
 	}
 
+	//育霆用的
 	@Override
 	public List<MenuBean> getMenuByStroeId(Integer id) {
 		StoreBean storeBean = storeRepository.getById(id);
 		return menuRepository.findByStoreBean(storeBean);
 	}
+	
+	//用菜品ID去刪除菜品
+	@Override
+	public void deleteByDishId(Integer dishId) {
+		menuRepository.deleteByDishId(dishId);
+	}
+
+	@Override
+	public void saveMenuList(List<MenuBean> menuListS, StoreBean storeBean) {
+		// TODO Auto-generated method stub
+		for(MenuBean MLS: menuListS) {
+			MLS.setStoreBean(storeBean);
+			menuRepository.save(MLS);
+		}
+	}
+	
+	
 
 }

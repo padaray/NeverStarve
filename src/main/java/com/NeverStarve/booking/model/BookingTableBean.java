@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -31,7 +32,7 @@ public class BookingTableBean {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer pkBookingNo;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "FK_Member_Id")
 	private MemberBean memberBean;
 	
@@ -43,12 +44,12 @@ public class BookingTableBean {
 	
 //	String storeName;
 	
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy 年 MM 月 dd 日")
 	private Date bookingDate;
 	
 	@DateTimeFormat(pattern = "HH:mm")
 	private Date bookingTime;
-
+	
 	private Integer bookingNum;
 	
 	private Date postTime; //送出預約的時間紀錄

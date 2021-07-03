@@ -2,6 +2,7 @@ package com.NeverStarve.backStage.controller;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.response.MemberResponse;
 import com.NeverStarve.member.service.MemberService;
+import com.NeverStarve.orders.model.OrderBean;
+import com.NeverStarve.orders.model.OrderListBean;
+import com.NeverStarve.orders.service.OrderService;
 
 @Controller
 @RequestMapping("/Backstage/Member")
@@ -29,6 +33,9 @@ public class BackstageMember {
 	
 	@Autowired
 	MemberService memberservice;
+	
+	@Autowired
+	OrderService orderService ;
 	
 	@GetMapping("/{id}")
 	public String getMamberById(@PathVariable int id, Model model) {
@@ -71,5 +78,23 @@ public class BackstageMember {
 		return response;		
 	}
 		
+	@GetMapping("order/{id}")
+	public String getOrder(@PathVariable int id, Model model) {
+		Optional<MemberBean> member = memberservice.getMamberById(id);
+		MemberBean m = member.get();
+		Set<OrderBean> order = m.getOrders();
+		model.addAttribute("id", m.getPkMemberId());
+		model.addAttribute("orderSet",order);
+		return "backstage/MemberOrder" ;
+	}
 	
+	@GetMapping("list/{id}")
+	public String getliString (@PathVariable int id , Model model) {
+		Optional<OrderBean> order = orderService.findByPkOrderId(id);
+		OrderBean o = order.get();
+		Set<OrderListBean> list = o.getOrderListBean();
+		model.addAttribute("orderList",list);
+		return "backstage/OrderList";
+		
+	}
 }

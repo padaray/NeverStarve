@@ -7,9 +7,10 @@
 	crossorigin="anonymous"></script>
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-<title>結帳畫面</title>
-<script type="text/javascript">
+<script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" ></script>
 
+<title>結帳畫面</title>
+<script>
 	$.ajax({ type: "GET", 
 			url: "[[@{/Order/getShoppingCar}]]",
 			dataType: "json", 
@@ -17,54 +18,65 @@
 			 success: function (response) { 
 				 $.each(response, function(index, element){
 					 $('#info').append(
-							'<tr><td  class="p" style="display: none">'+ element.pkDishId + '</td>'+
+							'<tr class="allProduct"><td  class="p" style="display: none">'+ element.pkDishId + '</td>'+
         					'<td>'+ element.dishName+'</td>'+
         					'<td>'+ '價格：'+element.dishPrice+'</td>'+
           					'<td>'+ '數量：<input  class="min" name="" value="-" type="button"/>'+
     						'<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="'+element.quantity+'" disabled="disabled"/>'+
        						'<input class="add" name="" value="+" type="button" /></td>'+
-         					'<td>'+ '單價總額：'+element.dishPrice*element.quantity+'</td>'+
+         					'<td class="onetotal">'+ '單價總額：'+element.dishPrice*element.quantity+'</td>'+
          					'<td><button class="delete">刪除</button></td></tr>')
-// 					  $('#info').append($('<tr>').append(
-// 							  	$('<td>',
-// 							  	{text: element.pkDishId}),
-// 							  	$('<td>', 
-// 					            {text: element.dishName}),
-// 							  	$('<td>', 
-// 					            {text: '價格：'+element.dishPrice}),
-// 			                    $('<td>', 
-// 			                    {html: '數量：'+
-// 			                    	'<input  class="min" name="" value="-"  type="button"/>'+
-// 			        				'<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="'+element.quantity+'" disabled="disabled"/>'+
-// 				        			'<input class="add" name="" value="+" type="button" />'}),
-// 			                    $('<td>',
-// 			                    {text: '單價總額：'+element.dishPrice*element.quantity}),
-// 			                    $('<td>',
-// 					            {html: '<button class="delete">刪除</button>'}),
-// 			                    ));
+
 				 }
 			 )}
 			
 		});	
-</script>
 
-<script>
 $(function() {
+setAllTotal ();
 $(".min").click(function(){
 	var min = $(this).next().val();
+	var object = $(this).parent();
 	if(min == 1){
 		DeleteProduct()
 	}else{
 		min	--;
 	}
 	$(this).next().val(min)
+	setOneTotal(object);
+	setAllTotal();
 })
 $(".add").click(function(){
+var object = $(this).parent();	
 var add = $(this).prev().val();
  add ++;
  $(this).prev().val(add);
-
+ setOneTotal(object);
+	setAllTotal();
 })
+
+function setOneTotal(object){
+	var s=0;
+	s+=parseInt(object.children().eq(1).val())*parseFloat(object.prev().text().substring(3));
+	object.next().html("單價總額："+s.toFixed(0));
+	
+	}
+
+
+function setAllTotal () {
+	
+	var a=0;
+	var total = $(".onetotal");
+	var totallength =$("#tab").find(".onetotal").length;
+	for(i=0; i<totallength ; i++){
+	 a += parseFloat(total.eq(i).text().substring(5))
+		 
+	}
+		$("#alltotal").text(a)
+	
+}
+
+
 $(".delete").click(DeleteProduct)
 function DeleteProduct(){
 	
@@ -79,15 +91,88 @@ function DeleteProduct(){
 	}
 }
 $("#save").click(function(){
+	var saveOrder = [];
 	
+	var  allProductlength =$("#tab").find(".allProduct").length;
 	
+	var  memberaddres =$("#addressId").val();
+	
+	for(i=0; i < allProductlength; i++){
+		
+		var allProduct = $(".allProduct");
+		
+		if(allProduct.find(".text_box").eq(i).val()>0){
+			
+			saveOrder[saveOrder.length] = {
+					"menuID" :allProduct.find(".p").eq(i).text(),    
+					"quantity" : allProduct.find(".text_box").eq(i).val() ,
+					};
+		}	
+	}
+	for(j=0; j<saveOrder.length; j++){
+		console.log("ID = "      + saveOrder[j].menuID);
+		console.log("quantity =" + saveOrder[j].quantity);
+		}
+	
+	if(memberaddres == ""){
+		
+		$.ajax({ type: "POST", 
+			url:"[[@{/Order/saveOrder}]]",
+			data: JSON.stringify(saveOrder), dataType: "json", 
+			contentType: "application/json",
+		});
+		alert('訂單成功送出!!!');
+		window.location = "[[@{/store/findAll}]]"
+		
+
+	}else{
+		$.ajax({ type: "POST", 
+			url:"[[@{/Order/saveOrder}]]"+"/"+$("#addressId").val(),
+			data: JSON.stringify(saveOrder), dataType: "json", 
+			contentType: "application/json",
+				
+			
+		});	
+		alert('訂單成功送出!!!');
+		window.location = "[[@{/store/findAll}]]"
+		
+	}
+		
+})
+$("#maddres").click(function(){
+	$.ajax({ type: "GET", 
+		url:"[[@{/Order/getaddresByID}]]",
+		dataType: "json", 
+		contentType: "application/json",
+		success: function (response) {
+			$("#addressId").val(response.address)
+		}
+	});	
+})
+$(".county").change(function(){
+	$("#addressId").val($(".county").val()+" "+$(".district").val()+" ");
+})
+$(".district").change(function(){
+	$("#addressId").val($(".county").val()+" "+$(".district").val()+" ");
+})
+$("#inputaddressId").change(function(){
+	$("#addressId").val($(".county").val()+" "+$(".district").val()+" "+$("#inputaddressId").val());
+})
+$("#ggininder").hide();	
+$('input[name=checktake]').change(function(){
+	takeout = $('input[name=checktake]:checked').val()
+	if(takeout==1){
+		$("#ggininder").hide();	
+	}else{
+		$("#ggininder").show();	
+	}
 })
 
 })	
 </script>
 
 </head>
-<body>
+<body th:object="${memberBean}">
 	<div style="text-align: center;">
 		<table id="tablejia1" class="" width="100%" cellpadding="0"
 			cellspacing="0" border="0" style='text-align: center;'>
@@ -97,7 +182,7 @@ $("#save").click(function(){
 		</table>
 
 		<div style="overflow: hidden; height: 42vh; overflow-y: scroll">
-			<table class="table table-striped" width="100%" cellpadding="0"
+			<table id="tab" class="table table-striped" width="100%" cellpadding="0"
 				cellspacing="0" border="0">
 				<tbody id="info">
 
@@ -105,9 +190,51 @@ $("#save").click(function(){
 			</table>
 		</div>
 	</div>
+	
+	
+	<p>取餐方式:</p>
+  <input type="radio" id="store" name="checktake" value="1"  checked="true">
+  <label for="store">到店取餐</label>
+  <input type="radio" id="home" name="checktake" value="2">
+  <label for="home">送餐至住家</label><br>
+
+<p>付款方式:</p>
+<select>
+    <option>請選擇你想要的付款方式</option>
+    <option>現金</option>
+    <option>線上刷卡</option>
+</select>
+ 
+	
+	
 	<section class="fixed_bottom food_shopcar" >
+		<div class="form-group" id="ggininder" >
+		<br>
+					<label for="addressId">地址</label>
+					<div class="btn orgbtn fr" ><p  id="maddres" >使用會員地址</p></div>
+					<div id="twzipcode">
+					</div>
+					<input type="text" name="inputaddress" id="inputaddressId" class="form-control">
+					<input type="text" name="address" id="addressId" class="form-control" readonly="readonly">
+					<p class= "form-control-static text-danger"  style="margin-bottom: 0"></p>
+					<p class= "form-control-static text-danger" ></p>
+		</div>
+	
+
 		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
  		<div class="btn orgbtn fr" ><p  id="save" >送出訂單	</p></div>
 	</section>
+<script>
+$("#twzipcode").twzipcode({
+    countySel: "", // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+    districtSel: "", // 地區預設值
+    zipcodeIntoDistrict: true,  // 郵遞區號自動顯示在地區
+    css: ["county form-control", "district form-control", "zipcode form-control"], // 自訂 "城市"、"地區" class 名稱
+    countyName: "storeCity", // 自訂城市 select 標籤的 name 值
+    districtName: "storeTown" // 自訂地區 select 標籤的 name 值
+    });
+</script>
+
+	
 </body>
 </html>

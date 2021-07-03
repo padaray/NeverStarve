@@ -79,24 +79,24 @@ public class LoginController {
 //		if (nextPath == null) {
 //			nextPath = "/";
 //		}
-		processCookies(bean, request, response);
+		processCookies(member, request, response);
 		String type = member.getUserType();
 		if (type.equals("0")) {
 			return "redirect:/Backstage/";
 		}
-		
-		
 		return "redirect:/Member/memberDetail";
 	}
 	
 	
-	private void processCookies(LoginBean bean , HttpServletRequest request , HttpServletResponse response) {
+	private void processCookies(MemberBean bean , HttpServletRequest request , HttpServletResponse response) {
 		Cookie cookieEmail = null;
 		Cookie cookiePassword = null;
+		Cookie cookieId = null;
 		String userEmail = bean.getEmail();
 		String password = bean.getPassword();
+		String userId = String.valueOf(bean.getPkMemberId());
 		
-		cookieEmail = new Cookie("email", userEmail);
+		cookieEmail = new Cookie("email", userEmail); 
 		cookieEmail.setMaxAge(2 * 60 * 60);       // Cookie的存活期: 2小時
 		cookieEmail.setPath(request.getContextPath());
 
@@ -105,17 +105,23 @@ public class LoginController {
 		cookiePassword.setMaxAge( 2 * 60 * 60);
 		cookiePassword.setPath(request.getContextPath());
 		
+		cookieId = new Cookie("userId" , userId);
+		cookieId.setMaxAge( 2 * 60 * 60);
+		cookieId.setPath(request.getContextPath());
+		
 		response.addCookie(cookieEmail);
 		response.addCookie(cookiePassword);
-
+		response.addCookie(cookieId);
 	}
 	
-	private void deleteCookies( HttpServletRequest request , HttpServletResponse response) {
+		private void deleteCookies( HttpServletRequest request , HttpServletResponse response) {
 		Cookie cookieEmail = null;
 		Cookie cookiePassword = null;
+		Cookie cookieId = null;
 		String email = "";
 		String password = "";
-		
+		String userId = "";
+
 		cookieEmail = new Cookie("email", email);
 		cookieEmail.setMaxAge(0);
 		cookieEmail.setPath(request.getContextPath());
@@ -125,9 +131,13 @@ public class LoginController {
 		cookiePassword.setMaxAge(0);
 		cookiePassword.setPath(request.getContextPath());
 		
+		cookieId = new Cookie("userId" , userId);
+		cookieId.setMaxAge(0);
+		cookieId.setPath(request.getContextPath());
+		
 		response.addCookie(cookieEmail);
 		response.addCookie(cookiePassword);
-
+		response.addCookie(cookieId);
 	}
 	//確認有沒有cookie
 	public boolean checkCookie(String email, Model model){

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,11 +27,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name="MEMBER")
-@Data
+//@Data
+@Getter
+@Setter
+@ToString(exclude={"orders"})
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberBean implements Serializable{
@@ -88,7 +95,7 @@ String bas64;
 private MultipartFile memberImage;
 
 @JsonIgnore
-@OneToMany(mappedBy ="memberBean")
+@OneToMany(mappedBy ="memberBean",fetch = FetchType.LAZY)
 private Set<OrderBean> orders =new LinkedHashSet<>();
 
 

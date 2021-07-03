@@ -4,142 +4,153 @@
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- i標籤小圖 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"> <!-- bootstrap樣式 -->
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->
+<link rel="shortcut icon"  th:href="@{/favicon.ico}"/> <!-- 網站小圖 -->	
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <title>這是購物車</title>
 <style type="text/css">
-	.food_shopcar{
-		border-top:1px solid #d9d9d9;
-		background:rgba(255,255,255,9);
-		height:50px;
-		line-height:50px;
-		width:94%;
-		padding:0 3%;
-	}
-	.food_shopcar .car {
-    padding-left: 36px;
-    background-size: auto 60%;
-	}
+/* 	.food_shopcar{ */
+/* 		border-top:1px solid #d9d9d9; */
+/* 		background:rgba(255,255,255,9); */
+/* 		height:50px; */
+/* 		line-height:50px; */
+/* 		width:94%; */
+/* 		padding:0 3%; */
+/* 	} */
+/* 	.food_shopcar .car { */
+/*     padding-left: 36px; */
+/*     background-size: auto 60%; */
+/* 	} */
 
-	.fl {
-    float: left;
-	}
+ 	.fl {
+    float: left; 
+ 	} 
 	
-	.food_shopcar .btn {
-    margin: 8px 0;
-	}
-	.fr {
-    float: right;
-	}
+ 	.food_shopcar .btn { 
+     margin: 8px 0; 
+ 	} 
+ 	.fr { 
+     float: right; 
+	} 
 </style>
-<script>
-	$(function() {
-		
-		
-		$(".add").click(function() {
-// 		   設定一個變數t去尋找數量	
-			var t = $(this).prev();
-			var object = $(this).parent();
-			t.val(parseInt(t.val()) + 1)
-			setOneTotal(object);
-			setAllTotal();
-			$(this).attr("disabled",false);
-		})
-		$(".min").click(function() {
-			var t = $(this).next();
-			var object = $(this).parent();
-			t.val(parseInt(t.val()) - 1)
-			if (parseInt(t.val()) < 0) {
-				t.val(0);
-			}
-			setOneTotal(object);
-			setAllTotal();
-		})
+<script type="text/javascript" th:inline="javascript">
+$(function () {
+	var a=0 ;
+    var member = /*[[${member}]]*/
+    $(".add").click(function () {
+        //設定一個變數t去尋找數量	
+        var t = $(this).prev();
+        var object = $(this).parent();
+        t.val(parseInt(t.val()) + 1)
+        setOneTotal(object);
+        setAllTotal();
+        if(a>0){
+        	 $("#save").attr("disabled",false)
+        }
+    })
+    $(".min").click(function () {
+        var t = $(this).next();
+        var object = $(this).parent();
+        t.val(parseInt(t.val()) - 1)
+        if (parseInt(t.val()) <= 0) {
+            t.val(0);
+            $("#save").attr("disabled",truee)
+        }
+        
+        setOneTotal(object);
+        setAllTotal();
+    })
 
-		function setOneTotal(object){
-			var s=0;
-			var setOnetotal;
-			s+=parseInt(object.children().eq(1).val())*parseFloat(object.prev().text());
-			object.next().children().eq(0).html(s.toFixed(1));
-			
-			}
-		
-		function setAllTotal () {
-			
-			var a=0;
-			var total = $(".onetotal");
-			var totallength =$("#tab").find(".onetotal").length;
-			for(i=0; i<totallength ; i++){
-			 a += parseFloat(total.eq(i).text())
-				 
-			}
-				$("#alltotal").text(a)
-			
-		}
+    function setOneTotal(object) {
+        var s = 0;
+        var setOnetotal;
+        s += parseInt(object.children().eq(1).val()) * parseFloat(object.prev().text());
+        object.next().children().eq(0).html(s.toFixed(1));
+
+    }
+
+    function setAllTotal() {
+        a = 0;
+        var total = $(".onetotal");
+        var totallength = $("#tab").find(".onetotal").length;
+        for (i = 0; i < totallength; i++) {
+            a += parseFloat(total.eq(i).text())
+
+        }
+        $("#alltotal").text(a)	
+    }
+    
+    $("#save").click(function () {
+    	if(member!=null){
+    		 var b1 = false;
+    	        //把有數量的東西，用迴圈抓取出來
+    	        var saveCart = [];
+    	        //抓取用Th標籤遍歷出來的物件數量
+    	        var allProductlength = $("#tab").find(".allProduct").length;
+    	        for (i = 0; i < allProductlength; i++) {
+    	            //宣告一個變數去接所有遍歷出來的物件
+    	            var allProduct = $(".allProduct");
+    	            //用物件裡有一個叫.text_box裡面的值來判斷是否有大於0
+    	            if (allProduct.find(".text_box").eq(i).val() > 0) {
+    	                //{}是一個物件
+
+    	                saveCart[saveCart.length] = {
+    	                    "productID": allProduct.find(".dishID").eq(i).text(),
+    	                    "productOnePrice": allProduct.find(".price").eq(i).text(),
+    	                    "productQuantity": allProduct.find(".text_box").eq(i).val(),
+    	                    "productOneTotal": allProduct.find(".onetotal").eq(i).text(),
+    	                    "productAllTotal": $("#alltotal").text()
+    	                };
+    	                b1 = true;
+    	            }
+    	        }
+    	        // saveCart[saveCart.length] = 將等號右側的值放入陣列最後一個位置
+    	        // array的Length會比索引值(Index)大1
+    	        // 			saveCart[saveCart.length] = $("#alltotal").text();
+    	        for (j = 0; j < saveCart.length - 1; j++) {
+    	            console.log("ID = " + saveCart[j].productID);
+    	            console.log("Price =" + saveCart[j].productOnePrice);
+    	            console.log("Quantity =" + saveCart[j].productQuantity);
+    	            console.log("OneTotal =" + saveCart[j].productOneTotal);
+    	        }
+    	        //陣列的長度-1會等於陣列的最後一個索引值
+    	        // 			console.log("AllTotal =" +saveCart[saveCart.length-1]);
+    	        if (b1) {
+    	        	ur = /*[[@{/Order/saveShoppingCar}]]*/
+    	            $.ajax({
+    	                type: "POST",
+    	                url: ur,
+    	                data: JSON.stringify(saveCart), dataType: "json",
+    	                contentType: "application/json"
+
+    	            });
+    	            var b2 = confirm('前往結帳畫面!!!，若要繼續點餐請按取消按鈕謝謝~');
+
+    	            if (b2) {
+    					uu=/*[[@{/Order/order}]]*/
+    	                window.location = uu
+    	                alert('將跳轉到結帳畫面');
+    	            } else {
+    	                alert('請繼續選擇您的餐點');
+    	            }
+    	        }
+    	}else{
+    		nologin=/*[[@{/Member/login }]]*/
+            window.location = nologin 
+    		alert("請登入會員唷!!!")
+    	}
+       
+    })
+
+
 })
-</script>
-<script >
-$(function() {
-	$("#save").click(function(){
-		var b1 =false;
-		//把有數量的東西，用迴圈抓取出來
-		var saveCart = [];
-		//抓取用Th標籤遍歷出來的物件數量
-			var  allProductlength =$("#tab").find(".allProduct").length;
-			for(i=0; i < allProductlength; i++){
-				//宣告一個變數去接所有遍歷出來的物件
-				var allProduct = $(".allProduct");
-				//用物件裡有一個叫.text_box裡面的值來判斷是否有大於0
-				if(allProduct.find(".text_box").eq(i).val()>0){
-					//{}是一個物件
-					
-					saveCart[saveCart.length] = {
-							"productID" :allProduct.find(".dishID").eq(i).text(),    
-							"productOnePrice" : allProduct.find(".price").eq(i).text(),
-							"productQuantity" : allProduct.find(".text_box").eq(i).val() ,
-							"productOneTotal" : allProduct.find(".onetotal").eq(i).text(),
-							"productAllTotal" :  $("#alltotal").text()
-							};
-						b1 = true;
-				}	
-			}
-			// saveCart[saveCart.length] = 將等號右側的值放入陣列最後一個位置
-			// array的Length會比索引值(Index)大1
-// 			saveCart[saveCart.length] = $("#alltotal").text();
-			for(j=0; j<saveCart.length-1; j++){
-			console.log("ID = "      + saveCart[j].productID);
-			console.log("Price ="    + saveCart[j].productOnePrice);
-			console.log("Quantity =" + saveCart[j].productQuantity);
-			console.log("OneTotal =" + saveCart[j].productOneTotal);				
-			}
-			//陣列的長度-1會等於陣列的最後一個索引值
-// 			console.log("AllTotal =" +saveCart[saveCart.length-1]);
-			if(b1){
-			$.ajax({ type: "POST", 
-						
-					url: "[[@{/Order/saveShoppingCar}]]",
-					data: JSON.stringify(saveCart), dataType: "json", 
-					contentType: "application/json"
-			
-			});		
-			var b2 = confirm('前往結帳畫面!!!，若要繼續點餐請按取消按鈕謝謝~');
 
-			if (b2) {
-				
-				window.location ="[[@{/Order/order}]]"
-			    alert('將跳轉到結帳畫面');
-			} else {
-			    alert('請繼續選擇您的餐點');
-			}
-			}
-	})
-
-	
-	
-})
 </script>
 </head>
 <body>
-
+ <div th:insert="Generic :: Header"></div>
 	<table id="tab" style="border: 5px; border-color: black;">
 		<thead>
 			<tr>
@@ -179,9 +190,11 @@ $(function() {
 
 		</tbody>
 	</table>
-	<section class="fixed_bottom food_shopcar" >
-		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
- 		<div class="btn orgbtn fr" ><p  id="save" >存入購物車</p></div>
+	<div class="">
+	<section class="fixed-bottom d-flex justify-content-around" >
+		<div id="alltotalDiv" class="car"><span class="text-success " id="alltotal">0</span>元</div>
+ 		<div class="btn orgbtn " ><button  disabled="disabled" id="save" class="btn btn-primary" >存入購物車</button></div>
 	</section>
+	</div>
 </body>
 </html>
