@@ -5,7 +5,6 @@ import java.sql.Blob;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -49,12 +48,14 @@ public class StoreBean implements Serializable{
 	String storeAccount;
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message="請輸入至少8個字包含一個英文及數字")
 	String storePassword;
+	
 	@Transient
 	String storeCheckPassword;
 	@Transient
 	String storeCity;
 	@Transient
 	String storeTown;
+	
 	@NotBlank
 	String storeAddress;
 	@Pattern(regexp = "^[0-9]{7,12}$", message="只能填入數字")

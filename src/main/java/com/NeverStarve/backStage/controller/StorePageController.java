@@ -35,7 +35,7 @@ public class StorePageController {
 			pageNo = 1;			
 		}		
 		Map<Integer, StoreBean> StoreMap = storeService.getPageStores(pageNo);
-//		model.addAttribute("pagecounts",memberService.getTotalcount()); //取得取回來的總筆數
+		model.addAttribute("pagecounts",memberService.getTotalcount()); //取得取回來的總筆數
 //		model.addAttribute("counts",memberService.getRecordCounts()); //取得資料庫共有幾筆
 //		model.addAttribute("pageNo", String.valueOf(pageNo));
 //		model.addAttribute("totalPages", memberService.getTotalPages());
