@@ -28,8 +28,8 @@
         
         .headform{
             position: absolute;
-            
-            right:100px;
+            top:20px;       
+            right:120px;
         }
 
         .form-group{
