@@ -16,7 +16,7 @@
 	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
 	crossorigin="anonymous"></script>
 <script
-	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" />
+	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" ></script>
 <script src="/js/jquery.twzipcode.min.js"></script>
 <style>
 /* .zipcode { */
@@ -73,7 +73,21 @@
 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storePhone')}" th:errors="*{storePhone}"></p>
 				</div>
 				<div class="form-group">
-					<label for="storeTypeId">菜色種類:</label> 
+					<label for="storeTypeId">菜色種類:</label>
+					<div data-toggle="buttons" class="btn-group-toggle" >
+                            <label class="btn btn-outline-info">
+                                <input type="checkBox" name="bookingTime" value="美式">美式
+                            </label>
+                            <label class="btn btn-outline-info">
+                                <input type="checkBox" name="bookingTime" value="中式">中式
+                            </label>
+                            <label class="btn btn-outline-info">
+                                <input type="checkBox" name="bookingTime" value="韓式">韓式
+                            </label>
+                            <label class="btn btn-outline-info">
+                                <input type="checkBox" name="bookingTime" value="日式">日式
+                            </label>
+                        </div> 
 					<input type="text" name="storeType" id="storeTypeId" class="form-control" th:field="*{storeType}">
 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeType')}" th:errors="*{storeType}"></p>
 				</div>

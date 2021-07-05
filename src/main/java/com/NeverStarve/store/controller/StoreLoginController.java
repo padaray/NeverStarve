@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.store.model.StoreBean;
@@ -92,9 +93,10 @@ public class StoreLoginController {
 	
 	//登出帳號
 	@GetMapping("/logout")
-	public String logout(HttpSession session, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String logout(HttpSession session, Model model, HttpServletRequest request, HttpServletResponse response, SessionStatus status) {
 		if(model.getAttribute("storeUser") != null) {
-			session.removeAttribute("storeUser");
+			status.setComplete();   // 移除@SessionAttributes({"storeUser"}) 標示的屬性物件
+			session.invalidate();	// session.invalidate()讓SESSION失效.
 		}
 		
 		if(checkCookie(request, model)) {

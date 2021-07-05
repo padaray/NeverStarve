@@ -57,8 +57,12 @@ public class MenuRestController {
 	
 	//修改菜品
 	@PostMapping(value="/modifyMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void modifyMenu(@RequestBody MenuBean menuBean) {
-		menuService.save(menuBean);
+	public void modifyMenu(@RequestBody MenuBean menuBean, HttpServletRequest request) {
+		StoreBean storeBean = checkCookie(request);
+		if(storeBean != null) {
+			menuBean.setStoreBean(storeBean);
+			menuService.save(menuBean);
+		}
 	}
 	
 //	@GetMapping("/getMenu")
