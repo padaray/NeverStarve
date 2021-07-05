@@ -18,6 +18,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -61,7 +63,10 @@ public class StoreBean implements Serializable{
 	String storePhone;
 	
 	@JsonIgnore
-	Blob storeImage;
+	Blob coverImage;
+	
+	@Transient
+	MultipartFile storeImage;
 	
 	String storeImageName;
 	
