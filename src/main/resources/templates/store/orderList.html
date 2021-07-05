@@ -19,13 +19,15 @@
        // instantiates the pie chart, passes in the data and
        // draws it.
        function drawChart() {
- 
+    	 var real_data = [[${resultMap}]];
          // Create the data table.
          var data = new google.visualization.DataTable();
          data.addColumn('string', 'Topping');
          data.addColumn('number', 'Slices');
-         data.addRows([[${chartData}]]);
-
+        
+         Object.keys(real_data).forEach(function(key) {
+             data.addRow([ key, real_data[key] ]);
+         });
          // Set chart options
          var options = {'title':'How Much Pizza I Ate Last Night',
              'width':400,

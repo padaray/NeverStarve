@@ -5,6 +5,7 @@ import java.sql.Blob;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,16 +22,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name ="STORE")
-@Data
+//@Data
+@Getter
+@Setter
+@ToString(exclude={"menus","order"})
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class StoreBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -70,10 +78,10 @@ public class StoreBean implements Serializable{
 	@NotNull
 	Integer seatNumber;
 	
-	@JsonIgnore
+	@JsonIgnoreProperties(value = "userInfo")//避免遞歸死循環
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<MenuBean> menus =new LinkedHashSet<>();
-	
+	@JsonIgnore
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<OrderBean> order =new LinkedHashSet<>();
 	

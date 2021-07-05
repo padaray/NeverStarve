@@ -7,9 +7,10 @@
 	crossorigin="anonymous"></script>
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-<script th:src="@{/js/jquery.twzipcode.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" ></script>
+
 <title>結帳畫面</title>
-<script >
+<script>
 	$.ajax({ type: "GET", 
 			url: "[[@{/Order/getShoppingCar}]]",
 			dataType: "json", 
@@ -30,8 +31,7 @@
 			 )}
 			
 		});	
-</script >
-<script >
+
 $(function() {
 setAllTotal ();
 $(".min").click(function(){
@@ -115,16 +115,26 @@ $("#save").click(function(){
 		}
 	
 	if(memberaddres == ""){
-		alert('地址不能為空白的唷!!!');
+		
+		$.ajax({ type: "POST", 
+			url:"[[@{/Order/saveOrder}]]",
+			data: JSON.stringify(saveOrder), dataType: "json", 
+			contentType: "application/json",
+		});
+		alert('訂單成功送出!!!');
+		window.location = "[[@{/store/findAll}]]"
+		
 
 	}else{
 		$.ajax({ type: "POST", 
 			url:"[[@{/Order/saveOrder}]]"+"/"+$("#addressId").val(),
 			data: JSON.stringify(saveOrder), dataType: "json", 
 			contentType: "application/json",
+				
+			
 		});	
 		alert('訂單成功送出!!!');
-		window.location = "[[@{/store/findAll}]]";
+		window.location = "[[@{/store/findAll}]]"
 		
 	}
 		
@@ -139,7 +149,24 @@ $("#maddres").click(function(){
 		}
 	});	
 })
-
+$(".county").change(function(){
+	$("#addressId").val($(".county").val()+" "+$(".district").val()+" ");
+})
+$(".district").change(function(){
+	$("#addressId").val($(".county").val()+" "+$(".district").val()+" ");
+})
+$("#inputaddressId").change(function(){
+	$("#addressId").val($(".county").val()+" "+$(".district").val()+" "+$("#inputaddressId").val());
+})
+$("#ggininder").hide();	
+$('input[name=checktake]').change(function(){
+	takeout = $('input[name=checktake]:checked').val()
+	if(takeout==1){
+		$("#ggininder").hide();	
+	}else{
+		$("#ggininder").show();	
+	}
+})
 
 })	
 </script>
@@ -163,18 +190,51 @@ $("#maddres").click(function(){
 			</table>
 		</div>
 	</div>
+	
+	
+	<p>取餐方式:</p>
+  <input type="radio" id="store" name="checktake" value="1"  checked="true">
+  <label for="store">到店取餐</label>
+  <input type="radio" id="home" name="checktake" value="2">
+  <label for="home">送餐至住家</label><br>
+
+<p>付款方式:</p>
+<select>
+    <option>請選擇你想要的付款方式</option>
+    <option>現金</option>
+    <option>線上刷卡</option>
+</select>
+ 
+	
+	
 	<section class="fixed_bottom food_shopcar" >
-		<div class="form-group">
+		<div class="form-group" id="ggininder" >
+		<br>
 					<label for="addressId">地址</label>
+					<div class="btn orgbtn fr" ><p  id="maddres" >使用會員地址</p></div>
 					<div id="twzipcode">
 					</div>
-					<div class="btn orgbtn fr" ><p  id="maddres" >使用會員地址</p></div>
-					<input type="text" name="address" id="addressId" class="form-control">
+					<input type="text" name="inputaddress" id="inputaddressId" class="form-control">
+					<input type="text" name="address" id="addressId" class="form-control" readonly="readonly">
 					<p class= "form-control-static text-danger"  style="margin-bottom: 0"></p>
 					<p class= "form-control-static text-danger" ></p>
 		</div>
+	
+
 		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
  		<div class="btn orgbtn fr" ><p  id="save" >送出訂單	</p></div>
 	</section>
+<script>
+$("#twzipcode").twzipcode({
+    countySel: "", // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+    districtSel: "", // 地區預設值
+    zipcodeIntoDistrict: true,  // 郵遞區號自動顯示在地區
+    css: ["county form-control", "district form-control", "zipcode form-control"], // 自訂 "城市"、"地區" class 名稱
+    countyName: "storeCity", // 自訂城市 select 標籤的 name 值
+    districtName: "storeTown" // 自訂地區 select 標籤的 name 值
+    });
+</script>
+
+	
 </body>
 </html>
