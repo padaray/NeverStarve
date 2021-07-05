@@ -15,6 +15,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.NeverStarve.booking.model.BookingTableBean;
 import com.NeverStarve.booking.service.BookingService;
 import com.NeverStarve.member.model.MemberBean;
+import com.NeverStarve.store.model.StoreBean;
 
 @Controller
 @RequestMapping("/Booking")
@@ -41,8 +42,12 @@ public class BookingController {
 	
 		//取得會員的id傳進預約資料表中
 		//BookingTableBean的memberBean的cascadeType需改成cascade.MERGE 或不做級聯操作
-		MemberBean memberBean =(MemberBean) model.getAttribute("member"); 
+		MemberBean memberBean = (MemberBean) model.getAttribute("member"); 
 		btb.setMemberBean(memberBean);
+		
+		//取得店家的id傳進預約資料表中
+//		StoreBean storeBean = (StoreBean) model.addAttribute("store");
+//		btb.setStoreBean(storeBean);
 		
 		btb.setPostTime(new Date());
 		model.addAttribute("btb", btb);

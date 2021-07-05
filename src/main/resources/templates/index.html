@@ -36,9 +36,86 @@
 			<span th:case="3">白金會員</span>			 
 		</p>
 	</div>
-	
-	
-			
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Bootstrap Tutorial</h1>
+			<p>Bootstrap is the most popular HTML, CSS, and JS framework for
+				developing responsive, mobile-first projects on the web.</p>
+		</div>
+		<p>This is some text.</p>
+		<p>This is another text.</p>
+	</div>
+
+	<div class="container" style="width: 1000px;">
+		<h1>My First Bootstrap Page</h1>
+		<p>This is some text.</p>
+		<div class="row" >
+			<div class="col-sm-3">
+				<div class="card">
+					<a th:href="@{/}">
+					<img class="card-img-top" th:src="@{/images/NoImage.jpg}" alt="Card image test">
+						Basic card
+						<div class="card-body">test1</div>
+						<p>test2</p>
+					</a>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="card">
+					<a th:href="@{/}" class="card-body">Basic card
+						<div >test1</div>
+						<p>test2</p>
+					</a>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="card">
+					<div class="card-body">
+						<a th:href="@{'/store/'+${storeId}}">Basic card3</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="card">
+					<div class="card-body">
+						<a th:href="@{/}">Basic card</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="card">
+					<div class="card-body">
+						<a th:href="@{/}">Basic card</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="card">
+					<div class="card-body">
+						<a th:href="@{/}">Basic card</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="card">
+					<div class="card-body">
+						<a th:href="@{/}">Basic card</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="card">
+					<div class="card-body">
+						<a th:href="@{/}">Basic card</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
 
 </body>
 </html>
