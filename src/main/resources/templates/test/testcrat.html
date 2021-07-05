@@ -151,6 +151,23 @@ $(function () {
 </head>
 <body>
  <div th:insert="Generic :: Header"></div>
+
+	<div class="container" style="max-width: 700px; margin-top: 50px">
+		<div class="jumbotron text-left">
+			<div >
+				<div>
+					<h3 th:text="${store.storeName}"></h3>
+<!-- 					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}" th:text="${store.storeName}"> </a> -->
+				</div>
+				<a th:href="@{'/Booking/BookingByStoreId/' + ${store.pkStoreId}}">
+<!-- 				<a th:href="@{/Booking/}"> -->
+					<button class="btn btn-primary"><i class='fa fa-calendar'></i> 預約座位去!
+					</button>
+				</a>
+			</div>
+		</div>
+	</div>
+	
 	<table id="tab" style="border: 5px; border-color: black;">
 		<thead>
 			<tr>

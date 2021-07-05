@@ -20,7 +20,7 @@
 <link rel="shortcut icon"  th:href="@{/favicon.ico}"/> <!-- 網站小圖 -->	
 </head>
 
-<body>
+<body >
     <div th:insert="Generic :: Header"></div>
 	
 	<div th:if = "${session.member!=null}">
@@ -46,16 +46,16 @@
 		<p>This is another text.</p>
 	</div>
 
-	<div class="container" style="width: 1000px;">
+	<div class="container" style="width: 1000px;" th:object="${stores}">
 		<h1>My First Bootstrap Page</h1>
 		<p>This is some text.</p>
 		<div class="row" >
-			<div class="col-sm-3">
-				<div class="card">
-					<a th:href="@{/}">
-					<img class="card-img-top" th:src="@{/images/NoImage.jpg}" alt="Card image test">
+			<div class="col-sm-3" th:each="store, iterStat : ${stores}">
+				<div class="card" >
+					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}" th:text="${store.storeName}">
+					<img class="card-img-top" th:src="@{${store.storeImage}}" alt="Card image test">
 						Basic card
-						<div class="card-body">test1</div>
+						<div class="card-body" th:text="${store.storeName}">test1</div>
 						<p>test2</p>
 					</a>
 				</div>
@@ -96,20 +96,20 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{/}">Basic card</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{/}">Basic card</a>
-					</div>
-				</div>
-			</div>
+<!-- 			<div class="col-sm-3"> -->
+<!-- 				<div class="card"> -->
+<!-- 					<div class="card-body"> -->
+<!-- 						<a th:href="@{/}">Basic card</a> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="col-sm-3"> -->
+<!-- 				<div class="card"> -->
+<!-- 					<div class="card-body"> -->
+<!-- 						<a th:href="@{/}">Basic card</a> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
 		</div>
 	</div>
 

@@ -54,8 +54,8 @@
 					<div class="form-group">
 						<label for="storeNameId">預約餐廳</label>
 <!-- 						<input type="text" name="storeName" id="storeNameId" class="form-control" readonly> -->
-						<p id="storeNameId" class="form-control">餐廳名稱(暫時範例)</p>
-<!-- 						<p id="storeNameId" class="form-control">${store.name}</p> -->
+<!-- 						<p id="storeNameId" class="form-control">餐廳名稱(暫時範例)</p> -->
+						<p id="storeNameId" class="form-control" th:text="${store.storeName}"></p>
 					</div>
 					<div class="form-group">
 						<label for="datepicker">用餐日期</label>
