@@ -34,7 +34,6 @@ public class MenuBean {
 	Integer pkDishId;
 	@NotBlank
 	String dishName;
-//	@Pattern(regexp = "", message="只能填入數字")
 	@Min(0)
 	Double dishPrice;
 	@NotBlank
