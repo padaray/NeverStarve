@@ -109,10 +109,10 @@ $("#save").click(function(){
 					};
 		}	
 	}
-	for(j=0; j<saveOrder.length; j++){
-		console.log("ID = "      + saveOrder[j].menuID);
-		console.log("quantity =" + saveOrder[j].quantity);
-		}
+// 	for(j=0; j<saveOrder.length; j++){
+// 		console.log("ID = "      + saveOrder[j].menuID);
+// 		console.log("quantity =" + saveOrder[j].quantity);
+// 		}
 	
 	if(memberaddres == ""){
 		
@@ -121,20 +121,45 @@ $("#save").click(function(){
 			data: JSON.stringify(saveOrder), dataType: "json", 
 			contentType: "application/json",
 		});
-		alert('訂單成功送出!!!');
-		window.location = "[[@{/store/findAll}]]"
+		if($("#payment").val()=="onlineCash"){
+		setTimeout(function(){
+			$.ajax({ type: "POST", 
+				url:"[[@{/Order/toPayECpay}]]",
+				dataType: "json", 
+				contentType: "application/json",
+				success: function (response) {	
+					$("#divforEcpay").html(response.hi)
+						
+				}
+				
+			});
+		}, 1500); 
+// 					 $("#allPayAPIForm").submit()
+		}
+// 		window.location = "[[@{/store/findAll}]]"
 		
 
 	}else{
 		$.ajax({ type: "POST", 
 			url:"[[@{/Order/saveOrder}]]"+"/"+$("#addressId").val(),
 			data: JSON.stringify(saveOrder), dataType: "json", 
-			contentType: "application/json",
+			contentType: "application/json",	
+		});
+		if($("#payment").val()=="onlineCash"){
+			setTimeout(function(){
+			$.ajax({ type: "POST", 
+				url:"[[@{/Order/toPayECpay}]]",
+				dataType: "json", 
+				contentType: "application/json",
+				success: function (response) {
+					$("#divforEcpay").html(response.hi)
+				}
 				
-			
-		});	
-		alert('訂單成功送出!!!');
-		window.location = "[[@{/store/findAll}]]"
+			});
+			}, 1500);
+// 					 $("#allPayAPIForm").submit()
+		}
+// 		window.location = "[[@{/store/findAll}]]"
 		
 	}
 		
@@ -168,6 +193,7 @@ $('input[name=checktake]').change(function(){
 	}
 })
 
+
 })	
 </script>
 
@@ -199,10 +225,9 @@ $('input[name=checktake]').change(function(){
   <label for="home">送餐至住家</label><br>
 
 <p>付款方式:</p>
-<select>
-    <option>請選擇你想要的付款方式</option>
-    <option>現金</option>
-    <option>線上刷卡</option>
+<select id="payment">
+    <option value="cash">現金</option>
+    <option value="onlineCash">線上刷卡</option>
 </select>
  
 	
@@ -219,9 +244,12 @@ $('input[name=checktake]').change(function(){
 					<p class= "form-control-static text-danger"  style="margin-bottom: 0"></p>
 					<p class= "form-control-static text-danger" ></p>
 		</div>
+		
+		<div id="divforEcpay" hidden="hidden"></div>
 	
-
+		
 		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
+ 		<div class="btn orgbtn fr" ><p  id="test" >測試用	</p></div>
  		<div class="btn orgbtn fr" ><p  id="save" >送出訂單	</p></div>
 	</section>
 <script>

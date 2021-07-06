@@ -85,23 +85,39 @@ public class OrderServiceImpl implements OrderService {
 			
 	}
 
-
-
+	@SuppressWarnings("unchecked")
 	@Override
 	public Optional<OrderBean> getNewestOrderByMember(MemberBean memberBean) {
-		
+		//宣告一個變數去接會員的訂單
 		 Set<OrderBean> memberOrder = memberBean.getOrders();
 		 LocalDateTime dateTime = null;
-		 Optional<OrderBean> orderBean = null;
+		 OrderBean orderBean = null ;
+		 Set<OrderListBean> orderList =null;
+		 String dishName = "";
+		 String dishPrice = "";
+		 String dishQuan = "";
+		 String itemName ="";
+		 //遍歷整個會員的訂單
 		 for(OrderBean checkDate:memberOrder) {
+			 //假如dateTime為null或dateTime的時間是在訂單的時間之前
 			 if(dateTime == null || dateTime.isBefore(checkDate.getOrderDate())) {
+				 //訂單的時間設為會員下訂的時間
 				 dateTime = checkDate.getOrderDate();
-				 orderBean = Optional.of(checkDate);
+				//把下單的日期放回orderBean
+				 orderBean = checkDate;
 			 }
-			
+		 }		
+		 orderList = orderBean.getOrderListBean();				 
+		 for( OrderListBean orderitem:orderList) {
+			 dishName = orderitem.getMenuBean().getDishName();
+			 dishPrice = String.valueOf(orderitem.getMenuBean().getDishPrice());
+			 dishQuan  = String.valueOf(orderitem.getQuantity());
+			 itemName  += dishName+dishPrice+"元"+"X"+dishQuan+"#";
 		 }
-		 System.out.println(orderBean.get().getPkOrderId());
-		return orderBean;
+		 itemName = itemName.substring(0,itemName.length()-1);
+		 System.out.println(itemName);
+		 orderBean.setItemName(itemName);
+		return Optional.of(orderBean);
 	}
 
 
