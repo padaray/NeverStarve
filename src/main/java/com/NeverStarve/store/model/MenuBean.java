@@ -17,6 +17,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -43,8 +45,14 @@ public class MenuBean {
 	Double dishPrice;
 	@NotBlank
 	String dishIntroduction;
+	
 	@JsonIgnore
-	Blob dishPicture;
+	Blob coverImage;
+	@Transient
+	MultipartFile dishPicture;
+	String dishImageName;
+	@Transient
+	String base64;
 	
 	@JsonIgnore
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, 

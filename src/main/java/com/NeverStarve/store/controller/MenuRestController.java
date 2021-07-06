@@ -1,9 +1,11 @@
 package com.NeverStarve.store.controller;
 
+import java.sql.Blob;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
@@ -63,6 +66,12 @@ public class MenuRestController {
 			menuBean.setStoreBean(storeBean);
 			menuService.save(menuBean);
 		}
+	}
+	
+	//取消按鈕按下去後，用ID去後端把本來的菜品顯示
+	@GetMapping(value="/findByDishId/{pkDishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public MenuBean findByDishId(@PathVariable int pkDishId) {
+		return menuService.getMenuById(pkDishId);
 	}
 	
 //	@GetMapping("/getMenu")
