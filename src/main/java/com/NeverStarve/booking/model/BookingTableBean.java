@@ -36,7 +36,7 @@ public class BookingTableBean {
 	@JoinColumn(name = "FK_Member_Id")
 	private MemberBean memberBean;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "FK_Store_Id")
 	private StoreBean storeBean;
 	

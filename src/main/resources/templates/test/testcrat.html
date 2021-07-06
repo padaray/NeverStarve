@@ -151,6 +151,23 @@ $(function () {
 </head>
 <body>
  <div th:insert="Generic :: Header"></div>
+
+	<!--  若購物車頁面改成餐廳詳細資訊頁面，直接加入此段的預約功能，再做排版  -->
+	<div class="container" style="max-width: 700px; margin-top: 50px">
+		<div class="jumbotron text-left">
+			<div>
+				<div>
+					<h3 th:text="${store.storeName}"></h3>
+				</div>
+				<a th:href="@{'/Booking/BookingByStoreId/' + ${store.pkStoreId}}">
+					<button class="btn btn-primary">
+						<i class='fa fa-calendar'></i> 預約座位去!
+					</button>
+				</a>
+			</div>
+		</div>
+	</div>
+
 	<table id="tab" style="border: 5px; border-color: black;">
 		<thead>
 			<tr>
