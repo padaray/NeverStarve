@@ -121,20 +121,30 @@
 <!-- 						<input type="text" -->
 <!-- 							name="bookingNum" id="bPeopleNumId" class="form-control"> -->
 							
+<!-- 						<select name="bookingNum" id="bPeopleNumId" class="form-control"> -->
+<!-- 							<option value="1">1</option> -->
+<!-- 							<option value="2" selected="selected">2</option> -->
+<!-- 							<option value="3">3</option> -->
+<!-- 							<option value="4">4</option> -->
+<!-- 							<option value="5">5</option> -->
+<!-- 							<option value="6">6</option> -->
+<!-- 							<option value="7">7</option> -->
+<!-- 							<option value="8">8</option> -->
+<!-- 							<option value="9">9</option> -->
+<!-- 							<option value="10">10</option> -->
+<!-- 						</select> -->
+
 						<select name="bookingNum" id="bPeopleNumId" class="form-control">
-							<option value="1">1</option>
-							<option value="2" selected="selected">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
+							<option th:each="seat : ${#numbers.sequence(1, store.seatNumber, 1)}" 
+									th:value="${seat}" 
+									th:text="${seat}" 
+									th:selected="${seat == 2}">
+							 </option>
 						</select>
-					<p> </p>
+						
+<!-- 					<p th:text="'總座位數(測試): ' + ${store.seatNumber}"> </p> -->
 					</div>
+					<hr>
 					<p>
 						<input id="confirmSubmitId" type="checkbox" name="confirm" th:checked="false" value="1">
 						<label for="confirmSubmitId">已確認預約資訊無誤</label>
