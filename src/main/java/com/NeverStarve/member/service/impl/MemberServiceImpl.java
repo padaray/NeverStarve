@@ -15,11 +15,13 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.repository.MemberRepository;
@@ -57,7 +59,26 @@ public class MemberServiceImpl implements MemberService {
 	public MemberBean updateMember(MemberBean bean) {
 		bean.setAddress(bean.getMemberCity()+" "+bean.getMemberTown()+" "+bean.getAddress());
 		MemberBean orinigBean = memberDao.findById(bean.getPkMemberId()).get();
-
+		MultipartFile memberImage = bean.getMemberImage();
+		if (memberImage != null && !memberImage.isEmpty()) {
+			String ImageFileName = memberImage.getOriginalFilename();
+			bean.setFileName(ImageFileName);
+			try {
+				byte[] b = memberImage.getBytes();
+				Blob blob = new SerialBlob(b);
+				bean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
+			}
+		}else {
+				if(orinigBean.getFileName()!=null) {			
+			bean.setCoverImage(orinigBean.getCoverImage());
+			bean.setFileName(orinigBean.getFileName());
+				}
+		}
+		
+		
 		bean.setLongTime(orinigBean.getLongTime());
 		bean.setRegisterTime(orinigBean.getRegisterTime());
 		bean.setUnpaid_amount(orinigBean.getUnpaid_amount());	
@@ -214,9 +235,6 @@ public class MemberServiceImpl implements MemberService {
 			}
 			
 			return data;
-
-
-
 
 	}
 

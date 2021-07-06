@@ -1,7 +1,8 @@
 package com.NeverStarve.orders.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.sql.Blob;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,16 +17,22 @@ import javax.persistence.Transient;
 
 import com.NeverStarve.store.model.MenuBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name ="ORDERList")
-@Data
+//@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class OrderListBean implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -38,7 +45,7 @@ public class OrderListBean implements Serializable{
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "FK_MenuBean_Id")
 	private MenuBean menuBean; 	//取得菜單的Bean
-	String quantity ;			//商品數量
+	Integer quantity ;			//商品數量
 	@JsonIgnore
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "FK_OrderBean_Id")

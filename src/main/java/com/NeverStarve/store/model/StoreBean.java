@@ -17,18 +17,27 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name ="STORE")
-@Data
+//@Data
+@Getter
+@Setter
+@ToString(exclude={"menus","order"})
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class StoreBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -41,28 +50,39 @@ public class StoreBean implements Serializable{
 	String storeAccount;
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message="請輸入至少8個字包含一個英文及數字")
 	String storePassword;
+	
 	@Transient
 	String storeCheckPassword;
 	@Transient
 	String storeCity;
 	@Transient
 	String storeTown;
+	
 	@NotBlank
 	String storeAddress;
 	@Pattern(regexp = "^[0-9]{7,12}$", message="只能填入數字")
 	String storePhone;
 	
 	@JsonIgnore
-	Blob storeImage;
+	Blob coverImage;
+	
+	@Transient
+	MultipartFile storeImage;
+	
+	String storeImageName;
+	
+	@Transient
+	String base64;
+
 	@NotBlank
 	String storeType;
 	@NotNull
 	Integer seatNumber;
 	
-	@JsonIgnore
+	@JsonIgnoreProperties(value = "userInfo")//避免遞歸死循環
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<MenuBean> menus =new LinkedHashSet<>();
-	
+	@JsonIgnore
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
 	private Set<OrderBean> order =new LinkedHashSet<>();
 	

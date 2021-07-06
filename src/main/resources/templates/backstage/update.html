@@ -18,11 +18,12 @@
 <link rel="shortcut icon" th:href="@{/favicon.ico}" />
 <!-- 地區外掛 -->
 <script th:src="@{/js/jquery.twzipcode.min.js}"></script>
-<style type="text/css">
-</style>
+<!-- seewt alert -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script  type="text/javascript" th:inline="javascript">
 
 $(function () {
+	var update=/*[[@{/Backstage/Member/update}]]*/
 	
 	$("#updateForm").change(function(){
 		 $('#submitbutton').attr('disabled', false);
@@ -31,37 +32,53 @@ $(function () {
 	
 	var pkid = /*[[${member.pkMemberId}]]*/
     $('#submitbutton').click(function (e) {
-    	
-    	if(window.confirm("確認修改內容")){
-    		//alert(“確定”);
-    		
-        //Prevent default submission of form
+     	//Prevent default submission of form
         e.preventDefault();
  
         //Remove previous errors
         $('input').next('span').remove();
+        
+    	Swal.fire({
+    		  title: '要儲存改變嗎?',
+    		  showDenyButton: true,
+    		  showCancelButton: true,
+    		  confirmButtonText: '儲存',
+    		  denyButtonText: '取消',
+    		}).then((result) => {
+    		  /* Read more about isConfirmed, isDenied below */
+    		  if (result.isConfirmed) {
+    			  var formData = new FormData($("#updateForm")[0]);
+    		    
+	    		     $.post({
+	            url: update,
+	            data:formData,
+	            contentType: false, 
+	            processData: false, 
+	            success: function (res) {
+	                if (res.validated) {
+	                    //take your successful action here; you may want to redirect to another page         
+	                    $("#prompt").html('<span class="error" style="color: green;" >更新成功</span>')
+	                    $('#submitbutton').attr('disabled', true);
+	                    Swal.fire('修改成功!', '', 'success')  
+	                } else {
+	                	  $("#prompt").html('<span class="error" style="color: red;" >更新失敗</span>')
+	                	  
+	                    $.each(res.errorMessages, function (key, value) {                   	
+	                        $('input[name=' + key + ']').after('<span class="error" style="color: red;" >' + value + '</span>');
+	                    });
+	                }
+	            }
+	        })
+    		    
+    		  } else if (result.isDenied) {
+    		    Swal.fire('修改未被儲存', '', 'info')
+    		  }
+    		})
+    		
+    
  
-        $.post({
-            url: 'http://localhost:9527/NeverStarve/Backstage/Member/update',
-            data: $('#updateForm').serialize(),
-            success: function (res) {
-                if (res.validated) {
-                    //take your successful action here; you may want to redirect to another page         
-                    $("#prompt").html('<span class="error" style="color: green;" >更新成功</span>')
-                    $('#submitbutton').attr('disabled', true);
-                } else {
-                	  $("#prompt").html('<span class="error" style="color: red;" >更新失敗</span>')
-                    $.each(res.errorMessages, function (key, value) {                   	
-                        $('input[name=' + key + ']').after('<span class="error" style="color: red;" >' + value + '</span>');
-                    });
-                }
-            }
-        })
-        return true;
-		}else{
-		//alert(“取消”);
-		return false;
-		} 
+       
+ 
         
         
     });
@@ -86,7 +103,7 @@ $(function () {
 			<h3 class="page-header" th:text="${member.name}"></h3>
 		</div>
 		<div class="jumbotron text-center">
-			<form id="updateForm" method="post" th:object="${member}" >
+			<form id="updateForm" method="post" th:object="${member}"  enctype="multipart/form-data" >
 				<input type="hidden" name="_method" value="put">
 				<input style="display:none" type="text"  th:field="*{pkMemberId}"> 
 				<div class="form-group" style="width: 250px; float:left; align-items: center;">
@@ -133,6 +150,11 @@ $(function () {
 					<div id="twzipcode"></div>
 					<input type="text" name="address" id="addressId"
 						class="form-control">
+				</div>
+				
+				<div style="margin: 20px;">
+					<label for="photoId">會員照片: </label>
+					<input type="file" name="memberImage"  id="photoId" th:field="*{memberImage}" multiple="multiple">
 				</div>
 
 				<p class="text-center">

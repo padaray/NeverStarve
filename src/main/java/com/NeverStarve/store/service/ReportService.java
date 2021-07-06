@@ -1,15 +1,11 @@
 package com.NeverStarve.store.service;
 
-import java.util.List;
+import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
-
-import com.NeverStarve.orders.model.OrderListBean;
+import com.NeverStarve.store.model.StoreBean;
 
 public interface ReportService {
-	public Integer getpkStoreId(HttpSession session);
 	
-	public List<OrderListBean> getOrderListAll(HttpSession session);
+	public Map<String, Integer> getQuantity(StoreBean mystorebean);
 	
 }

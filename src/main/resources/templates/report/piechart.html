@@ -24,11 +24,7 @@
          var data = new google.visualization.DataTable();
          data.addColumn('string', 'Topping');
          data.addColumn('number', 'Slices');
-         data.addRows([
-             /*[# th:each="row : ${chartData}"]*/
-             [[${ row }]],
-             /*[/]*/
-         ]);
+         data.addRows([[${chartData}]]);
 
          // Set chart options
          var options = {'title':'How Much Pizza I Ate Last Night',
@@ -46,8 +42,6 @@
    
 <!--Div that will hold the pie chart-->
 <div id="chart_div"></div>  
-
-
 
 
 

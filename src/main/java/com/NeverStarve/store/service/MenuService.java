@@ -13,5 +13,9 @@ public interface MenuService {
 	
 	MenuBean getMenuById(Integer id);
 
-  List<MenuBean> getMenuByStoreBean(StoreBean storeBean);
+	List<MenuBean> getMenuByStoreBean(StoreBean storeBean);
+	
+	void deleteByDishId(Integer dishId);
+	
+	void saveMenuList(List<MenuBean> menuListS, StoreBean storeBean);
 }
