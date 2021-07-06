@@ -2,8 +2,11 @@ package com.NeverStarve.member.controller;
 
 import java.sql.Blob;
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.validation.Valid;
 
@@ -11,13 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.member.model.MemberBean;
+import com.NeverStarve.member.response.MemberResponse;
 import com.NeverStarve.member.service.MemberService;
 
 @Controller
@@ -30,6 +38,9 @@ public class RegisterController {
 
 	@Autowired
 	ServletContext context;
+	
+	@Autowired
+	HttpSession session;
 
 	@GetMapping("/register")
 	public String register(@CookieValue(value = "email", required = false, defaultValue = "") String email,
@@ -94,12 +105,41 @@ public class RegisterController {
 	}
 
 	@GetMapping("/memberDetail")
-	public String memberDetail() {
-
+	public String memberDetail(Model model) {
+		MemberBean sessionMember =(MemberBean) session.getAttribute("member");
+		
+		model.addAttribute("member",sessionMember);
+		
 		return "member/memberDetail";
 
 	}
+	
+	@PostMapping("/update")
+	@ResponseBody
+	public MemberResponse update(@ModelAttribute @Valid MemberBean member,BindingResult result) {
+		MemberResponse response = new MemberResponse();
+		MemberBean sessionMember = (MemberBean)session.getAttribute("member");
+		if(result.hasErrors()) {
+			
+			Map<String, String> errors = result.getFieldErrors().stream().collect(
+					Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+			response.setValidated(false);
+			response.setErrorMessages(errors);
+		}else {
+			System.out.println("更新拉");
+			response.setValidated(true);	
+			member.setPkMemberId(sessionMember.getPkMemberId());
+			member.setUserType(sessionMember.getUserType());
 
+			
+			System.out.println(sessionMember.getEmail());
+			System.out.println(member);
+			memberService.updateMember(member);
+		}
+		return response;		
+	}
+		
+	
 //	//確認有沒有cookie
 	public boolean checkCookie(String email, Model model) {
 		if (email != null) {
