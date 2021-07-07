@@ -237,7 +237,6 @@ public class OrderController {
 			orderBean.setOrderDate(LocalDateTime.now().withNano(0));
 			orderBean.setShipping_address(addres);
 			
-			orderservice.getNewestOrderByMember(memberService.getMamberById(1).get());
 			
 			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
 				productIDCookie.setMaxAge(0);
@@ -301,8 +300,11 @@ public class OrderController {
 
 		//0705綠界交易驗證
 		@PostMapping("/returnURL")
-	    public void returnURL(@RequestParam("merchantTradeNo")String merchantTradeNo,
-	            @RequestParam("rtnCode")int rtnCode,@RequestParam("tradeAmt")int tradeAmt,HttpServletRequest request)
+	    public void returnURL(
+	    		@RequestParam("merchantTradeNo")String merchantTradeNo,
+	            @RequestParam("rtnCode")int rtnCode,
+	            @RequestParam("tradeAmt")int tradeAmt,
+	            HttpServletRequest request)
 	    {
 	        if((request.getRemoteAddr().equalsIgnoreCase("175.99.72.41"))&& rtnCode==1)
 	                {
