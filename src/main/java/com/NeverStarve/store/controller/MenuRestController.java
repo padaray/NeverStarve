@@ -67,17 +67,17 @@ public class MenuRestController {
 	}
 	
 	//修改菜品
-	@PostMapping(value="/modifyMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void modifyMenu(@RequestBody MenuBean menuBean, HttpServletRequest request) {
+	@PostMapping(value="/modifyMenu")
+	public void modifyMenu(@ModelAttribute MenuBean menuBean, HttpServletRequest request) {
 		StoreBean storeBean = checkCookie(request);
 		if(storeBean != null) {
 			menuBean.setStoreBean(storeBean);
-			menuService.save(menuBean);
+			menuService.saveMenuList(menuBean);
 		}
 	}
 	
 	//取消按鈕按下去後，用ID去後端把本來的菜品顯示
-	@GetMapping(value="/findByDishId/{pkDishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/findByDishId/{pkDishId}")
 	public MenuBean findByDishId(@PathVariable int pkDishId) {
 		return menuService.getMenuById(pkDishId);
 	}
