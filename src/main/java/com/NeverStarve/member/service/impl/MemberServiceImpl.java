@@ -81,8 +81,17 @@ public class MemberServiceImpl implements MemberService {
 		
 		bean.setLongTime(orinigBean.getLongTime());
 		bean.setRegisterTime(orinigBean.getRegisterTime());
-		bean.setUnpaid_amount(orinigBean.getUnpaid_amount());		
+		bean.setUnpaid_amount(orinigBean.getUnpaid_amount());	
+		
+		if (bean.getFileName() == null) {
+			if(orinigBean.getFileName() != null) {
+				bean.setFileName(orinigBean.getFileName());
+				bean.setCoverImage(orinigBean.getCoverImage());
+			}
+		}
+		
 		return memberDao.save(bean);
+		
 	}
 
 	@Override

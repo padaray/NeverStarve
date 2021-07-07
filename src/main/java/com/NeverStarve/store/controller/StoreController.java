@@ -55,7 +55,7 @@ public class StoreController {
 		
 	}
 	
-	//修改店家詳細資料頁面
+	//修改店家詳細資料
 	@PostMapping("/modifyInfo")
 	public String modifyInfo(StoreBean storeBean, BindingResult result) {
 	//確認兩次密碼輸入一樣
