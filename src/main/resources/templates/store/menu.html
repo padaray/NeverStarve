@@ -59,12 +59,13 @@ $(".delete").click(DeleteProduct)
  				});		
  			}
 		}
-
 //新增一行可輸入的菜單
-let newLineStr = "<tr class='menuInp'><td><input type='text' class='classinp DN' name='dishName' placeholder='菜品名稱'></td><td><input type='text' class='classinp DI' name='dishIntroduction' placeholder='菜品說明'><td><input type='text' class='classinp DP' name='dishPrice' placeholder='菜品價格'><span class='text-danger'></span></td><td><input type='file' name='dishPicture' id='dishPictureId' class='form-control DPt'></td><td><button class='deleteLine btn btn-danger'>刪除</button></td></tr>"
+// let newLineStr = "<tr class='menuInp'><form class='saveDishForm' method='post' enctype='multipart/form-data'><td><input type='text' class='classinp DN' name='dishName' placeholder='菜品名稱'></td><td><input type='text' class='classinp DI' name='dishIntroduction' placeholder='菜品說明'><td><input type='text' class='classinp DP' name='dishPrice' placeholder='菜品價格'><span class='text-danger'></span></td><td><input type='file' name='dishPicture' id='dishPictureId' class='form-control DPt'></td></form><td><button class='deleteLine btn btn-danger'>刪除</button></td></tr>"
+let newLineStr = "<tr class='menuInp'><td><input type='text' class='classinp DN' name='dishName' placeholder='菜品名稱'></td><td><input type='text' class='classinp DI' name='dishIntroduction' placeholder='菜品說明'><td><input type='text' class='classinp DP' name='dishPrice' placeholder='菜品價格'><span class='text-danger'></span></td><td><form class='saveDishForm' method='post' enctype='multipart/form-data'><input type='file' name='dishPicture' id='dishPictureId' class='form-control DPt'></form></td><td><button class='deleteLine btn btn-danger'>刪除</button></td></tr>"
 $(".addNewLine").click(function() {
 	let ObjInput=document.getElementsByTagName("input") ;
 	$("#submitButt").attr("hidden", false);
+// 	$('.addDishPlace').append(newLineStr);
 	$('#newDishForm').append(newLineStr);
 });
 //將新增後的一行刪除
@@ -109,11 +110,19 @@ $(".addDishPlace").on("click", "#submitButt", function() {
 		}
 	}
 	if(!flag){
-		$.ajax({ type: "POST", 
-			url:"[[@{/store/saveMenu}]]",
-			data: JSON.stringify(saveMenu), dataType: "json", 
-			contentType: "application/json",
-		});	
+		for(i=0; i < allDishlength; i++){
+			var form = document.querySelector(".saveDishForm");
+			var formData = new FormData(form);
+			formData.append('dishName', $(".DN").eq(i).val());
+			formData.append('dishIntroduction', $(".DI").eq(i).val());
+			formData.append('dishPrice', $(".DP").eq(i).val());
+			$.ajax({ type: "POST", 
+				url: "[[@{/store/saveMenu}]]",
+				data: formData,
+				contentType: false, 
+	            processData: false,
+			})
+		}
 		alert('已新增菜單');
 		location.reload();
 	}else{

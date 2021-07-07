@@ -58,6 +58,7 @@ public class StoreLoginController {
 		if(result.hasErrors()) {
 			return "store/register";
 		}
+		//設定權限
 		storeService.save(storeBean);
 		return "store/login";
 	}
