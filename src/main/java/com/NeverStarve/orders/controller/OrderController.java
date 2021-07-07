@@ -237,6 +237,7 @@ public class OrderController {
 			orderBean.setOrderDate(LocalDateTime.now().withNano(0));
 			orderBean.setShipping_address(addres);
 			
+//			orderservice.getNewestOrderByMember(memberService.getMamberById(1).get());
 			
 			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
 				productIDCookie.setMaxAge(0);
