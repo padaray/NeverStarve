@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,11 +52,18 @@ public class MenuRestController {
 	}
 	
 	
-	//新增菜品
-	@PostMapping(value="/saveMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void saveMenu(@RequestBody List<MenuBean> menuListS, HttpServletRequest request) {
+//	//新增菜品
+//	@PostMapping(value="/saveMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public void saveMenu(@RequestBody List<MenuBean> menuListS, HttpServletRequest request) {
+//		StoreBean storeBean = checkCookie(request);
+//		menuService.saveMenuList(menuListS, storeBean);
+//	}
+	
+	@PostMapping(value="/saveMenu")
+	public void saveMenu(@ModelAttribute MenuBean menuBean, HttpServletRequest request) {
 		StoreBean storeBean = checkCookie(request);
-		menuService.saveMenuList(menuListS, storeBean);
+		menuBean.setStoreBean(storeBean);
+		menuService.saveMenuList(menuBean);
 	}
 	
 	//修改菜品

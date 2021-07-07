@@ -5,9 +5,13 @@ import java.io.InputStream;
 import java.sql.Blob;
 import java.util.Base64;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
+import com.NeverStarve.store.model.StoreBean;
+
 public class NeverStarveUtil {
 
-	
 	public String blobToBase64(Blob image, String mimeType) {
 		StringBuffer strbuffer = new StringBuffer();
 
@@ -28,6 +32,19 @@ public class NeverStarveUtil {
 		}
 
 		return strbuffer.toString();
+	}
+
+	public String getCookieValueByCookieName(String cookieName, HttpServletRequest request) {
+		String cookieValue = "";
+		Cookie cookies[] = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if(cookie.getName().equals(cookieName)) {
+					cookieValue = cookie.getValue();
+				}
+			}
+		}
+		return cookieValue;
 	}
 
 }
