@@ -1,11 +1,18 @@
 package com.NeverStarve.orders.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +40,7 @@ import com.NeverStarve.orders.service.OrderListService;
 import com.NeverStarve.orders.service.OrderService;
 import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.service.MenuService;
+import com.NeverStarve.util.NeverStarveUtil;
 
 import ecpay.payment.integration.AllInOne;
 import ecpay.payment.integration.domain.AioCheckOutALL;
@@ -50,6 +58,8 @@ public class OrderController {
 	OrderListService orderListService;
 	@Autowired
     HttpSession session;
+	@Autowired
+	ServletContext context;
 	
 	private String productIDName = "productIDName";
 	private String productQuantityName = "productQuantityName";
@@ -119,13 +129,14 @@ public class OrderController {
 
 			}
 			if (productID.contains("_")) {
-				List<MenuBean> manyProducts = orderservice.getOrderList(productID.split("_"));
+				
+				List<MenuBean> manyProducts = tobase64(orderservice.getOrderList(productID.split("_")));
 				for (int i = 0; i < manyProducts.size(); i++) {
 					manyProducts.get(i).setQuantity(Integer.valueOf(productQuantity.split("_")[i]));
 
 				}
-
-				return manyProducts;
+				
+				return  manyProducts;
 
 			} else {
 				List<MenuBean> oneProductList = new ArrayList<MenuBean>();
@@ -335,6 +346,48 @@ public class OrderController {
 			return "order/OrderListMember";
 			
 		}
+		
+		private List<MenuBean> tobase64(List<MenuBean> menuBeanList) {
+	        String filePath = "/images/NoImage.jpg";
+	        StringBuffer stringBuff = new StringBuffer();
+	        byte[] media = null;
+	        NeverStarveUtil util = new NeverStarveUtil();
+	        for (MenuBean MBL : menuBeanList) {
+	            stringBuff.setLength(0);
+	            String filename = MBL.getDishImageName();
+	            Blob coverImage = MBL.getCoverImage();
+	            if (filename != null && coverImage != null) {
+	                String base64img = util.blobToBase64(coverImage, context.getMimeType(filename));
+	                MBL.setBase64(base64img);
+
+	            } else {
+	                media = toByteArrayJSON(filePath);
+	                String mimeType = context.getMimeType(filePath);
+	                stringBuff.append("data:" + mimeType + ";base64,");
+	                Base64.Encoder be = Base64.getEncoder();
+	                stringBuff.append(new String(be.encode(media)));
+	                MBL.setBase64(stringBuff.toString());
+	            }
+	        }
+	        return menuBeanList;
+	    }
+		//把沒有圖片的東西轉成Byte陣列
+		 private byte[] toByteArrayJSON(String filepath) {
+		        byte[] b = null;
+		        String realPath = context.getRealPath(filepath);
+		        try {
+		            File file = new File(realPath);
+		            long size = file.length();
+		            b = new byte[(int) size];
+		            InputStream fis = context.getResourceAsStream(filepath);
+		            fis.read(b);
+		        } catch (FileNotFoundException e) {
+		            e.printStackTrace();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		        return b;
+		    }
 		
 	
 }
