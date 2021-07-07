@@ -56,27 +56,46 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public void saveMenuList(List<MenuBean> menuListS, StoreBean storeBean) {
+	public void saveMenuList(MenuBean menuBean) {
 		// TODO Auto-generated method stub
-		for(MenuBean MLS: menuListS) {
-			MLS.setStoreBean(storeBean);
-			//寫入圖片
-			MultipartFile dishPicture = MLS.getDishPicture();
-			if (dishPicture != null && !dishPicture.isEmpty()) {
-				String ImageFileName = dishPicture.getOriginalFilename();
-				MLS.setDishImageName(ImageFileName);
-				try {
-					byte[] b = dishPicture.getBytes();
-					Blob blob = new SerialBlob(b);
-					MLS.setCoverImage(blob);
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
-				}
+		//寫入圖片
+		MultipartFile dishPicture = menuBean.getDishPicture();
+		if (dishPicture != null && !dishPicture.isEmpty()) {
+			String ImageFileName = dishPicture.getOriginalFilename();
+			menuBean.setDishImageName(ImageFileName);
+			try {
+				byte[] b = dishPicture.getBytes();
+				Blob blob = new SerialBlob(b);
+				menuBean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
 			}
-			menuRepository.save(MLS);
 		}
+		menuRepository.save(menuBean);
 	}
+//	@Override
+//	public void saveMenuList(List<MenuBean> menuListS, StoreBean storeBean) {
+//		// TODO Auto-generated method stub
+//		for(MenuBean MLS: menuListS) {
+//			MLS.setStoreBean(storeBean);
+//			//寫入圖片
+//			MultipartFile dishPicture = MLS.getDishPicture();
+//			if (dishPicture != null && !dishPicture.isEmpty()) {
+//				String ImageFileName = dishPicture.getOriginalFilename();
+//				MLS.setDishImageName(ImageFileName);
+//				try {
+//					byte[] b = dishPicture.getBytes();
+//					Blob blob = new SerialBlob(b);
+//					MLS.setCoverImage(blob);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//					throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
+//				}
+//			}
+//			menuRepository.save(MLS);
+//		}
+//	}
 	
 	
 
