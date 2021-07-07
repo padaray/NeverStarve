@@ -18,7 +18,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.NeverStarve.member.model.MemberBean;
-import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
