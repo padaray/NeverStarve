@@ -140,8 +140,7 @@ $(".info").on("click", ".modify", function() {
 	dishName = $(this).parent().siblings().eq(2).text();
 	dishIntroduction = $(this).parent().siblings().eq(3).text();
 	dishPrice = $(this).parent().siblings().eq(4).text();
-	
-	let dishString = "<td class='dishNum'>" + dishNum + "</td><td style='display: none'>" + pkDishId + "</td><td><input type='text' name='dishNameMod' value='" + dishName + "'></td><td><input type='text' name='dishIntroductionMod' value='" + dishIntroduction + "'></td><td><input type='text' name='dishPriceMod' value='" + dishPrice + "'></td><td><button class='modiCom btn btn-primary'>送出</button><button class='cancelModi btn btn-secondary'>取消</button><div class='noEmptyModi text-danger'></div></td>"
+	let dishString = "<td class='dishNum'>" + dishNum + "</td><td style='display: none'>" + pkDishId + "</td><td><input type='text' name='dishNameMod' value='" + dishName + "'></td><td><input type='text' name='dishIntroductionMod' value='" + dishIntroduction + "'></td><td><input type='text' name='dishPriceMod' value='" + dishPrice + "'></td><td><form class='modifyDishForm' method='post' enctype='multipart/form-data'><input type='file' name='dishPicture' style='width: 200px'></form></td><td><button class='modiCom btn btn-primary'>送出</button><button class='cancelModi btn btn-secondary'>取消</button><div class='noEmptyModi text-danger'></div></td>"
 	$(this).parent().parent().html(dishString);
 })
 
@@ -163,12 +162,20 @@ $(".info").on("click", ".modiCom", function() {
 	if(flag){
 		$(this).parent().find(".noEmptyModi").html("請確認欄位是否有空白");
 	}else{
+		var form = document.querySelector(".modifyDishForm");
+		var formDataModi = new FormData(form);
+		formDataModi.append('pkDishId', $(this).parent().siblings().eq(1).text());
+		formDataModi.append('dishName', $(this).parent().siblings().eq(2).find("input").val());
+		formDataModi.append('dishIntroduction', $(this).parent().siblings().eq(3).find("input").val());
+		formDataModi.append('dishPrice', $(this).parent().siblings().eq(4).find("input").val());
 		$.ajax({ type: "POST", 
-			url:"[[@{/store/modifyMenu}]]",
-			data: JSON.stringify(saveModiMenu), dataType: "json", 
-			contentType: "application/json",
-		});	
-// 		setInterval(function(){window.location.reload();},100);
+			url: "[[@{/store/modifyMenu}]]",
+			data: formDataModi,
+			contentType: false, 
+            processData: false,
+		})
+		
+		//讓修改後的頁面顯示回去
 		let dishNumRe, pkDishIdRe, dishNameRe, dishIntroductionRe, dishPriceRe;
 		dishNumRe = $(this).parent().siblings().eq(0).text();
 		pkDishIdRe = saveModiMenu.pkDishId;
@@ -187,7 +194,7 @@ $(".info").on("click", ".cancelModi", function() {
 		url:"[[@{/store/findByDishId/}]]" + dishIdCanc,
 		contentType: "application/json",
 		success: function (response) { 
-			let originalDish = "<td class='dishNum'>" + dishNumOri + "</td><td style='display: none'>" + response.pkDishId + "</td><td>" + response.dishName + "</td><td>" + response.dishIntroduction + "</td><td>" + response.dishPrice + "</td><td><button class='modify btn btn-primary'>修改</button><button class='delete btn btn-danger'>刪除</button></td>";
+			let originalDish = "<td class='dishNum'>" + dishNumOri + "</td><td style='display: none'>" + response.pkDishId + "</td><td>" + response.dishName + "</td><td>" + response.dishIntroduction + "</td><td>" + response.dishPrice + "</td><td><img height='80' src='" + response.base64 + "'></td><td><button class='modify btn btn-primary'>修改</button><button class='delete btn btn-danger'>刪除</button></td>";
 			$(".dishNum").eq(dishNumOri-1).parent().html(originalDish);
 		}
 	});
@@ -207,6 +214,7 @@ $(".info").on("click", ".cancelModi", function() {
 					<th>菜名</th>
 					<th>說明</th>
 					<th>價錢(元)</th>
+					<th>圖片</th>
 					<th>操作</th>
 				</tr>
 			</thead>
@@ -217,6 +225,7 @@ $(".info").on("click", ".cancelModi", function() {
 					<td th:text="${menu.dishName}"></td>
 					<td th:text="${menu.dishIntroduction}"></td>
 					<td th:text="${menu.dishPrice}"></td>
+					<td ><img height="80" th:src='${menu.base64}'> </td>
 					<td><button class="modify btn btn-primary">修改</button><button class="delete btn btn-danger">刪除</button></td>
 				</tr>
 			</tbody>
