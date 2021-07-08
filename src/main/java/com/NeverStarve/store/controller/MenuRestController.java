@@ -1,21 +1,25 @@
 package com.NeverStarve.store.controller;
 
+import java.sql.Blob;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
@@ -48,17 +52,34 @@ public class MenuRestController {
 	}
 	
 	
-	//新增菜品
-	@PostMapping(value="/saveMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void saveMenu(@RequestBody List<MenuBean> menuListS, HttpServletRequest request) {
+//	//新增菜品
+//	@PostMapping(value="/saveMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public void saveMenu(@RequestBody List<MenuBean> menuListS, HttpServletRequest request) {
+//		StoreBean storeBean = checkCookie(request);
+//		menuService.saveMenuList(menuListS, storeBean);
+//	}
+	
+	@PostMapping(value="/saveMenu")
+	public void saveMenu(@ModelAttribute MenuBean menuBean, HttpServletRequest request) {
 		StoreBean storeBean = checkCookie(request);
-		menuService.saveMenuList(menuListS, storeBean);
+		menuBean.setStoreBean(storeBean);
+		menuService.saveMenuList(menuBean);
 	}
 	
 	//修改菜品
-	@PostMapping(value="/modifyMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void modifyMenu(@RequestBody MenuBean menuBean) {
-		menuService.save(menuBean);
+	@PostMapping(value="/modifyMenu")
+	public void modifyMenu(@ModelAttribute MenuBean menuBean, HttpServletRequest request) {
+		StoreBean storeBean = checkCookie(request);
+		if(storeBean != null) {
+			menuBean.setStoreBean(storeBean);
+			menuService.saveMenuList(menuBean);
+		}
+	}
+	
+	//取消按鈕按下去後，用ID去後端把本來的菜品顯示
+	@GetMapping(value="/findByDishId/{pkDishId}")
+	public MenuBean findByDishId(@PathVariable int pkDishId) {
+		return menuService.getMenuById(pkDishId);
 	}
 	
 //	@GetMapping("/getMenu")

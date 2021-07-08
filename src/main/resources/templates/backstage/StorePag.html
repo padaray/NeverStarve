@@ -15,6 +15,7 @@
 
 <!-- 網頁小圖 -->
 <link rel="shortcut icon"  th:href="@{/favicon.ico}"/>
+<script th:src="@{/js/jquery.twzipcode.min.js}"></script>  
 <style th:inline="css">
 .table{
 	margin:auto ;
@@ -48,59 +49,55 @@
 		<h1 class="center tit"  id="tit">[[${SearchResult}]]</h1>
 		<h2 id="resl" class="center tit" style="margin-top: 20px">結果共:[[${pagecounts}]]筆</h2>	
 		
-		<div style="width: 800px ;margin: 0 auto;">
-			 <form action="#" class="row">
-	            <div class="col-md-6">
-	                <div class="form-group">
-	                    <label for="start">From</label>
-	                  <input type="text" class="form-control" id="start" placeholder="Start Date">
-	                </div>
-	            </div>
-	            <div class="col-md-6">
-	                <div class="form-group">
-	                    <label for="end">To</label>
-	                  <input type="text" class="form-control" id="end" placeholder="End Date">
-	                </div>
-	            </div>
-	          </form>
-		</div>
-		<div class="inp1" style="width: 200px" >
-			<input type="text" id="semail" class="form-control"  placeholder="查詢Email">
-		</div>
+<!-- 		<div style="width: 800px ;margin: 0 auto;"> -->
+<!-- 			 <form action="#" class="row"> -->
+<!-- 	            <div class="col-md-6"> -->
+<!-- 	                <div class="form-group"> -->
+<!-- 	                    <label for="start">From</label> -->
+<!-- 	                  <input type="text" class="form-control" id="start" placeholder="Start Date"> -->
+<!-- 	                </div> -->
+<!-- 	            </div> -->
+<!-- 	            <div class="col-md-6"> -->
+<!-- 	                <div class="form-group"> -->
+<!-- 	                    <label for="end">To</label> -->
+<!-- 	                  <input type="text" class="form-control" id="end" placeholder="End Date"> -->
+<!-- 	                </div> -->
+<!-- 	            </div> -->
+<!-- 	          </form> -->
+<!-- 		</div> -->
+<!-- 		<div class="inp1" style="width: 200px" > -->
+<!-- 			<input type="text" id="semail" class="form-control"  placeholder="查詢Email"> -->
+<!-- 		</div> -->
 		
-		<div style="margin-top: 20px" class="center" id="selectCity">	
-		</div>	
 		<div  class="center">
 			<button id="allMember" class="btn btn-primary">查詢所有店家</button>			
 			<button id="sele" class="btn btn-primary">查詢</button>
 		
 		</div>
+		<div style="margin-top: 20px" class="center" id="selectCity"></div>	
+		<div style="margin-top: 20px" class="center" id="selectCity">
 		<div th:inline="text" style="margin-bottom: 30px;" >
 			<table width=400px; class="table table-striped table-dark " >
 				<thead>
 					<tr>
-					<th>會員編號</th>
-					<th>會員姓名</th>
-					<th>會員地址</th>
-					<th>電子信箱</th>
-					<th>會員密碼</th>
+					<th>店家編號</th>
+					<th>店家名稱</th>
+					<th>店家位置</th>
+					<th>店家密碼</th>
 					<th>電話號碼</th>
-					<th>會員等級</th>
-					<th>註冊時間</th>
+					<th>座位數量</th>
 					<th>會員圖片</th>
 					</tr>		
 				</thead>
 				<tbody id="tbody">
-					<tr th:each="member,loopStatus: ${products_DPP}">
-						<th valign="middle"><a id="a" th:inline="text" th:href="@{'/Member/'+${member.value.pkMemberId}}">[[${member.value.pkMemberId}]] </a></th>
-						<td valign="middle">[[${member.value.name}]] </td>
-						<td valign="middle">[[${member.value.address}]]</td>
-						<td valign="middle">[[${member.value.email}]] </td>
-						<td valign="middle">[[${member.value.password}]] </td>
-						<td valign="middle">[[${member.value.mobilePhone}]]</td>
-						<td valign="middle">[[${member.value.userType}]] </td>
-						<td valign="middle">[[${member.value.registerTime}]] </td>
-						<td ><img height="120" th:src='${member.value.bas64}'> </td>
+					<tr th:each="store,loopStatus: ${products_DPP}">
+						<th valign="middle"><a id="a" th:inline="text" th:href="@{'/Backstage/Store/Showstore/'+${store.value.pkStoreId}}">[[${store.value.pkStoreId}]] </a></th>
+						<td valign="middle">[[${store.value.storeName}]] </td>
+						<td valign="middle">[[${store.value.storeAddress}]]</td>
+						<td valign="middle">[[${store.value.storePassword}]] </td>
+						<td valign="middle">[[${store.value.storePhone}]]</td>
+						<td valign="middle">[[${store.value.seatNumber}]] </td>
+						<td ><img height="120" th:src='${store.value.base64}'> </td>
 					</tr>
 				</tbody>
 			</table>

@@ -9,9 +9,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">	
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	
+<!-- bootStrap icon -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
 <body class="index">
 	<header th:fragment="Header">
+	<!-- bootStrap icon -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
       <div id="headbar" style="background-color: #C4E1E1 	;box-shadow: 0 4px 10px rgba(0,0,0,0.3) ">
             <div class="logodiv">
                 <a th:href="@{/}"><img th:src=@{/images/NeverStarvelogo3.png} height="80px" ></a>
@@ -20,18 +24,20 @@
             </div>
             
             <div class="logodiv">
-            	<a th:href="@{/Booking/}" type="button" class="btn btn-dark"><i class='fa fa-calendar'></i> 訂位系統</a>
-            	<a th:href="@{/Booking/}" type="button" class="btn btn-dark">訂位系統</a>
-           	<a th:href="@{/Member/login}" type="button" class="btn btn-primary longin" th:if ="${session.member == null}">登入</a>
-           	<a th:if = "${session.member!=null}" class="btn btn-warning longin" th:href="@{/Member/logout}">登出</a>           
+<!--             	<a th:href="@{/Booking/}" type="button" class="btn btn-dark"><i class='fa fa-calendar'></i> 訂位系統(暫停使用)</a> -->
+            	<a th:href="@{/}" type="button" class="btn btn-success">Temp</a>
+	           	<a th:href="@{/Member/login}" type="button" class="btn btn-primary longin" th:if ="${session.member == null}">登入</a>
+	           	<a th:if = "${session.member!=null}" class="btn btn-warning longin" th:href="@{/Member/logout}">登出</a>           
             </div>
 
             <div class="headform">
-                <form role="search" class="form-inline">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="搜尋"/>    
-                        <button type="submit" class="select btn btn-light"><i class="fa fa-search"></i></button>
-                    </div>                                                   
+                <form >
+                   <div class="input-group mb-3">
+					  <input type="text" class="form-control" placeholder="查詢" aria-label="Recipient's username" aria-describedby="basic-addon2">
+					  <div class="input-group-append">
+					    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
+					  </div>
+					</div>                                                
                 </form>
             </div> 
             

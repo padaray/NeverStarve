@@ -5,7 +5,6 @@ import java.sql.Blob;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,6 +16,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.orders.model.OrderBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,19 +50,24 @@ public class StoreBean implements Serializable{
 	String storeAccount;
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message="請輸入至少8個字包含一個英文及數字")
 	String storePassword;
+	
 	@Transient
 	String storeCheckPassword;
 	@Transient
 	String storeCity;
 	@Transient
 	String storeTown;
+	
 	@NotBlank
 	String storeAddress;
 	@Pattern(regexp = "^[0-9]{7,12}$", message="只能填入數字")
 	String storePhone;
 	
 	@JsonIgnore
-	Blob storeImage;
+	Blob coverImage;
+	
+	@Transient
+	MultipartFile storeImage;
 	
 	String storeImageName;
 	

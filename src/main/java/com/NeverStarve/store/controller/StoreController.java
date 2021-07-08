@@ -1,9 +1,12 @@
 package com.NeverStarve.store.controller;
 
+
+import java.sql.Blob;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
@@ -52,14 +56,27 @@ public class StoreController {
 		
 	}
 	
-	//修改店家詳細資料頁面
+	//修改店家詳細資料
 	@PostMapping("/modifyInfo")
 	public String modifyInfo(StoreBean storeBean, BindingResult result) {
 	//確認兩次密碼輸入一樣
 		if(comfirmPassword(storeBean)) {
 			result.rejectValue("storeCheckPassword","confirmError" ,"密碼不一致");
 		}	
-		storeBean.setPkStoreId(storeBean.getPkStoreId());
+		//寫入圖片
+		MultipartFile storeImage = storeBean.getStoreImage();
+		if (storeImage != null && !storeImage.isEmpty()) {
+			String ImageFileName = storeImage.getOriginalFilename();
+			storeBean.setStoreImageName(ImageFileName);
+			try {
+				byte[] b = storeImage.getBytes();
+				Blob blob = new SerialBlob(b);
+				storeBean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
+			}
+		}
 		storeService.save(storeBean);
 		return "redirect:/store/storeIndex";
 	}

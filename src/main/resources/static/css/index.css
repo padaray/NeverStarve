@@ -28,8 +28,8 @@
         
         .headform{
             position: absolute;
-            
-            right:100px;
+            top:20px;       
+            right:120px;
         }
 
         .form-group{
@@ -47,9 +47,9 @@
         .select{
         	float: right;
         }
-/*         a{ */
-/*             text-decoration:none; */
-/*         } */
+        a{
+            text-decoration:none;
+        }
 /*         a:link { */
 /* 	    color: yellow; 未訪問連接颜色 */
 /*         } */
@@ -58,10 +58,10 @@
 /* 	    color: yellow; 已訪問的連接颜色 */
 /*         } */
  
-/*         a:hover { */
-/* 	    color: blue; 移動到連接的颜色 */
-/* 	    text-decoration: underline; */
-/*         } */
+        a:hover {
+	    color: blue; /*移動到連接的颜色*/
+	    text-decoration: none;
+        }
  
 /*         a:active { */
 /* 	    color: orange; 點擊的颜色 */

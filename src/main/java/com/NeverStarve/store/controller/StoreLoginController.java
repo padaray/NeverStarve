@@ -1,12 +1,7 @@
 package com.NeverStarve.store.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,27 +10,17 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
 
@@ -73,6 +58,7 @@ public class StoreLoginController {
 		if(result.hasErrors()) {
 			return "store/register";
 		}
+		//設定權限
 		storeService.save(storeBean);
 		return "store/login";
 	}
@@ -108,9 +94,10 @@ public class StoreLoginController {
 	
 	//登出帳號
 	@GetMapping("/logout")
-	public String logout(HttpSession session, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String logout(HttpSession session, Model model, HttpServletRequest request, HttpServletResponse response, SessionStatus status) {
 		if(model.getAttribute("storeUser") != null) {
-			session.removeAttribute("storeUser");
+			status.setComplete();   // 移除@SessionAttributes({"storeUser"}) 標示的屬性物件
+			session.invalidate();	// session.invalidate()讓SESSION失效.
 		}
 		
 		if(checkCookie(request, model)) {

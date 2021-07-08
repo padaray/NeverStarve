@@ -1,10 +1,10 @@
 package com.NeverStarve.orders.controller;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,15 +14,18 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.service.MemberService;
+import com.NeverStarve.orders.model.EcPayBean;
 import com.NeverStarve.orders.model.OrderBean;
 import com.NeverStarve.orders.model.OrderListBean;
 import com.NeverStarve.orders.model.ShoppingCar;
@@ -31,6 +34,7 @@ import com.NeverStarve.orders.service.OrderService;
 import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.service.MenuService;
 
+import ecpay.payment.integration.AllInOne;
 import ecpay.payment.integration.domain.AioCheckOutALL;
 
 @Controller
@@ -230,9 +234,10 @@ public class OrderController {
 			 	alltotal += i.getQuantity()*i.getMenuBean().getDishPrice();
 			}
 			orderBean.setTotalCost(alltotal);
-			orderBean.setOrderDate(LocalDateTime.now());
+			orderBean.setOrderDate(LocalDateTime.now().withNano(0));
 			orderBean.setShipping_address(addres);
-			orderservice.getNewestOrderByMember(memberService.getMamberById(1).get());
+			
+//			orderservice.getNewestOrderByMember(memberService.getMamberById(1).get());
 			
 			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
 				productIDCookie.setMaxAge(0);
@@ -263,32 +268,74 @@ public class OrderController {
 		return null;
 	}
 	
-//	//發送請求給綠界
-//	@PostMapping(value="/toPayECpay",
-//				consumes = MediaType.APPLICATION_JSON_VALUE)
-//	@ResponseBody
-//	public AioCheckOutALL  aioCheckOutALL(HttpServletRequest request) {
-//		AioCheckOutALL aio = new AioCheckOutALL();
-//		Cookie[] cookieList = request.getCookies();
-//		if (cookieList != null) {
-//			for (Cookie cookie : cookieList) {
-//				if(cookie.getName().equals("userId")) {
-//					cookie.getValue();
-//				}
-//			}
-//		}
-//		aio.setMerchantID("2000132");
-//		aio.setMerchantTradeNo(merchantTradeNo);
-//	    aio.setMerchantTradeDate(merchantTradeDate);
-//		aio.setTotalAmount(totalAmount);
-//		aio.setTradeDesc(tradeDesc);
-//		aio.setItemName(itemName);
-//		aio.setReturnURL(returnURL);
-//		
-//		return null;
-//	}
+	//發送請求給綠界
+	@PostMapping(value="/toPayECpay",
+				consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public EcPayBean  aioCheckOutALL(HttpServletRequest request) {
+		AioCheckOutALL aio = new AioCheckOutALL();
+		AllInOne aioOne = new AllInOne("");
+		EcPayBean ecpay = new EcPayBean();
+		Cookie[] cookieList = request.getCookies();
+		String memberCookieID = null;
+		if (cookieList != null) {
+			for (Cookie cookie : cookieList) {
+				if(cookie.getName().equals("userId")) {
+					memberCookieID = cookie.getValue();
+				}
+			}
+		}
+		Optional<MemberBean> memberID = memberService.getMamberById(Integer.valueOf(memberCookieID));
+		Optional<OrderBean> orderBean = orderservice.getNewestOrderByMember(memberID.get());
+		aio.setMerchantID("2000132");
+		aio.setMerchantTradeNo("NeverStarve"+String.valueOf(orderBean.get().getPkOrderId()));
+	    aio.setMerchantTradeDate(String.valueOf(orderBean.get().getOrderDate()).substring(0,19).replace("T", " ").replace("-", "/"));
+	    aio.setTotalAmount(String.valueOf(orderBean.get().getTotalCost().intValue()));
+		aio.setTradeDesc("test shopping");
+		aio.setItemName(orderBean.get().getItemName());
+		aio.setReturnURL("http://localhost:9527/NeverStarve/Order/returnURL");
+		ecpay.setHi(aioOne.aioCheckOut(aio,null));
+		System.out.println(aioOne.aioCheckOut(aio,null));
+		return ecpay ;
+	}
 
-	
-
+		//0705綠界交易驗證
+		@PostMapping("/returnURL")
+	    public void returnURL(
+	    		@RequestParam("merchantTradeNo")String merchantTradeNo,
+	            @RequestParam("rtnCode")int rtnCode,
+	            @RequestParam("tradeAmt")int tradeAmt,
+	            HttpServletRequest request)
+	    {
+	        if((request.getRemoteAddr().equalsIgnoreCase("175.99.72.41"))&& rtnCode==1)
+	                {
+	        	System.out.println("======================================================================================");
+	        	System.out.println("AAAAAAAAAAAAAAAAAAAAA");
+	        	System.out.println("===============================================================================================");
+	                }
+	    }
+		
+		
+		//0706訂單的展示
+		@GetMapping("order/{id}")
+		public String getOrder(@PathVariable int id, Model model) {
+			Optional<MemberBean> member = memberService.getMamberById(id);
+			MemberBean m = member.get();
+			Set<OrderBean> order = m.getOrders();
+			model.addAttribute("id", m.getPkMemberId());
+			model.addAttribute("orderSet",order);
+			return "order/OrderMember" ;
+		}
+		
+		@GetMapping("list/{id}")
+		public String getliString (@PathVariable int id , Model model) {
+			Optional<OrderBean> order = orderservice.findByPkOrderId(id);
+			OrderBean o = order.get();
+			Set<OrderListBean> list = o.getOrderListBean();
+			model.addAttribute("orderList",list);
+			return "order/OrderListMember";
+			
+		}
+		
 	
 }

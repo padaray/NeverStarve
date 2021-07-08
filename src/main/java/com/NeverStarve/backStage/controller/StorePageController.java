@@ -9,12 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.service.MemberService;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
+import com.NeverStarve.util.NeverStarveUtil;
 
 @Controller
 @RequestMapping("/Backstage/Store")
@@ -26,6 +29,8 @@ public class StorePageController {
 	@Autowired
 	StoreService storeService;
 	
+	NeverStarveUtil util = new NeverStarveUtil();
+	
 	@GetMapping("/ShowStore")
 	public String displayPageProducts(Model model, HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "pageNo", required = false) Integer pageNo
@@ -35,14 +40,20 @@ public class StorePageController {
 			pageNo = 1;			
 		}		
 		Map<Integer, StoreBean> StoreMap = storeService.getPageStores(pageNo);
-//		model.addAttribute("pagecounts",memberService.getTotalcount()); //取得取回來的總筆數
-//		model.addAttribute("counts",memberService.getRecordCounts()); //取得資料庫共有幾筆
-//		model.addAttribute("pageNo", String.valueOf(pageNo));
-//		model.addAttribute("totalPages", memberService.getTotalPages());
-		// 將讀到的一頁資料放入request物件內，成為它的屬性物件
+		model.addAttribute("pagecounts",memberService.getTotalcount()); //取得取回來的總筆數
 		model.addAttribute("products_DPP", StoreMap);
-//		model.addAttribute("SearchResult","所有店家");
 		return "backstage/StorePag";
+	}
+	
+	@GetMapping("/Showstore/{id}")
+	public String showOneStore(Model model, @PathVariable Integer id,HttpServletRequest request ) {
+		MemberBean member = memberService.getMamberById(Integer.valueOf(util.getCookieValueByCookieName("userId", request))).get();
+		
+		if(member.getUserType().equals("0")) {
+			model.addAttribute("storeUser",storeService.findoneById(id));
+		}
+		
+		return "store/modifyInfo";
 	}
 
 }

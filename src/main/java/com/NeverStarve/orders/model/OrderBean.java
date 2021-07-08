@@ -15,9 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.NeverStarve.member.model.MemberBean;
-import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -58,7 +58,8 @@ public class OrderBean implements Serializable {
 	LocalDateTime orderDate; // 購買日期
 	Integer trading; // 交易成功的判斷
 
-
+	@Transient
+	String ItemName;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "orderBean", fetch =FetchType.LAZY)

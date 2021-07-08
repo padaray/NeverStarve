@@ -1,6 +1,5 @@
 package com.NeverStarve.store.service.Impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.repository.StoreRepository;
 import com.NeverStarve.store.service.StoreService;
+import com.NeverStarve.util.NeverStarveUtil;
 
 @Service
 @Transactional
@@ -95,33 +95,14 @@ public class StoreServiceImpl implements StoreService {
 		String filePath = "/images/NoImage.jpg";
 		StringBuffer sb = new StringBuffer();
 		byte[] media = null;
+		NeverStarveUtil util = new NeverStarveUtil();
 		for (Entry<Integer, StoreBean> m : memberMap.entrySet()) {
 			sb.setLength(0);
 			String filename = m.getValue().getStoreImageName();
-			Blob coverImage = m.getValue().getStoreImage();
+			Blob coverImage = m.getValue().getCoverImage();
 			if (filename != null && coverImage != null) {
-				String mimeType = context.getMimeType(filename);
-
-				try (InputStream is = coverImage.getBinaryStream();
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();) {
-					System.out.println(filename);
-
-					int len = 0;
-					byte[] b = new byte[81920]; // 512的整數倍
-					while ((len = is.read(b)) != -1) {
-						baos.write(b, 0, len);
-					}
-					byte[] ba = baos.toByteArray();
-
-					sb.append("data:" + mimeType + ";base64,");
-					Base64.Encoder be = Base64.getEncoder();
-					sb.append(new String(be.encode(ba)));
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-
-//				System.out.println(sb.toString());
-				m.getValue().setBase64(sb.toString());
+				String base64img = util.blobToBase64(coverImage, context.getMimeType(filename));
+				m.getValue().setBase64(base64img);
 
 			} else {
 				media = toByteArrayJSON(filePath);
@@ -130,8 +111,6 @@ public class StoreServiceImpl implements StoreService {
 				sb.append("data:" + mimeType + ";base64,");
 				Base64.Encoder be = Base64.getEncoder();
 				sb.append(new String(be.encode(media)));
-
-				System.out.println(sb.toString());
 				m.getValue().setBase64(sb.toString());
 			}		
 		}
