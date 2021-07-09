@@ -53,7 +53,7 @@
 			<div class="col-sm-3" th:each="store, iterStat : ${stores}">
 				<div class="card" >
 					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}" th:text="${store.storeName}">
-					<img class="card-img-top" th:src="@{${store.storeImage}}" alt="Card image test">
+					<img class="card-img-top" th:src="@{${store.base64}}" alt="Card image test">
 						Basic card
 						<div class="card-body" th:text="${store.storeName}">test1</div>
 						<p>test2</p>

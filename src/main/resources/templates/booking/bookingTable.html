@@ -167,7 +167,7 @@
 
 <!--     <script th:src="@{/js/main.js}"></script> -->
 	
-	<script>
+	<script th:inline="javascript">
 	//jQ-ui的月曆工具
 	$( "#datepicker" ).datepicker({
         showOn: "both",
@@ -177,6 +177,7 @@
         buttonText: "<i class='fa fa-calendar'></i>",
 //         buttonText: "請選擇日期",
         dateFormat: "yy 年 mm 月 dd 日",
+        firstDay: 0,
         
         showButtonPanel: true,
         currentText: "回到今天",
@@ -198,6 +199,20 @@
 		  $("#submitBookingId").prop("disabled", !$("#confirmSubmitId:checked").length);
 		});
 	
+	$("#datepicker").change(function(){
+		console.log("change!");
+		console.log($(this).val());
+		storeId1 = /*[[@{/Booking/findTimesByDateAndStoreId/}]]*/
+		storeId2 = /*[[${store.pkStoreId}]]*/
+		$.ajax({
+			url: storeId1 + storeId2,
+			type: 'GET',
+// 			dataType: 'json',
+			data: {testDate:$(this).val()},
+			contentType: 'application/json',
+			success: alert("success!" + ", " + "storeId: " + "[[${store.pkStoreId}]]")
+		})
+	})
     </script>
 </body>
 </html>
