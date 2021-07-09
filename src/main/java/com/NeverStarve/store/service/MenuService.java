@@ -18,4 +18,6 @@ public interface MenuService {
 	void deleteByDishId(Integer dishId);
 	
 	void saveMenuList(MenuBean menuBean);
+	
+	void saveMenuListNoPic(MenuBean menuBean);
 }

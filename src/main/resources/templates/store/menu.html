@@ -60,12 +60,10 @@ $(".delete").click(DeleteProduct)
  			}
 		}
 //新增一行可輸入的菜單
-// let newLineStr = "<tr class='menuInp'><form class='saveDishForm' method='post' enctype='multipart/form-data'><td><input type='text' class='classinp DN' name='dishName' placeholder='菜品名稱'></td><td><input type='text' class='classinp DI' name='dishIntroduction' placeholder='菜品說明'><td><input type='text' class='classinp DP' name='dishPrice' placeholder='菜品價格'><span class='text-danger'></span></td><td><input type='file' name='dishPicture' id='dishPictureId' class='form-control DPt'></td></form><td><button class='deleteLine btn btn-danger'>刪除</button></td></tr>"
 let newLineStr = "<tr class='menuInp'><td><input type='text' class='classinp DN' name='dishName' placeholder='菜品名稱'></td><td><input type='text' class='classinp DI' name='dishIntroduction' placeholder='菜品說明'><td><input type='text' class='classinp DP' name='dishPrice' placeholder='菜品價格'><span class='text-danger'></span></td><td><form class='saveDishForm' method='post' enctype='multipart/form-data'><input type='file' name='dishPicture' id='dishPictureId' class='form-control DPt'></form></td><td><button class='deleteLine btn btn-danger'>刪除</button></td></tr>"
 $(".addNewLine").click(function() {
 	let ObjInput=document.getElementsByTagName("input") ;
 	$("#submitButt").attr("hidden", false);
-// 	$('.addDishPlace').append(newLineStr);
 	$('#newDishForm').append(newLineStr);
 });
 //將新增後的一行刪除
@@ -174,19 +172,26 @@ $(".info").on("click", ".modiCom", function() {
 			contentType: false, 
             processData: false,
 		})
+		//讓函式休眠幾秒 更新的頁面才不會是舊的
+		let dishNumRe = $(this).parent().siblings().eq(0).text();
+		setTimeout(function(){
+			//讓修改後的頁面顯示回去
+			let pkDishIdRe = saveModiMenu.pkDishId;
+			$.ajax({ type: "GET", 
+				url:"[[@{/store/findByDishId/}]]" + pkDishIdRe,
+				contentType: "application/json",
+				success: function (response) { 
+					let originalDish = "<td class='dishNum'>" + dishNumRe + "</td><td style='display: none'>" + response.pkDishId + "</td><td>" + response.dishName + "</td><td>" + response.dishIntroduction + "</td><td>" + response.dishPrice + ".0</td><td><img height='80' src='" + response.base64 + "'></td><td><button class='modify btn btn-primary'>修改</button><button class='delete btn btn-danger'>刪除</button></td>";
+					$(".dishNum").eq(dishNumRe-1).parent().html(originalDish);
+				}
+			//讓修改後的頁面顯示回去
+			});
+		}, 100);
 		
-		//讓修改後的頁面顯示回去
-		let dishNumRe, pkDishIdRe, dishNameRe, dishIntroductionRe, dishPriceRe;
-		dishNumRe = $(this).parent().siblings().eq(0).text();
-		pkDishIdRe = saveModiMenu.pkDishId;
-		dishNameRe = saveModiMenu.dishName;
-		dishIntroductionRe = saveModiMenu.dishIntroduction;
-		dishPriceRe = saveModiMenu.dishPrice;
-		let dishStringRe = "<td class='dishNum'>" + dishNumRe + "</td><td style='display: none'>" + pkDishIdRe + "</td><td>" + dishNameRe + "</td><td>" + dishIntroductionRe + "</td><td>" + dishPriceRe + "</td><td><button class='modify btn btn-primary'>修改</button><button class='delete btn btn-danger'>刪除</button></td>"
-		$(this).parent().parent().html(dishStringRe);
 	}
 })
 
+//按下修改鈕後按下取消 回復本來畫面
 $(".info").on("click", ".cancelModi", function() {
 	let dishIdCanc = $(this).parent().siblings().eq(1).text();
 	let dishNumOri = $(this).parent().siblings().eq(0).text();
@@ -202,20 +207,24 @@ $(".info").on("click", ".cancelModi", function() {
 		
 })
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- i標籤小圖 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"> <!-- 新版I標籤小圖 -->
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->	
 <title>修改菜單</title>
 </head>
 <body>
-	<div class="container">
+<div th:insert="Generic :: Header"></div>
+	<div class="container" style="margin: 50px">
 		<h2 class="page-header">修改菜單</h2>
 		<table class="table table-bordered table-hover table-striped">
 			<thead>
 				<tr>
-					<th>序號</th>
-					<th>菜名</th>
-					<th>說明</th>
-					<th>價錢(元)</th>
-					<th>圖片</th>
-					<th>操作</th>
+					<th style="width: 70px">序號</th>
+					<th style="width: 140px">菜名</th>
+					<th style="width: 200px">說明</th>
+					<th style="width: 100px">價錢(元)</th>
+					<th style="width: 100px">圖片</th>
+					<th style="width: 140px">操作</th>
 				</tr>
 			</thead>
 			<tbody class="info">
