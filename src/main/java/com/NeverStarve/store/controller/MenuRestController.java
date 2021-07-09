@@ -51,14 +51,6 @@ public class MenuRestController {
 		menuService.deleteByDishId(dishId);
 	}
 	
-	
-//	//新增菜品
-//	@PostMapping(value="/saveMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public void saveMenu(@RequestBody List<MenuBean> menuListS, HttpServletRequest request) {
-//		StoreBean storeBean = checkCookie(request);
-//		menuService.saveMenuList(menuListS, storeBean);
-//	}
-	
 	@PostMapping(value="/saveMenu")
 	public void saveMenu(@ModelAttribute MenuBean menuBean, HttpServletRequest request) {
 		StoreBean storeBean = checkCookie(request);
@@ -70,8 +62,16 @@ public class MenuRestController {
 	@PostMapping(value="/modifyMenu")
 	public void modifyMenu(@ModelAttribute MenuBean menuBean, HttpServletRequest request) {
 		StoreBean storeBean = checkCookie(request);
-		if(storeBean != null) {
-			menuBean.setStoreBean(storeBean);
+		menuBean.setStoreBean(storeBean);
+		//判斷是否有照片傳入
+		MultipartFile dishPicture = menuBean.getDishPicture();
+		String ImageName = dishPicture.getOriginalFilename();
+		System.out.println(menuBean.getDishName());
+		System.out.println(menuBean.getDishPrice());
+		System.out.println(menuBean.getDishIntroduction());
+		if(ImageName.isEmpty()) {
+			menuService.saveMenuListNoPic(menuBean);
+		}else {
 			menuService.saveMenuList(menuBean);
 		}
 	}
@@ -81,16 +81,6 @@ public class MenuRestController {
 	public MenuBean findByDishId(@PathVariable int pkDishId) {
 		return menuService.getMenuById(pkDishId);
 	}
-	
-//	@GetMapping("/getMenu")
-//	public List<MenuBean> getMenu(HttpServletRequest request, Model model){
-//		model.addAttribute("storeUser", new StoreBean());  //初始化model的storeUser
-//		checkCookie(request, model);  //用cookie建立model
-//		//把抓到的storeId丟給後端抓菜單
-//		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
-//		return menuService.getMenuByStoreBean(storeBean);
-////		model.addAttribute("menuList", menuList);
-//	}
 	
 	//確認有沒有cookie
 		public StoreBean checkCookie(HttpServletRequest request){

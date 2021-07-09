@@ -46,7 +46,7 @@
 				</div>
 				<div class="form-group">
 					<label for="storePasswordId">密碼:</label> 
-					<input type="text" name="storePassword" id="storePasswordId" class="form-control" th:field="*{storePassword}">
+					<input type="text" name="storePassword" id="storePasswordId" class="form-control" th:field="*{storePassword}" placeholder="需要英文與數字，合計至少8位">
 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storePassword')}" th:errors="*{storePassword}"></p>
 				</div>
 				<div class="form-group">
@@ -76,20 +76,26 @@
 					<label for="storeTypeId">菜色種類:</label>
 					<div data-toggle="buttons" class="btn-group-toggle" >
                             <label class="btn btn-outline-info">
-                                <input type="checkBox" name="bookingTime" value="美式">美式
+                                <input type="checkBox" name="storeTypeList" value="美式">美式
                             </label>
                             <label class="btn btn-outline-info">
-                                <input type="checkBox" name="bookingTime" value="中式">中式
+                                <input type="checkBox" name="storeTypeList" value="中式">中式
                             </label>
                             <label class="btn btn-outline-info">
-                                <input type="checkBox" name="bookingTime" value="韓式">韓式
+                                <input type="checkBox" name="storeTypeList" value="韓式">韓式
                             </label>
                             <label class="btn btn-outline-info">
-                                <input type="checkBox" name="bookingTime" value="日式">日式
+                                <input type="checkBox" name="storeTypeList" value="日式">日式
+                            </label>
+                            <label class="btn btn-outline-info">
+                                <input type="checkBox" name="storeTypeList" value="泰式">泰式
+                            </label>
+                            <label class="btn btn-outline-info">
+                                <input type="checkBox" name="storeTypeList" value="西式">西式
                             </label>
                         </div> 
-					<input type="text" name="storeType" id="storeTypeId" class="form-control" th:field="*{storeType}">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeType')}" th:errors="*{storeType}"></p>
+					<input type="text" name="storeTypeList" id="storeTypeId" class="form-control" th:field="*{storeType}" placeholder="其他類型">
+					<p class="form-control-static text-danger"></p>
 				</div>
 				<div class="form-group">
 					<label for="seatNumberId">座位數量:</label> 

@@ -2,6 +2,7 @@ package com.NeverStarve.store.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +59,16 @@ public class StoreLoginController {
 		if(result.hasErrors()) {
 			return "store/register";
 		}
-		//設定權限
+		//將存進來的菜品種類相加
+		String sttp = "";
+		List<String> storeTypeL = storeBean.getStoreTypeList();
+		if(storeTypeL != null) {
+			for(String ST: storeTypeL) {
+				sttp += ST + ",";
+			}
+			sttp.substring(0, sttp.length()-1);
+			storeBean.setStoreType(sttp);
+		}
 		storeService.save(storeBean);
 		return "store/login";
 	}

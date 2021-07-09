@@ -128,6 +128,7 @@ public class MenuServiceImpl implements MenuService {
 			menuBean.setBase64(base64img);
 
 		} else {
+			//無圖片時會將"暫無圖片"塞進來
 			media = toByteArrayJSON(filePath);
 			String mimeType = context.getMimeType(filePath);
 			stringBuff.append("data:" + mimeType + ";base64,");
@@ -156,28 +157,15 @@ public class MenuServiceImpl implements MenuService {
 		}
 		return b;
 	}
-//	@Override
-//	public void saveMenuList(List<MenuBean> menuListS, StoreBean storeBean) {
-//		// TODO Auto-generated method stub
-//		for(MenuBean MLS: menuListS) {
-//			MLS.setStoreBean(storeBean);
-//			//寫入圖片
-//			MultipartFile dishPicture = MLS.getDishPicture();
-//			if (dishPicture != null && !dishPicture.isEmpty()) {
-//				String ImageFileName = dishPicture.getOriginalFilename();
-//				MLS.setDishImageName(ImageFileName);
-//				try {
-//					byte[] b = dishPicture.getBytes();
-//					Blob blob = new SerialBlob(b);
-//					MLS.setCoverImage(blob);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//					throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
-//				}
-//			}
-//			menuRepository.save(MLS);
-//		}
-//	}
+
+	@Override
+	public void saveMenuListNoPic(MenuBean menuBean) {
+		String dishName = menuBean.getDishName();
+		String dishIntroduction = menuBean.getDishIntroduction();
+		Double dishPrice = menuBean.getDishPrice();
+		Integer pkDishId = menuBean.getPkDishId();
+		menuRepository.saveNoPic(dishName, dishIntroduction, dishPrice, pkDishId);
+	}
 	
 	
 
