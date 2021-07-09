@@ -39,19 +39,18 @@ public class BookingRestController {
 	public List<StoreBookingBean> findTimesByDateAndStoreId(@PathVariable Integer StoreId, StrDateBean bookingDate) {
 		
 		StoreBean storeId = storeService.findoneById(StoreId).get();
-		System.out.println(storeId.getStoreName());
-		
-//		StoreBean storeBean = (StoreBean) model.getAttribute("store");
+//		System.out.println(storeId.getStoreName());
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//		System.out.println("hi: " + bookingDate.getTestDate());
+//		System.out.println("hi: " + bookingDate.getStrDate());
 		
 		String Str = bookingDate.getStrDate();
+//		System.out.println(Str);
 		Str = Str.replace(" ","");
 		Str = Str.replace("年","-");
 		Str = Str.replace("月","-");
 		Str = Str.replace("日","");
-		System.out.println(Str);
+//		System.out.println(Str);
 		
 		Date d = null;
 		try {
@@ -59,15 +58,11 @@ public class BookingRestController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println(sdf.format(d));
-//		sbb.setStoreBean(storeBean);
-//		sbb.setBookingDate(bookingDate);
+//		System.out.println(sdf.format(d));
 		
 		System.out.println(storeBookingService.findTimesByDateAndStoreId(d, storeId));
 		
 		return storeBookingService.findTimesByDateAndStoreId(d, storeId);
-		
 	}
 	
 }

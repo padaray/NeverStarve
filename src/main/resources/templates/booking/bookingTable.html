@@ -94,27 +94,17 @@
 <!-- 						<input type="text" -->
 <!-- 							name="bookingTime" id="bookingTimeId" class="form-control" > -->
 						<br>
-						<div data-toggle="buttons" class="btn-group-toggle" >
-							<label class="btn btn-outline-info">
-								<input type="radio" name="bookingTime" id="t1200" value="12:00">12:00
-							</label>
-							<label class="btn btn-outline-info">
-								<input type="radio" name="bookingTime" id="t1300" value="13:00">13:00
-							</label>
-							<label class="btn btn-outline-info">
-								<input type="radio" name="bookingTime" id="t1300" value="14:00">14:00
-							</label>
-							<label class="btn btn-outline-info">
-								<input type="radio" name="bookingTime" id="t1300" value="15:00">15:00
-							</label>
-							<label class="btn btn-outline-info">
-								<input type="radio" name="bookingTime" id="t1300" value="16:00">16:00
-							</label>
+						<div data-toggle="buttons" class="btn-group-toggle" id="bTimesbtn">
+<!-- 							<label class="btn btn-outline-info"> -->
+<!-- 								<input type="radio" name="bookingTime" id="t1200" value="12:00">12:00 -->
+<!-- 							</label> -->
+<!-- 							<label class="btn btn-outline-info"> -->
+<!-- 								<input type="radio" name="bookingTime" id="t1300" value="13:00">13:00 -->
+<!-- 							</label> -->
 						</div>
 <!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="12:00">12:00</button>	 -->
 <!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="13:00">13:00</button>	 -->
-							
-					<p> </p>
+					<p id="testTime"> </p>
 					</div>
 					<div class="form-group">
 						<label for="bPeopleNumId">用餐人數</label> 
@@ -125,13 +115,6 @@
 <!-- 							<option value="1">1</option> -->
 <!-- 							<option value="2" selected="selected">2</option> -->
 <!-- 							<option value="3">3</option> -->
-<!-- 							<option value="4">4</option> -->
-<!-- 							<option value="5">5</option> -->
-<!-- 							<option value="6">6</option> -->
-<!-- 							<option value="7">7</option> -->
-<!-- 							<option value="8">8</option> -->
-<!-- 							<option value="9">9</option> -->
-<!-- 							<option value="10">10</option> -->
 <!-- 						</select> -->
 
 						<select name="bookingNum" id="bPeopleNumId" class="form-control">
@@ -199,20 +182,43 @@
 		  $("#submitBookingId").prop("disabled", !$("#confirmSubmitId:checked").length);
 		});
 	
+	//選取預約日期後，ajax請求預約時段回傳至前端
 	$("#datepicker").change(function(){
-		console.log("change!");
-		console.log($(this).val());
+// 		console.log("change!");
+// 		console.log($(this).val());
 		storeId1 = /*[[@{/Booking/findTimesByDateAndStoreId/}]]*/
 		storeId2 = /*[[${store.pkStoreId}]]*/
 		$.ajax({
 			url: storeId1 + storeId2,
 			type: 'GET',
-// 			dataType: 'json',
-			data: {testDate:$(this).val()},
+			dataType: 'json',
+			data: {strDate : $(this).val()},
 			contentType: 'application/json',
-			success: alert("success!" + ", " + "storeId: " + "[[${store.pkStoreId}]]")
+			errors: function (xhr) {
+				alert("發生錯誤: " + xhr.status + " " + xhr.statusText);
+			},
+			success: 
+				function (response) {
+
+				var bTimesBtn = "";
+				$.each(response, function(index, element){
+					var StrTime = element.bookingTime
+					StrTime = StrTime.substring(11, 16)
+					
+					bTimesBtn += '<label class="btn btn-outline-info" style="margin: 2px">' + 
+								 '<input type="radio" name="bookingTime" value="' + StrTime + '">' + StrTime +
+								 '</label>'
+				})
+// 					console.log(bTimesBtn)
+					$('#bTimesbtn').html(bTimesBtn)
+				;
+			}
+			
 		})
 	})
     </script>
+<!-- 				alert("success!" + ", " + "storeId: " + "[[${store.pkStoreId}]]"); -->
+<!-- 				$('#testTime').html('(測試用)抓到資料囉!') -->
+<!-- 							  .append("<br>" + "(測試用)storeId: " + "[[${store.pkStoreId}]]") -->
 </body>
 </html>
