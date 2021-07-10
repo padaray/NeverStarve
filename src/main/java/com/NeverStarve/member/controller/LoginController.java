@@ -97,16 +97,16 @@ public class LoginController {
 		String userId = String.valueOf(bean.getPkMemberId());
 		
 		cookieEmail = new Cookie("email", userEmail); 
-		cookieEmail.setMaxAge(2 * 60 * 60);       // Cookie的存活期: 2小時
+		cookieEmail.setMaxAge(24 * 60 * 60);       // Cookie的存活期: 2小時
 		cookieEmail.setPath(request.getContextPath());
 
 //		String encodePassword = GlobalService.encryptString(password);
 		cookiePassword = new Cookie("password", password);
-		cookiePassword.setMaxAge( 2 * 60 * 60);
+		cookiePassword.setMaxAge( 24 * 60 * 60);
 		cookiePassword.setPath(request.getContextPath());
 		
 		cookieId = new Cookie("userId" , userId);
-		cookieId.setMaxAge( 2 * 60 * 60);
+		cookieId.setMaxAge( 24 * 60 * 60);
 		cookieId.setPath(request.getContextPath());
 		
 		response.addCookie(cookieEmail);

@@ -53,11 +53,45 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.findAll();
 	}
 
+	
+	//註冊時使用
 	@Override
 	public MemberBean save(MemberBean bean) {
+		
+		MultipartFile memberImage = bean.getMemberImage();
+		if (memberImage != null && !memberImage.isEmpty()) {
+			String ImageFileName = memberImage.getOriginalFilename();
+			bean.setFileName(ImageFileName);
+			try {
+				byte[] b = memberImage.getBytes();
+				Blob blob = new SerialBlob(b);
+				bean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
+			}
+			//如果沒圖片的話就存入吉祥物圖片
+		}else {
+			try {
+				byte[] b = toByteArrayJSON("/image/NeverStravefavicon.png");
+				bean.setFileName("NeverStrave.png");
+				Blob blob = new SerialBlob(b);
+				bean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
+			}
+			
+		}
+		
+		
 		return memberDao.save(bean);
 	}
 
+	
+	
+	
+	
 	@Override
 	public MemberBean updateMember(MemberBean bean) {
 		bean.setAddress(bean.getMemberCity() + " " + bean.getMemberTown() + " " + bean.getAddress());
@@ -91,9 +125,7 @@ public class MemberServiceImpl implements MemberService {
 				bean.setCoverImage(orinigBean.getCoverImage());
 			}
 		}
-
 		return memberDao.save(bean);
-
 	}
 
 	@Override

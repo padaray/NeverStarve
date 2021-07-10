@@ -143,11 +143,29 @@ $(function () {
     	}
        
     })
+// ------------------------------我是地圖---------------------------------------------     
 
+var longitude;
+var latitude;
+navigator.geolocation.getCurrentPosition(function(position){
+		 longitude = position.coords.longitude;
+		 latitude = position.coords.latitude;
+		 
+// 		 alert(latitude+","+longitude);
+	var mapUrl = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0";
+	var add1 ="&origin="+latitude+","+longitude+"&destination="
+	var add2 =/*[[${store.storeAddress}]]*/
+
+	$("iframe").attr("src",mapUrl+add1+add2) 
+// 	alert($("iframe").attr("src"));
+	});
 
 })
 
 </script>
+<!-- <script type="text/javascript" th:inline = "javascript"> -->
+
+<!-- </script> -->
 </head>
 <body>
  <div th:insert="Generic :: Header"></div>
@@ -155,6 +173,17 @@ $(function () {
 	<!--  若購物車頁面改成餐廳詳細資訊頁面，直接加入此段的預約功能，再做排版  -->
 	<div class="container" style="max-width: 700px; margin-top: 50px">
 		<div class="jumbotron text-left">
+			<div class="d-flex justify-content-center" th:inline="text">
+  <iframe
+  	id="map"
+    width="600"
+    height="450"
+    frameborder="0" 
+    style="border:0"
+    src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&origin=台北市政府&waypoints=台北101|國父紀念館&destination=大安森林公園">
+  </iframe>
+
+</div>
 			<div>
 				<div>
 					<h3 th:text="${store.storeName}"></h3>
@@ -179,7 +208,6 @@ $(function () {
 				<th width="200">單價總金額</th>
 
 			</tr>
-
 
 		</thead>
 
@@ -213,5 +241,7 @@ $(function () {
  		<div class="btn orgbtn " ><button  disabled="disabled" id="save" class="btn btn-primary" >存入購物車</button></div>
 	</section>
 	</div>
+	
+
 </body>
 </html>
