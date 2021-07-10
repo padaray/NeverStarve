@@ -33,7 +33,11 @@
 <!-- <iframe width="600" height="450" style="border: 0" loading="lazy" -->
 <!--                                 allowfullscreen -->
 <!--                                 src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&q=新北勢永和區保安路262巷2號"> -->
-<!--                             </iframe> -->
+<!--                                              th:href="@{'/Backstage/Member/'+${member.value.pkMemberId}}"    
+                         </iframe> -->
+<!--                              src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&origin=台北市政府&waypoints=台北101|國父紀念館&destination="+[[${session.member.address}]]> -->
+              
+  <input type="text" id="input" value = "台北">                       
 <div id="app" class="container">
   <div class="row">
     <div class="col">
@@ -41,28 +45,60 @@
     </div>
   </div>
 </div>
+<!-- <div class="d-flex justify-content-center" th:inline="text"> -->
+<!--   <iframe -->
+<!--   	id="map" -->
+<!--     width="600" -->
+<!--     height="450" -->
+<!--     frameborder="0"  -->
+<!--     style="border:0" -->
+<!--     src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&origin=台北市政府&waypoints=台北101|國父紀念館&destination=大安森林公園"> -->
+<!--   </iframe> -->
+<!--   <p th:text="${session.member.address}"></p> -->
+<!--   <br> -->
+<!--   <P>[[${session.member.address}]]</P> -->
+<!-- </div> -->
 
-
-
-<script type="text/javascript">
-
+<script type="text/javascript" th:inline = "javascript">
+// 	var mapUrl = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&origin=台北市政府&destination=";
+// 	var add = /*[[${session.member.address}]]*/
+// 	$("iframe").attr("src",mapUrl+add)
+// 	alert($("iframe").attr("src"));
+   var listAddress=["台北市政府","台北101","信義威秀電影院"];
+   var  elementList=[]
    var loc;
    var geocoder = new google.maps.Geocoder();
    var address = '大安森林公園';
-
-   if (geocoder) {
-      geocoder.geocode({ 'address': address }, function (results, status) {
-         if (status == google.maps.GeocoderStatus.OK) {
-        	 loc = results[0].geometry.location;
-        	 console.log(results[0].geometry.location);
-         }
-         else {
-            console.log("Geocoding failed: " + status);
-         }
-      });
-   }    
-
-
+   var mid;
+	$("#input").change(function(){
+		
+	var element = $("#input").val()
+    if (geocoder) {
+	   		   
+	   		  geocoder.geocode({'address': element}, function (results, status) {
+	            if (status == google.maps.GeocoderStatus.OK) {
+	           	 mid= results[0].geometry.location;
+	           	 alert(mid);
+	            }
+	            else {
+	               console.log("Geocoding failed: " + status);
+	            }
+	         })
+	      };
+	      console.log(googleMap)
+	      googleMap.map=new google.maps.Map(document.getElementById('map'), {
+		        center: mid, // 中心點座標
+		        zoom: 16, // 1-20，數字愈大，地圖愈細：1是世界地圖，20就會到街道
+		        /*
+		          roadmap 顯示默認道路地圖視圖。
+		          satellite 顯示 Google 地球衛星圖像。
+		          hybrid 顯示正常和衛星視圖的混合。
+		          terrain 顯示基於地形信息的物理地圖。
+		        */
+		        mapTypeId: 'terrain'
+		      });
+	 
+   })
 
 
 const googleMap = new Vue({
@@ -73,7 +109,6 @@ const googleMap = new Vue({
 	  methods: {
 	    // init google map
 	    initMap() {
-
 	      // 預設顯示的地點：台北市政府親子劇場
 	      let location = {
 	        lat: 25.0374865, // 經度
@@ -82,7 +117,7 @@ const googleMap = new Vue({
 
 	      // 建立地圖
 	      this.map = new google.maps.Map(document.getElementById('map'), {
-	        center: loc, // 中心點座標
+	        center: location, // 中心點座標
 	        zoom: 16, // 1-20，數字愈大，地圖愈細：1是世界地圖，20就會到街道
 	        /*
 	          roadmap 顯示默認道路地圖視圖。
@@ -92,19 +127,42 @@ const googleMap = new Vue({
 	        */
 	        mapTypeId: 'terrain'
 	      });
+	      
+	      if (geocoder) {
+	   	   listAddress.forEach(function(element){
+	   		   
+	   		  geocoder.geocode({'address': element}, function (results, status) {
+	            if (status == google.maps.GeocoderStatus.OK) {
+	           	 loc = results[0].geometry.location;
+	           	 console.log(results[0].geometry.location);
+	           	 
+	   	            var marker = new google.maps.Marker({
+	   		              position:loc,
+	   		              map: googleMap.map
+	   		            });
+	            }
+	            else {
+	               console.log("Geocoding failed: " + status);
+	            }
+	         })
+	   	   }) 
+
+	      };    
+	      
+	      
 	      // 放置多個marker
-	      fetch('map.geojson')
-	        .then(results => results.json())
-	        .then(result => {
-	          let res = result.features;
-	          Array.prototype.forEach.call(res, r => {
-	            let latLng = new google.maps.LatLng(r.geometry.coordinates[0], r.geometry.coordinates[1]);
-	            let marker = new google.maps.Marker({
-	              position:loc,
-	              map: this.map
-	            });
-	          });
-	      });
+// 	      fetch("")
+// 	        .then(results => results.json())
+// 	        .then(result => {
+// 	          let res = result.features;
+// 	          Array.prototype.forEach.call(res, r => {
+// 	            let latLng = new google.maps.LatLng(r.geometry.coordinates[0], r.geometry.coordinates[1]);
+// 	            let marker = new google.maps.Marker({
+// 	              position:loc,
+// 	              map: this.map
+// 	            });
+// 	          });
+// 	      });
 
 	    }
 	  },
