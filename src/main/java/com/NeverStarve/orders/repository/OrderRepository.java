@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.orders.model.OrderBean;
 import com.NeverStarve.store.model.StoreBean;
 public interface OrderRepository extends JpaRepository<OrderBean, Integer> {
 
 List<OrderBean> findByStoreBean(StoreBean storebean);
 
-//上次錯誤的地方
-//List<OrderBean> findOrderByMember();
+List<OrderBean> findOrdersByMemberBean(MemberBean memberBean);
 
-	
+
 	
 }
