@@ -60,7 +60,7 @@ $(".delete").click(DeleteProduct)
  			}
 		}
 //新增一行可輸入的菜單
-let newLineStr = "<tr class='menuInp'><td><input type='text' class='classinp DN' name='dishName' placeholder='菜品名稱'></td><td><input type='text' class='classinp DI' name='dishIntroduction' placeholder='菜品說明'><td><input type='text' class='classinp DP' name='dishPrice' placeholder='菜品價格'><span class='text-danger'></span></td><td><form class='saveDishForm' method='post' enctype='multipart/form-data'><input type='file' name='dishPicture' id='dishPictureId' class='form-control DPt'></form></td><td><button class='deleteLine btn btn-danger'>刪除</button></td></tr>"
+let newLineStr = "<tr class='menuInp'><td><input type='text' class='classinp DN' style='width: 140px' name='dishName' placeholder='菜品名稱'></td><td><input type='text' class='classinp DI' name='dishIntroduction' style='width: 140px' placeholder='菜品說明'><td><input type='text' class='classinp DP' name='dishPrice' style='width: 140px' placeholder='菜品價格'><span class='text-danger'></span></td><td><form class='saveDishForm' method='post' enctype='multipart/form-data'><input type='file' name='dishPicture' id='dishPictureId' class='form-control DPt' style='width: 200px'></form></td><td><button class='deleteLine btn btn-danger'>刪除</button></td></tr>"
 $(".addNewLine").click(function() {
 	let ObjInput=document.getElementsByTagName("input") ;
 	$("#submitButt").attr("hidden", false);
@@ -138,7 +138,7 @@ $(".info").on("click", ".modify", function() {
 	dishName = $(this).parent().siblings().eq(2).text();
 	dishIntroduction = $(this).parent().siblings().eq(3).text();
 	dishPrice = $(this).parent().siblings().eq(4).text();
-	let dishString = "<td class='dishNum'>" + dishNum + "</td><td style='display: none'>" + pkDishId + "</td><td><input type='text' name='dishNameMod' value='" + dishName + "'></td><td><input type='text' name='dishIntroductionMod' value='" + dishIntroduction + "'></td><td><input type='text' name='dishPriceMod' value='" + dishPrice + "'></td><td><form class='modifyDishForm' method='post' enctype='multipart/form-data'><input type='file' name='dishPicture' style='width: 200px'></form></td><td><button class='modiCom btn btn-primary'>送出</button><button class='cancelModi btn btn-secondary'>取消</button><div class='noEmptyModi text-danger'></div></td>"
+	let dishString = "<td class='dishNum'>" + dishNum + "</td><td style='display: none'>" + pkDishId + "</td><td><input type='text' name='dishNameMod' style='width: 100px' value='" + dishName + "'></td><td><input type='text' name='dishIntroductionMod' style='width: 140px' value='" + dishIntroduction + "'></td><td><input type='text' name='dishPriceMod' style='width: 70px' value='" + dishPrice + "'></td><td><form class='modifyDishForm' method='post' enctype='multipart/form-data'><input type='file' name='dishPicture' style='width: 120px'></form></td><td><button class='modiCom btn btn-primary'>送出</button><button class='cancelModi btn btn-secondary'>取消</button><div class='noEmptyModi text-danger'></div></td>"
 	$(this).parent().parent().html(dishString);
 })
 
@@ -215,16 +215,17 @@ $(".info").on("click", ".cancelModi", function() {
 <body>
 <div th:insert="Generic :: Header"></div>
 	<div class="container" style="margin: 50px">
-		<h2 class="page-header">修改菜單</h2>
-		<table class="table table-bordered table-hover table-striped">
+		<h3 class="page-header" style="margin-left: 15%">修改菜單</h3>
+		<div class="d-flex justify-content-center">
+		<table class="table table-bordered table-hover table-striped text-center " style="width: 80%">
 			<thead>
 				<tr>
-					<th style="width: 70px">序號</th>
-					<th style="width: 140px">菜名</th>
-					<th style="width: 200px">說明</th>
-					<th style="width: 100px">價錢(元)</th>
-					<th style="width: 100px">圖片</th>
-					<th style="width: 140px">操作</th>
+					<th style="width: 9%">序號</th>
+					<th style="width: 18%">菜名</th>
+					<th style="width: 27%">說明</th>
+					<th style="width: 12%">價錢(元)</th>
+					<th style="width: 12%">圖片</th>
+					<th style="width: 22%">操作</th>
 				</tr>
 			</thead>
 			<tbody class="info">
@@ -239,16 +240,23 @@ $(".info").on("click", ".cancelModi", function() {
 				</tr>
 			</tbody>
 		</table>
+		</div>
 		
-		<div class="addDishPlace">
+		<div class="d-flex justify-content-center">
+		<div class="addDishPlace" style="width: 80%">
 		<table id="newDishForm" class="table table-bordered">
 		</table>
-		<div class="alertEmp">
+<!-- 			<div class="alertEmp"> -->
+<!-- 			</div> -->
 		</div>
+		</div>
+		
+		<div style="margin-left: 83%">
 		<button class="btn btn-secondary" hidden="hidden" id="submitButt">送出</button>
 		</div>
 		
-		<div class="buttPlace">
+		<div class="alertEmp"></div>
+		<div class="buttPlace d-flex justify-content-center">
 		<button class="addNewLine btn btn-primary">新增菜品</button>
 		</div>
 	</div>
