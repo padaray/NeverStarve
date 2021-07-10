@@ -2,6 +2,8 @@ package com.NeverStarve.orders.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -9,6 +11,8 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.NeverStarve.member.model.MemberBean;
@@ -121,6 +125,30 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 
+	//0708排序用
+	@Override
+	public List<OrderBean> findOrderByMemberBean(MemberBean memberBean) {
+		//拿到會員的資料
+		List<OrderBean> orderfindm = orderRepository.findOrdersByMemberBean(memberBean);
+		List<OrderBean> ordera = new ArrayList<OrderBean>();
+		for(int i=orderfindm.size()-1; i>0; i--) {
+			 OrderBean getorderf = orderfindm.get(i);
+			 ordera.add(getorderf);
+		}
+		return ordera;
+	}
+
+
+
+	
+
+
+
+
+		
+
+
+	
 
 	
 

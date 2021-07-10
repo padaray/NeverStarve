@@ -105,9 +105,11 @@ $(function () {
     	            var b2 = confirm('前往結帳畫面!!!，若要繼續點餐請按取消按鈕謝謝~');
 
     	            if (b2) {
+    	            	setTimeout(function(){
     					uu=/*[[@{/Order/order}]]*/
     	                window.location = uu
     	                alert('將跳轉到結帳畫面');
+    	            	},750)
     	            } else {
     	                alert('請繼續選擇您的餐點');
     	            }

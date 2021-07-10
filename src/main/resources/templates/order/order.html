@@ -26,7 +26,6 @@
     						'<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="'+element.quantity+'" disabled="disabled"/>'+
        						'<input class="add" name="" value="+" type="button" /></td>'+
          					'<td class="onetotal">'+ '單價總額：'+element.dishPrice*element.quantity+'</td>'+
-         					'<td ><img height="100" src='+element.base64+'> </td>'+         					
          					'<td><button class="delete">刪除</button></td></tr>')
 
 				 }
@@ -91,6 +90,7 @@ function DeleteProduct(){
 			
 	});		
 	}
+	setAllTotal ();
 }
 $("#save").click(function(){
 	var saveOrder = [];
@@ -111,18 +111,17 @@ $("#save").click(function(){
 					};
 		}	
 	}
-// 	for(j=0; j<saveOrder.length; j++){
-// 		console.log("ID = "      + saveOrder[j].menuID);
-// 		console.log("quantity =" + saveOrder[j].quantity);
-// 		}
 	
 	if(memberaddres == ""){
 		
 		$.ajax({ type: "POST", 
 			url:"[[@{/Order/saveOrder}]]",
-			data: JSON.stringify(saveOrder), dataType: "json", 
+			data: JSON.stringify(saveOrder), dataType: "json",
 			contentType: "application/json",
+			
 		});
+			
+			
 		if($("#payment").val()=="onlineCash"){
 		setTimeout(function(){
 			$.ajax({ type: "POST", 
@@ -135,18 +134,17 @@ $("#save").click(function(){
 				}
 				
 			});
-		}, 1500); 
-// 					 $("#allPayAPIForm").submit()
-		}
-// 		window.location = "[[@{/store/findAll}]]"
-		
-
+		}, 750); 
+					}setTimeout(function(){
+						window.location = "[[@{/Order/order/NowOrder}]]"
+					}, 750);
 	}else{
 		$.ajax({ type: "POST", 
 			url:"[[@{/Order/saveOrder}]]"+"/"+$("#addressId").val(),
 			data: JSON.stringify(saveOrder), dataType: "json", 
 			contentType: "application/json",	
 		});
+		
 		if($("#payment").val()=="onlineCash"){
 			setTimeout(function(){
 			$.ajax({ type: "POST", 
@@ -158,10 +156,12 @@ $("#save").click(function(){
 				}
 				
 			});
-			}, 1500);
-// 					 $("#allPayAPIForm").submit()
+			}, 750);
+		}else{
+			setTimeout(function(){
+			window.location = "[[@{/Order/order/NowOrder}]]"
+			}, 750);
 		}
-// 		window.location = "[[@{/store/findAll}]]"
 		
 	}
 		
