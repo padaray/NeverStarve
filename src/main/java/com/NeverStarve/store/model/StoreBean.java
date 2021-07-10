@@ -72,6 +72,9 @@ public class StoreBean implements Serializable{
 	
 	String storeImageName;
 	
+	//0是停權 1是正常店家 2是付費廣告店家
+	Integer storeLv;
+	
 	@Transient
 	String base64;
 	@Transient
@@ -80,6 +83,9 @@ public class StoreBean implements Serializable{
 	String storeType;
 	@NotNull
 	Integer seatNumber;
+	@Transient
+	long totalcount;
+	
 	
 	@JsonIgnoreProperties(value = "userInfo")//避免遞歸死循環
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
