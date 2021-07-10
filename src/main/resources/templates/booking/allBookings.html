@@ -28,20 +28,25 @@
 <body>
 	<div th:insert="Generic :: Header"></div>
 	<div class="container" style="max-width: 700px; margin-top: 50px">
-		<div class="jumbotron text-left">
-<!-- 			<p class="text-success text-center display-4"> -->
-<!-- 				<strong>訂位成功!</strong> -->
-<!-- 			</p> -->
-			<div>
-				<div class="" th:object="${btb}">
-					<h4>訂位資訊：</h4><hr>
-					<p >預約餐廳：<span th:utext="${store.storeName}"></span> </p>
-					<p >預約日期：<span th:utext="*{#dates.format(bookingDate,'yyyy 年 MM 月 dd 日')}"></span>
-						(<span th:utext="*{#dates.dayOfWeekNameShort(bookingDate)}"></span>)
-					 </p>
-<!-- 					<p >預約日期：<span th:utext="*{bookingDate}"></span> </p> -->
-					<p >預約時間：<span th:utext="*{#dates.format(bookingTime,'HH:mm')}"></span> </p>
-					<p >預約人數：<span th:utext="*{bookingNum}"></span> </p>
+		<h4>歷史預約訂位清單：</h4><hr>
+		<div>
+			<div th:each="booking, iterStat: ${bookingList}" class="">
+				<div class="jumbotron text-left">
+<!-- 					<p th:text="${booking}"> </p> -->
+					<div class="d-flex justify-content-end">
+						<h4><span class="badge badge-secondary expired"  
+									th:if="(${#dates.format(#calendars.createToday(),'yyyy 年 MM 月 dd 日')} 
+											> ${#dates.format(booking.bookingDate,'yyyy 年 MM 月 dd 日')})">已過期</span></h4>
+					</div>
+					<p >訂單序號：<span th:utext="${booking.pkBookingNo}"></span>
+									
+					<p >預約餐廳：<span th:utext="${booking.storeBean.storeName}"></span> </p>
+					<p >預約日期：<span th:utext="${#dates.format(booking.bookingDate,'yyyy 年 MM 月 dd 日')}" id="bDate"></span>
+							(<span th:utext="${#dates.dayOfWeekNameShort(booking.bookingDate)}"></span>)
+					</p>
+					<p >預約時間：<span th:utext="${#dates.format(booking.bookingTime,'HH:mm')}"></span> </p>
+					<p >預約人數：<span th:utext="${booking.bookingNum}"></span> </p>
+<!-- 					<p th:utext="${#dates.format(#calendars.createToday(),'yyyy 年 MM 月 dd 日')}"> -->
 				</div>
 			</div>
 		</div>

@@ -202,11 +202,11 @@
 
 				var bTimesBtn = "";
 				$.each(response, function(index, element){
-					var StrTime = element.bookingTime
-					StrTime = StrTime.substring(11, 16)
+					var strTime = element.bookingTime
+					strTime = strTime.substring(11, 16)
 					
 					bTimesBtn += '<label class="btn btn-outline-info" style="margin: 2px">' + 
-								 '<input type="radio" name="bookingTime" value="' + StrTime + '">' + StrTime +
+								 '<input type="radio" name="bookingTime" value="' + strTime + '">' + strTime +
 								 '</label>'
 				})
 // 					console.log(bTimesBtn)

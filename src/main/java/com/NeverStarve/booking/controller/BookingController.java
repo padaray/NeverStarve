@@ -1,6 +1,8 @@
 package com.NeverStarve.booking.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class BookingController {
 	}
 	
 	@GetMapping("/BookingByStoreId/{storeId}")
-	public String postBookingByStoreId(@PathVariable Integer storeId, BookingTableBean btb, 
+	public String toBookingTableByStoreId(@PathVariable Integer storeId, BookingTableBean btb, 
 													 Model model, SessionStatus status) {
 		
 		MemberBean memberBean = (MemberBean) model.getAttribute("member");
@@ -88,4 +90,22 @@ public class BookingController {
 		return "booking/bookingConfirm";
 	}
 
+	@GetMapping("/findBookings")
+	public String findBookingsByMemberId(Model model, SessionStatus status) {
+		
+		MemberBean memberBean = (MemberBean) model.getAttribute("member");
+		if (memberBean == null) {
+			status.setComplete();
+			return "redirect:/Member/login";
+		}
+
+		List<BookingTableBean> bookings = bookingService.getMemberBookings(memberBean);
+		model.addAttribute("bookingList", bookings);
+//		System.out.println(bookings);
+		
+//		Date todayDate = new Date();
+//		model.addAttribute("todayDate", todayDate);
+		
+		return "/booking/allBookings";
+	}
 }
