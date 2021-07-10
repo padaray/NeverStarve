@@ -1,5 +1,6 @@
 package com.NeverStarve.booking.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,16 @@ public class StoreBookingServiceImpl implements StoreBookingService {
 			storeBookingRepository.save(stb);
 		}
 		
+	}
+
+//	@Override
+//	public List<StoreBookingBean> findTimesByDateAndStoreId(StoreBookingBean sbb) {
+//		return storeBookingRepository.findTimesByBookingDate(sbb);
+//	}
+
+	@Override
+	public List<StoreBookingBean> findTimesByDateAndStoreId(Date d, StoreBean storeId) {
+		return storeBookingRepository.findTimesByBookingDateAndStoreBean(d, storeId);
 	}
 
 }

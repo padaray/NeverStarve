@@ -3,6 +3,7 @@ package com.NeverStarve.booking.service;
 import java.util.List;
 
 import com.NeverStarve.booking.model.BookingTableBean;
+import com.NeverStarve.member.model.MemberBean;
 
 public interface BookingService {
 
@@ -14,5 +15,5 @@ public interface BookingService {
 	
 	List<BookingTableBean> getAllBookings();
 	
-	List<BookingTableBean> getMemberBookings(Integer pkMemberId);
+	List<BookingTableBean> getMemberBookings(MemberBean memberBean);
 }
