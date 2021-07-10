@@ -6,8 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 
@@ -17,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.NeverStarve.backStage.service.BackstageMemberSevice;
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.repository.MemberRepository;
+import com.NeverStarve.orders.model.OrderBean;
 
 @Service
 public class BackstageMemberSeviceimpl implements BackstageMemberSevice {
@@ -97,5 +103,12 @@ public class BackstageMemberSeviceimpl implements BackstageMemberSevice {
 			e.printStackTrace();
 		}
 		return b;
+	}
+
+	@Override
+	public Collection<OrderBean> getOrders(MemberBean bean) {
+		Set<OrderBean> order = bean.getOrders();
+		List<OrderBean> list1 = new ArrayList<OrderBean>(order);
+		return  list1.stream().sorted(Comparator.comparing(OrderBean::getPkOrderId).reversed()).collect(Collectors.toCollection(ArrayList::new));	
 	}
 }

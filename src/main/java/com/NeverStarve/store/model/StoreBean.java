@@ -3,6 +3,7 @@ package com.NeverStarve.store.model;
 import java.io.Serializable;
 import java.sql.Blob;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -76,8 +77,9 @@ public class StoreBean implements Serializable{
 	
 	@Transient
 	String base64;
-
-	@NotBlank
+	@Transient
+	List<String> storeTypeList;
+	
 	String storeType;
 	@NotNull
 	Integer seatNumber;

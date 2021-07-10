@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+<!-- i標籤小圖 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->
+<link rel="shortcut icon"  th:href="@{/favicon.ico}"/> <!-- 網站小圖 -->
+
+<!-- jQ-UI datepicker CSS and js -->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script th:src="@{/js/TW.js}"></script>
+
+<!-- fullcalendar (testing) -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css"> -->
+
+<script type="text/javascript">
+$(".addDishPlace").on("click", "#submitButt", function() {
+	var saveMenu = [];
+	
+	var  allDishlength =$("#newDishForm").find(".menuInp").length;
+	
+	for(i=0; i < allDishlength; i++){
+		
+		var allDish = $(".menuInp");
+		saveMenu[saveMenu.length] = {
+				"dishName" : $(".DN").eq(i).val(),    
+				"dishIntroduction" : $(".DI").eq(i).val(),
+				"dishPrice" : $(".DP").eq(i).val(),
+				};
+		
+	}
+	//判斷書入欄位是否有空值
+	var flag = false;
+	for(i = 0; i < allDishlength; i++){
+		for(let obj in saveMenu[i]){
+			if(saveMenu[i][obj] == ''){
+				flag = true;
+			}
+		}
+		//判斷價格欄位是否為數字
+		re = /^[0-9]*$/;
+		if(!re.test(saveMenu[i].dishPrice)){
+			 $(".DP").eq(i).parent().find("span").html("請填入數字");
+			 flag = true;
+		}
+	}
+	if(!flag){
+		$.ajax({ type: "POST", 
+			url:"[[@{/StoreBooking/saveStoreBookingTimes}]]",
+			data: JSON.stringify(saveMenu), 
+			dataType: "json", 
+			contentType: "application/json",
+		});	
+		alert('已新增菜單');
+		location.reload();
+	}else{
+		$('.alertEmp').html("<strong class='text-danger'>請確認欄位是否有空白</strong>");
+	}
+		
+})
+</script>
+<title>店家訂位管理系統</title>
+</head>
+<body>
+	<div th:insert="Generic :: Header"></div>
+	<div class="container" style="max-width: 700px; margin-top: 50px">
+		<h3 class="page-header">店家訂位管理系統</h3>
+		<div class="jumbotron text-left">
+			<p >貴公司  <span th:text="${session.storeUser.storeName}"></span>，您好！歡迎使用店家訂位管理系統！</p>
+			<p>
+				<strong>請設定營業日期和預約時段</strong>
+			</p><hr>
+			<div>
+				<form action="#" th:action="@{/StoreBooking/storeBookingPost}" method="post">
+<!-- 				<form action="#" th:action="@{/StoreBooking/saveStoreBookingTimes}" method="post"> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="storeNameId">預約餐廳</label> -->
+<!-- 						<p id="storeNameId" class="form-control" th:text="${store.storeName}"></p> -->
+<!-- 					</div> -->
+					<div class="form-group">
+						<label for="datepicker">營業日期</label>
+
+						<!-- jQ範例 -->
+						<p id="dater">
+							<input type="text" name="bookingDate" id="datepicker" 
+								class="form-control float-left btn-outline-info" style="width: 565px" readonly>
+						</p>
+
+					</div>
+					<div class="form-group">
+						<label for="bookingTimeId">預約時段</label> 
+						<br>
+						<div data-toggle="buttons" class="btn-group-toggle" >夜間：
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0000" value="00:00">00:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0100" value="01:00">01:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0200" value="02:00">02:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0300" value="03:00">03:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0400" value="04:00">04:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0500" value="05:00">05:00
+							</label>
+						</div><br>
+						<div data-toggle="buttons" class="btn-group-toggle" >上午：
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0600" value="06:00">06:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0700" value="07:00">07:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0800" value="08:00">08:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t0900" value="09:00">09:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1000" value="10:00">10:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1100" value="11:00">11:00
+							</label>
+						</div><br>
+						<div data-toggle="buttons" class="btn-group-toggle" >下午：
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1200" value="12:00">12:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1300" value="13:00">13:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1400" value="14:00">14:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1500" value="15:00">15:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1600" value="16:00">16:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1700" value="17:00">17:00
+							</label>
+						</div><br>
+						<div data-toggle="buttons" class="btn-group-toggle" >晚間：
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1800" value="18:00">18:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t1900" value="19:00">19:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t2000" value="20:00">20:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t2100" value="21:00">21:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t2200" value="22:00">22:00
+							</label>
+							<label class="btn btn-outline-info">
+								<input type="checkbox" name="bookingTimes" id="t2300" value="23:00">23:00
+							</label>
+						</div><br>
+							
+					<p> </p>
+					</div>
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="bPeopleNumId">用餐人數</label>  -->
+
+<!-- 						<select name="bookingNum" id="bPeopleNumId" class="form-control"> -->
+<!-- 							<option th:each="seat : ${#numbers.sequence(1, store.seatNumber, 1)}"  -->
+<!-- 									th:value="${seat}"  -->
+<!-- 									th:text="${seat}"  -->
+<!-- 									th:selected="${seat == 2}"> -->
+<!-- 							 </option> -->
+<!-- 						</select> -->
+<!-- 					</div> -->
+					<hr>
+					<p>
+						<input id="confirmSubmitId" type="checkbox" name="confirm" th:checked="false" value="1">
+						<label for="confirmSubmitId">已確認預約資訊無誤</label>
+					</p>
+					<p>
+						<button id="submitBookingId" type="submit" class="btn btn-primary" disabled>立即預約</button>
+					</p>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+	//jQ-ui的月曆工具
+	$( "#datepicker" ).datepicker({
+        showOn: "both",
+        buttonImageOnly: false,
+        buttonText: "<i class='fa fa-calendar'></i>",
+        dateFormat: "yy 年 mm 月 dd 日",
+        
+        showButtonPanel: true,
+        currentText: "回到今天",
+        
+        minDate: new Date() // 最小日期設定，未設定參數即表示今日
+      }).datepicker("setDate", new Date()); //設置月曆工具的相關設定後，在鏈結設置今日日期到輸入欄位
+
+	//月曆按鈕樣式
+	$("#dater button").addClass("btn btn-secondary");
+	
+	//確認資料按鈕綁定送出按鈕的disabled功能
+	$("#confirmSubmitId").click(function(){
+		  $("#submitBookingId").prop("disabled", !$("#confirmSubmitId:checked").length);
+		});
+	
+    </script>
+</body>
+</html>

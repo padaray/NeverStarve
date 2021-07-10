@@ -1,5 +1,6 @@
 package com.NeverStarve.backStage.controller;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.NeverStarve.backStage.service.BackstageMemberSevice;
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.response.MemberResponse;
 import com.NeverStarve.member.service.MemberService;
@@ -33,6 +35,9 @@ public class BackstageMember {
 	
 	@Autowired
 	MemberService memberservice;
+	
+	@Autowired
+	BackstageMemberSevice backstageMemberservice;
 	
 	@Autowired
 	OrderService orderService ;
@@ -82,9 +87,9 @@ public class BackstageMember {
 	public String getOrder(@PathVariable int id, Model model) {
 		Optional<MemberBean> member = memberservice.getMamberById(id);
 		MemberBean m = member.get();
-		Set<OrderBean> order = m.getOrders();
+		Collection<OrderBean> list2 = backstageMemberservice.getOrders(m);
 		model.addAttribute("id", m.getPkMemberId());
-		model.addAttribute("orderSet",order);
+		model.addAttribute("orderSet",list2);
 		return "backstage/MemberOrder" ;
 	}
 	

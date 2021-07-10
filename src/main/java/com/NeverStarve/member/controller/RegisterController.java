@@ -131,7 +131,6 @@ public class RegisterController {
 			member.setPkMemberId(sessionMember.getPkMemberId());
 			member.setUserType(sessionMember.getUserType());
 
-			
 			System.out.println(sessionMember.getEmail());
 			System.out.println(member);
 			memberService.updateMember(member);

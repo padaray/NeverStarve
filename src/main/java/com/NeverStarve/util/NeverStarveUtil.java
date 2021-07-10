@@ -8,6 +8,8 @@ import java.util.Base64;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import com.NeverStarve.store.model.StoreBean;
+
 public class NeverStarveUtil {
 
 	public String blobToBase64(Blob image, String mimeType) {
