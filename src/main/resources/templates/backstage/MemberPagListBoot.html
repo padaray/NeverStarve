@@ -144,7 +144,7 @@ $(function(){
 			success:function (data) {
 				
 				$("#tbody").empty();
-				var url
+			
 				$.each(data, function(index, element){ 
 					$('<tr>').appendTo("#tbody")
 					.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkMemberId+"'>" +element.pkMemberId+ "</a></th>")
@@ -185,7 +185,6 @@ $(function(){
 			async: true,
 	        cache: false,
 			success:function (data) {
-				
 				$("#tbody").empty();
 				var url
 				$.each(data, function(index, element){ 
@@ -581,13 +580,13 @@ $(function(){
 		</div>
 		
 	</div>
-	<div  class="center" style="margin: 20px">	
-			<button id="but00" width='250px' >第一頁</button>
-			<button id="but0" width='250px' >上一頁</button>
-			<span id="pageno">[[${pageNo}]] / [[${totalPages}]]</span>
-			<button id="but1" width='250px' >下一頁</button>
-			<button id="but2" width='250px' >最尾頁</button>
-	</div> 
+	<div class="center" style="margin: 20px">
+		<button id="but00" class="btn btn-primary" width='250px'>第一頁</button>
+		<button id="but0" class="btn btn-primary" width='250px'>上一頁</button>
+		<span id="pageno">[[${pageNo}]] / [[${totalPages}]]</span>
+		<button id="but1" class="btn btn-primary" width='250px'>下一頁</button>
+		<button id="but2" class="btn btn-primary" width='250px'>最尾頁</button>
+	</div>
 	
 	
 	

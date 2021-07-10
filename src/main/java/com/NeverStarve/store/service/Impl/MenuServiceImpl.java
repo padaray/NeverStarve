@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,13 +86,23 @@ public class MenuServiceImpl implements MenuService {
 				e.printStackTrace();
 				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
 			}
+		}else{
+			try {
+				byte[] b = fileToByteArray("/images/NeverStarvefavicon.png");
+				menuBean.setDishImageName("NeverStarvefavicon.png");
+				Blob blob = new SerialBlob(b);
+				menuBean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常else: " + e.getMessage());
+			}
 		}
 		menuRepository.save(menuBean);
 	}
 	
 	//將整個菜單變成base64
 	private List<MenuBean> tobase64(List<MenuBean> menuBeanList) {
-		String filePath = "/images/NoImage.jpg";
+		String filePath = "/images/NeverStarvefavicon.png";
 		StringBuffer stringBuff = new StringBuffer();
 		byte[] media = null;
 		NeverStarveUtil util = new NeverStarveUtil();
@@ -102,21 +114,31 @@ public class MenuServiceImpl implements MenuService {
 				String base64img = util.blobToBase64(coverImage, context.getMimeType(filename));
 				MBL.setBase64(base64img);
 
-			} else {
-				media = toByteArrayJSON(filePath);
-				String mimeType = context.getMimeType(filePath);
-				stringBuff.append("data:" + mimeType + ";base64,");
-				Base64.Encoder be = Base64.getEncoder();
-				stringBuff.append(new String(be.encode(media)));
-				MBL.setBase64(stringBuff.toString());
-			}	
+			} 
+//			else {
+//				media = fileToByteArray(filePath);
+//				String mimeType = context.getMimeType(filePath);
+//				stringBuff.append("data:" + mimeType + ";base64,");
+//				Base64.Encoder be = Base64.getEncoder();
+//				stringBuff.append(new String(be.encode(media)));
+//				MBL.setBase64(stringBuff.toString());
+//			}	
 		}
 		return menuBeanList;
 	}
 	
+	@Override
+	public void saveMenuListNoPic(MenuBean menuBean) {
+		String dishName = menuBean.getDishName();
+		String dishIntroduction = menuBean.getDishIntroduction();
+		Double dishPrice = menuBean.getDishPrice();
+		Integer pkDishId = menuBean.getPkDishId();
+		menuRepository.saveNoPic(dishName, dishIntroduction, dishPrice, pkDishId);
+	}
+	
 	//將單一menuBean變成base64
 	private MenuBean tobase64(MenuBean menuBean) {
-		String filePath = "/images/NoImage.jpg";
+		String filePath = "/images/NeverStarvefavicon.png";
 		StringBuffer stringBuff = new StringBuffer();
 		byte[] media = null;
 		NeverStarveUtil util = new NeverStarveUtil();
@@ -127,20 +149,22 @@ public class MenuServiceImpl implements MenuService {
 			String base64img = util.blobToBase64(coverImage, context.getMimeType(filename));
 			menuBean.setBase64(base64img);
 
-		} else {
-			media = toByteArrayJSON(filePath);
-			String mimeType = context.getMimeType(filePath);
-			stringBuff.append("data:" + mimeType + ";base64,");
-			Base64.Encoder be = Base64.getEncoder();
-			stringBuff.append(new String(be.encode(media)));
-			menuBean.setBase64(stringBuff.toString());
-		}
+		} 
+//		else {
+//			//無圖片時會將"暫無圖片"塞進來
+//			media = fileToByteArray(filePath);
+//			String mimeType = context.getMimeType(filePath);
+//			stringBuff.append("data:" + mimeType + ";base64,");
+//			Base64.Encoder be = Base64.getEncoder();
+//			stringBuff.append(new String(be.encode(media)));
+//			menuBean.setBase64(stringBuff.toString());
+//		}
 		return menuBean;
 	}
 	
 	
 	//變成byte
-	private byte[] toByteArrayJSON(String filepath) {
+	private byte[] fileToByteArray(String filepath) {
 		byte[] b = null;
 		String realPath = context.getRealPath(filepath);
 		try {
@@ -156,28 +180,7 @@ public class MenuServiceImpl implements MenuService {
 		}
 		return b;
 	}
-//	@Override
-//	public void saveMenuList(List<MenuBean> menuListS, StoreBean storeBean) {
-//		// TODO Auto-generated method stub
-//		for(MenuBean MLS: menuListS) {
-//			MLS.setStoreBean(storeBean);
-//			//寫入圖片
-//			MultipartFile dishPicture = MLS.getDishPicture();
-//			if (dishPicture != null && !dishPicture.isEmpty()) {
-//				String ImageFileName = dishPicture.getOriginalFilename();
-//				MLS.setDishImageName(ImageFileName);
-//				try {
-//					byte[] b = dishPicture.getBytes();
-//					Blob blob = new SerialBlob(b);
-//					MLS.setCoverImage(blob);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//					throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
-//				}
-//			}
-//			menuRepository.save(MLS);
-//		}
-//	}
+
 	
 	
 

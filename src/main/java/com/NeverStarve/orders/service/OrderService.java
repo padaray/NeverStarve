@@ -3,6 +3,9 @@ package com.NeverStarve.orders.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.orders.model.OrderBean;
 import com.NeverStarve.orders.model.OrderListBean;
@@ -20,6 +23,10 @@ public interface OrderService {
 	
 	boolean saveOrderBeanAndOrderList(OrderBean orderBean,List<OrderListBean> orderList);
 	
-	Optional<OrderBean> getNewestOrderByMember(MemberBean memberBean); 
-	 
+	Optional<OrderBean> getNewestOrderByMember(MemberBean memberBean);
+	
+	List<OrderBean> findOrderByMemberBean(MemberBean memberBean);
+	
+	
+	
 }

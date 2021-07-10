@@ -8,7 +8,8 @@
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" ></script>
-
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->
+<link rel="shortcut icon"  th:href="@{/favicon.ico}"/> <!-- 網站小圖 -->	
 <title>結帳畫面</title>
 <script>
 	$.ajax({ type: "GET", 
@@ -89,6 +90,7 @@ function DeleteProduct(){
 			
 	});		
 	}
+	setAllTotal ();
 }
 $("#save").click(function(){
 	var saveOrder = [];
@@ -109,18 +111,17 @@ $("#save").click(function(){
 					};
 		}	
 	}
-// 	for(j=0; j<saveOrder.length; j++){
-// 		console.log("ID = "      + saveOrder[j].menuID);
-// 		console.log("quantity =" + saveOrder[j].quantity);
-// 		}
 	
 	if(memberaddres == ""){
 		
 		$.ajax({ type: "POST", 
 			url:"[[@{/Order/saveOrder}]]",
-			data: JSON.stringify(saveOrder), dataType: "json", 
+			data: JSON.stringify(saveOrder), dataType: "json",
 			contentType: "application/json",
+			
 		});
+			
+			
 		if($("#payment").val()=="onlineCash"){
 		setTimeout(function(){
 			$.ajax({ type: "POST", 
@@ -133,18 +134,17 @@ $("#save").click(function(){
 				}
 				
 			});
-		}, 1500); 
-// 					 $("#allPayAPIForm").submit()
-		}
-// 		window.location = "[[@{/store/findAll}]]"
-		
-
+		}, 750); 
+					}setTimeout(function(){
+						window.location = "[[@{/Order/order/NowOrder}]]"
+					}, 750);
 	}else{
 		$.ajax({ type: "POST", 
 			url:"[[@{/Order/saveOrder}]]"+"/"+$("#addressId").val(),
 			data: JSON.stringify(saveOrder), dataType: "json", 
 			contentType: "application/json",	
 		});
+		
 		if($("#payment").val()=="onlineCash"){
 			setTimeout(function(){
 			$.ajax({ type: "POST", 
@@ -156,10 +156,12 @@ $("#save").click(function(){
 				}
 				
 			});
-			}, 1500);
-// 					 $("#allPayAPIForm").submit()
+			}, 750);
+		}else{
+			setTimeout(function(){
+			window.location = "[[@{/Order/order/NowOrder}]]"
+			}, 750);
 		}
-// 		window.location = "[[@{/store/findAll}]]"
 		
 	}
 		
@@ -196,28 +198,42 @@ $('input[name=checktake]').change(function(){
 
 })	
 </script>
+<style type="text/css">
+.fl {
+    float: left; 
+ 	} 
+	
+ 	.btn btn-primary { 
+     margin: 8px 0; 
+ 	} 
+ 	.fr { 
+     float: right; 
+	} 
+
+</style>
 
 </head>
 <body th:object="${memberBean}">
+<div th:insert="Generic :: Header"></div>
+
+	<div class="container" style="max-width: 1200px; margin-top: 50px">
 	<div style="text-align: center;">
-		<table id="tablejia1" class="" width="100%" cellpadding="0"
-			cellspacing="0" border="0" style='text-align: center;'>
+		<table >
 			<tr>
-				<td><font size="5" background="#fff" style="padding: 0 0 0 4%;">您的訂單</font></td>
+				<td><font size="5" >您的訂單</font></td>
 			</tr>
 		</table>
 
-		<div style="overflow: hidden; height: 42vh; overflow-y: scroll">
 			<table id="tab" class="table table-striped" width="100%" cellpadding="0"
 				cellspacing="0" border="0">
 				<tbody id="info">
 
 				</tbody>
 			</table>
-		</div>
+	</div>
 	</div>
 	
-	
+	<div class="container" style="max-width: 1200px; margin-top: 50px">
 	<p>取餐方式:</p>
   <input type="radio" id="store" name="checktake" value="1"  checked="true">
   <label for="store">到店取餐</label>
@@ -229,10 +245,12 @@ $('input[name=checktake]').change(function(){
     <option value="cash">現金</option>
     <option value="onlineCash">線上刷卡</option>
 </select>
- 
+ </div>
 	
 	
-	<section class="fixed_bottom food_shopcar" >
+	<section  >
+	<div class="container" style="max-width: 1200px; margin-top: 50px">
+
 		<div class="form-group" id="ggininder" >
 		<br>
 					<label for="addressId">地址</label>
@@ -244,14 +262,15 @@ $('input[name=checktake]').change(function(){
 					<p class= "form-control-static text-danger"  style="margin-bottom: 0"></p>
 					<p class= "form-control-static text-danger" ></p>
 		</div>
-		
+		</div>
 		<div id="divforEcpay" hidden="hidden"></div>
 	
-		
-		<div id="alltotalDiv" class="car fl"><span class="red num" id="alltotal">0</span>元</div>
- 		<div class="btn orgbtn fr" ><p  id="test" >測試用	</p></div>
- 		<div class="btn orgbtn fr" ><p  id="save" >送出訂單	</p></div>
 	</section>
+	<div class="navbar navbar-expand-sm bg-light justify-content-around">
+		<div id="alltotalDiv" class="fl"><span class="text-success" id="alltotal">0</span>元</div>
+ 		
+ 		<div class="btn orgbtn "><button  id="save" class="btn btn-primary " >送出訂單</button></div>
+	</div>
 <script>
 $("#twzipcode").twzipcode({
     countySel: "", // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料

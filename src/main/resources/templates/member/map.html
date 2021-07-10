@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="shortcut icon" th:href="@{/favicon.ico}" />
+
+<!-- vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&callback=initMap"></script> -->
+<!-- JavaScript Geocoding API v3 -->
+<script src="http://maps.google.com/maps/api/js?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&sensor=false"></script>
+
+</head>
+<body>
+<div th:insert="Generic :: Header"></div>
+
+<!-- <div th:src="${member.bas64}"> </div> -->
+
+<!-- <iframe width="600" height="450" style="border: 0" loading="lazy" -->
+<!--                                 allowfullscreen -->
+<!--                                 src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&q=新北勢永和區保安路262巷2號"> -->
+<!--                                              th:href="@{'/Backstage/Member/'+${member.value.pkMemberId}}"    
+                         </iframe> -->
+<!--                              src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&origin=台北市政府&waypoints=台北101|國父紀念館&destination="+[[${session.member.address}]]> -->
+              
+  <input type="text" id="input" value = "台北">                       
+<div id="app" class="container">
+  <div class="row">
+    <div class="col">
+      <div id="map" class="embed-responsive embed-responsive-16by9"></div>
+    </div>
+  </div>
+</div>
+<!-- <div class="d-flex justify-content-center" th:inline="text"> -->
+<!--   <iframe -->
+<!--   	id="map" -->
+<!--     width="600" -->
+<!--     height="450" -->
+<!--     frameborder="0"  -->
+<!--     style="border:0" -->
+<!--     src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&origin=台北市政府&waypoints=台北101|國父紀念館&destination=大安森林公園"> -->
+<!--   </iframe> -->
+<!--   <p th:text="${session.member.address}"></p> -->
+<!--   <br> -->
+<!--   <P>[[${session.member.address}]]</P> -->
+<!-- </div> -->
+
+<script type="text/javascript" th:inline = "javascript">
+// 	var mapUrl = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&origin=台北市政府&destination=";
+// 	var add = /*[[${session.member.address}]]*/
+// 	$("iframe").attr("src",mapUrl+add)
+// 	alert($("iframe").attr("src"));
+   var listAddress=["台北市政府","台北101","信義威秀電影院"];
+   var  elementList=[]
+   var loc;
+   var geocoder = new google.maps.Geocoder();
+   var address = '大安森林公園';
+   var mid;
+	$("#input").change(function(){
+		
+	var element = $("#input").val()
+    if (geocoder) {
+	   		   
+	   		  geocoder.geocode({'address': element}, function (results, status) {
+	            if (status == google.maps.GeocoderStatus.OK) {
+	           	 mid= results[0].geometry.location;
+	           	 alert(mid);
+	            }
+	            else {
+	               console.log("Geocoding failed: " + status);
+	            }
+	         })
+	      };
+	      console.log(googleMap)
+	      googleMap.map=new google.maps.Map(document.getElementById('map'), {
+		        center: mid, // 中心點座標
+		        zoom: 16, // 1-20，數字愈大，地圖愈細：1是世界地圖，20就會到街道
+		        /*
+		          roadmap 顯示默認道路地圖視圖。
+		          satellite 顯示 Google 地球衛星圖像。
+		          hybrid 顯示正常和衛星視圖的混合。
+		          terrain 顯示基於地形信息的物理地圖。
+		        */
+		        mapTypeId: 'terrain'
+		      });
+	 
+   })
+
+
+const googleMap = new Vue({
+	  el: '#app',
+	  data: {
+	    map: null
+	  },
+	  methods: {
+	    // init google map
+	    initMap() {
+	      // 預設顯示的地點：台北市政府親子劇場
+	      let location = {
+	        lat: 25.0374865, // 經度
+	        lng: 121.5647688 // 緯度
+	      };
+
+	      // 建立地圖
+	      this.map = new google.maps.Map(document.getElementById('map'), {
+	        center: location, // 中心點座標
+	        zoom: 16, // 1-20，數字愈大，地圖愈細：1是世界地圖，20就會到街道
+	        /*
+	          roadmap 顯示默認道路地圖視圖。
+	          satellite 顯示 Google 地球衛星圖像。
+	          hybrid 顯示正常和衛星視圖的混合。
+	          terrain 顯示基於地形信息的物理地圖。
+	        */
+	        mapTypeId: 'terrain'
+	      });
+	      
+	      if (geocoder) {
+	   	   listAddress.forEach(function(element){
+	   		   
+	   		  geocoder.geocode({'address': element}, function (results, status) {
+	            if (status == google.maps.GeocoderStatus.OK) {
+	           	 loc = results[0].geometry.location;
+	           	 console.log(results[0].geometry.location);
+	           	 
+	   	            var marker = new google.maps.Marker({
+	   		              position:loc,
+	   		              map: googleMap.map
+	   		            });
+	            }
+	            else {
+	               console.log("Geocoding failed: " + status);
+	            }
+	         })
+	   	   }) 
+
+	      };    
+	      
+	      
+	      // 放置多個marker
+// 	      fetch("")
+// 	        .then(results => results.json())
+// 	        .then(result => {
+// 	          let res = result.features;
+// 	          Array.prototype.forEach.call(res, r => {
+// 	            let latLng = new google.maps.LatLng(r.geometry.coordinates[0], r.geometry.coordinates[1]);
+// 	            let marker = new google.maps.Marker({
+// 	              position:loc,
+// 	              map: this.map
+// 	            });
+// 	          });
+// 	      });
+
+	    }
+	  },
+	  created() {
+	    window.addEventListener('load', () => {
+	      this.initMap();
+	    });
+	  }
+	});
+
+</script>
+
+
+</body>
+</html>

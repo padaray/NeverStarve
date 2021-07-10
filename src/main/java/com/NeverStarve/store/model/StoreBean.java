@@ -3,6 +3,7 @@ package com.NeverStarve.store.model;
 import java.io.Serializable;
 import java.sql.Blob;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -71,13 +72,20 @@ public class StoreBean implements Serializable{
 	
 	String storeImageName;
 	
+	//0是停權 1是正常店家 2是付費廣告店家
+	Integer storeLv;
+	
 	@Transient
 	String base64;
-
-	@NotBlank
+	@Transient
+	List<String> storeTypeList;
+	
 	String storeType;
 	@NotNull
 	Integer seatNumber;
+	@Transient
+	long totalcount;
+	
 	
 	@JsonIgnoreProperties(value = "userInfo")//避免遞歸死循環
 	@OneToMany(mappedBy ="storeBean",fetch = FetchType.LAZY)
