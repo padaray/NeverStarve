@@ -35,10 +35,6 @@ public class MenuController {
 	//抓取菜單
 	@GetMapping("/menu")
 	public String getMenu(HttpServletRequest request, Model model) {
-//		model.addAttribute("storeUser", new StoreBean());  //初始化model的storeUser
-//		checkCookie(request, model);  //用cookie建立model
-//		//把抓到的storeId丟給後端抓菜單
-//		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
 		List<MenuBean> menuList = menuService.getMenuByStoreBean(checkCookie(request));
 		model.addAttribute("menuList", menuList);
 		return "store/menu";

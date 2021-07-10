@@ -1,14 +1,12 @@
 package com.NeverStarve.store.controller;
 
+
 import java.sql.Blob;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,6 +77,8 @@ public class StoreController {
 				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
 			}
 		}
+		//預設店家等級為一
+		storeBean.setStoreLv(1);
 		storeService.save(storeBean);
 		return "redirect:/store/storeIndex";
 	}

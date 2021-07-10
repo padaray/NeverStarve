@@ -59,9 +59,8 @@ $(".delete").click(DeleteProduct)
  				});		
  			}
 		}
-
 //新增一行可輸入的菜單
-let newLineStr = "<tr class='menuInp'><td><input type='text' class='classinp DN' name='dishName' placeholder='菜品名稱'></td><td><input type='text' class='classinp DI' name='dishIntroduction' placeholder='菜品說明'><td><input type='text' class='classinp DP' name='dishPrice' placeholder='菜品價格'><span class='text-danger'></span></td><td><input type='file' name='dishPicture' id='dishPictureId' class='form-control DPt'></td><td><button class='deleteLine btn btn-danger'>刪除</button></td></tr>"
+let newLineStr = "<tr class='menuInp'><td><input type='text' class='classinp DN' style='width: 140px' name='dishName' placeholder='菜品名稱'></td><td><input type='text' class='classinp DI' name='dishIntroduction' style='width: 140px' placeholder='菜品說明'><td><input type='text' class='classinp DP' name='dishPrice' style='width: 140px' placeholder='菜品價格'><span class='text-danger'></span></td><td><form class='saveDishForm' method='post' enctype='multipart/form-data'><input type='file' name='dishPicture' id='dishPictureId' class='form-control DPt' style='width: 200px'></form></td><td><button class='deleteLine btn btn-danger'>刪除</button></td></tr>"
 $(".addNewLine").click(function() {
 	let ObjInput=document.getElementsByTagName("input") ;
 	$("#submitButt").attr("hidden", false);
@@ -109,11 +108,19 @@ $(".addDishPlace").on("click", "#submitButt", function() {
 		}
 	}
 	if(!flag){
-		$.ajax({ type: "POST", 
-			url:"[[@{/store/saveMenu}]]",
-			data: JSON.stringify(saveMenu), dataType: "json", 
-			contentType: "application/json",
-		});	
+		for(i=0; i < allDishlength; i++){
+			var form = document.querySelector(".saveDishForm");
+			var formData = new FormData(form);
+			formData.append('dishName', $(".DN").eq(i).val());
+			formData.append('dishIntroduction', $(".DI").eq(i).val());
+			formData.append('dishPrice', $(".DP").eq(i).val());
+			$.ajax({ type: "POST", 
+				url: "[[@{/store/saveMenu}]]",
+				data: formData,
+				contentType: false, 
+	            processData: false,
+			})
+		}
 		alert('已新增菜單');
 		location.reload();
 	}else{
@@ -131,8 +138,7 @@ $(".info").on("click", ".modify", function() {
 	dishName = $(this).parent().siblings().eq(2).text();
 	dishIntroduction = $(this).parent().siblings().eq(3).text();
 	dishPrice = $(this).parent().siblings().eq(4).text();
-	
-	let dishString = "<td class='dishNum'>" + dishNum + "</td><td style='display: none'>" + pkDishId + "</td><td><input type='text' name='dishNameMod' value='" + dishName + "'></td><td><input type='text' name='dishIntroductionMod' value='" + dishIntroduction + "'></td><td><input type='text' name='dishPriceMod' value='" + dishPrice + "'></td><td><button class='modiCom btn btn-primary'>送出</button><button class='cancelModi btn btn-secondary'>取消</button><div class='noEmptyModi text-danger'></div></td>"
+	let dishString = "<td class='dishNum'>" + dishNum + "</td><td style='display: none'>" + pkDishId + "</td><td><input type='text' name='dishNameMod' style='width: 100px' value='" + dishName + "'></td><td><input type='text' name='dishIntroductionMod' style='width: 140px' value='" + dishIntroduction + "'></td><td><input type='text' name='dishPriceMod' style='width: 70px' value='" + dishPrice + "'></td><td><form class='modifyDishForm' method='post' enctype='multipart/form-data'><input type='file' name='dishPicture' style='width: 120px'></form></td><td><button class='modiCom btn btn-primary'>送出</button><button class='cancelModi btn btn-secondary'>取消</button><div class='noEmptyModi text-danger'></div></td>"
 	$(this).parent().parent().html(dishString);
 })
 
@@ -154,23 +160,38 @@ $(".info").on("click", ".modiCom", function() {
 	if(flag){
 		$(this).parent().find(".noEmptyModi").html("請確認欄位是否有空白");
 	}else{
+		var form = document.querySelector(".modifyDishForm");
+		var formDataModi = new FormData(form);
+		formDataModi.append('pkDishId', $(this).parent().siblings().eq(1).text());
+		formDataModi.append('dishName', $(this).parent().siblings().eq(2).find("input").val());
+		formDataModi.append('dishIntroduction', $(this).parent().siblings().eq(3).find("input").val());
+		formDataModi.append('dishPrice', $(this).parent().siblings().eq(4).find("input").val());
 		$.ajax({ type: "POST", 
-			url:"[[@{/store/modifyMenu}]]",
-			data: JSON.stringify(saveModiMenu), dataType: "json", 
-			contentType: "application/json",
-		});	
-// 		setInterval(function(){window.location.reload();},100);
-		let dishNumRe, pkDishIdRe, dishNameRe, dishIntroductionRe, dishPriceRe;
-		dishNumRe = $(this).parent().siblings().eq(0).text();
-		pkDishIdRe = saveModiMenu.pkDishId;
-		dishNameRe = saveModiMenu.dishName;
-		dishIntroductionRe = saveModiMenu.dishIntroduction;
-		dishPriceRe = saveModiMenu.dishPrice;
-		let dishStringRe = "<td class='dishNum'>" + dishNumRe + "</td><td style='display: none'>" + pkDishIdRe + "</td><td>" + dishNameRe + "</td><td>" + dishIntroductionRe + "</td><td>" + dishPriceRe + "</td><td><button class='modify btn btn-primary'>修改</button><button class='delete btn btn-danger'>刪除</button></td>"
-		$(this).parent().parent().html(dishStringRe);
+			url: "[[@{/store/modifyMenu}]]",
+			data: formDataModi,
+			contentType: false, 
+            processData: false,
+		})
+		//讓函式休眠幾秒 更新的頁面才不會是舊的
+		let dishNumRe = $(this).parent().siblings().eq(0).text();
+		setTimeout(function(){
+			//讓修改後的頁面顯示回去
+			let pkDishIdRe = saveModiMenu.pkDishId;
+			$.ajax({ type: "GET", 
+				url:"[[@{/store/findByDishId/}]]" + pkDishIdRe,
+				contentType: "application/json",
+				success: function (response) { 
+					let originalDish = "<td class='dishNum'>" + dishNumRe + "</td><td style='display: none'>" + response.pkDishId + "</td><td>" + response.dishName + "</td><td>" + response.dishIntroduction + "</td><td>" + response.dishPrice + ".0</td><td><img height='80' src='" + response.base64 + "'></td><td><button class='modify btn btn-primary'>修改</button><button class='delete btn btn-danger'>刪除</button></td>";
+					$(".dishNum").eq(dishNumRe-1).parent().html(originalDish);
+				}
+			//讓修改後的頁面顯示回去
+			});
+		}, 100);
+		
 	}
 })
 
+//按下修改鈕後按下取消 回復本來畫面
 $(".info").on("click", ".cancelModi", function() {
 	let dishIdCanc = $(this).parent().siblings().eq(1).text();
 	let dishNumOri = $(this).parent().siblings().eq(0).text();
@@ -178,7 +199,7 @@ $(".info").on("click", ".cancelModi", function() {
 		url:"[[@{/store/findByDishId/}]]" + dishIdCanc,
 		contentType: "application/json",
 		success: function (response) { 
-			let originalDish = "<td class='dishNum'>" + dishNumOri + "</td><td style='display: none'>" + response.pkDishId + "</td><td>" + response.dishName + "</td><td>" + response.dishIntroduction + "</td><td>" + response.dishPrice + "</td><td><button class='modify btn btn-primary'>修改</button><button class='delete btn btn-danger'>刪除</button></td>";
+			let originalDish = "<td class='dishNum'>" + dishNumOri + "</td><td style='display: none'>" + response.pkDishId + "</td><td>" + response.dishName + "</td><td>" + response.dishIntroduction + "</td><td>" + response.dishPrice + "</td><td><img height='80' src='" + response.base64 + "'></td><td><button class='modify btn btn-primary'>修改</button><button class='delete btn btn-danger'>刪除</button></td>";
 			$(".dishNum").eq(dishNumOri-1).parent().html(originalDish);
 		}
 	});
@@ -186,19 +207,25 @@ $(".info").on("click", ".cancelModi", function() {
 		
 })
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- i標籤小圖 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"> <!-- 新版I標籤小圖 -->
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->	
 <title>修改菜單</title>
 </head>
 <body>
-	<div class="container">
-		<h2 class="page-header">修改菜單</h2>
-		<table class="table table-bordered table-hover table-striped">
+<div th:insert="Generic :: Header"></div>
+	<div class="container" style="margin: 50px">
+		<h3 class="page-header" style="margin-left: 15%">修改菜單</h3>
+		<div class="d-flex justify-content-center">
+		<table class="table table-bordered table-hover table-striped text-center " style="width: 80%">
 			<thead>
 				<tr>
-					<th>序號</th>
-					<th>菜名</th>
-					<th>說明</th>
-					<th>價錢(元)</th>
-					<th>操作</th>
+					<th style="width: 9%">序號</th>
+					<th style="width: 18%">菜名</th>
+					<th style="width: 27%">說明</th>
+					<th style="width: 12%">價錢(元)</th>
+					<th style="width: 12%">圖片</th>
+					<th style="width: 22%">操作</th>
 				</tr>
 			</thead>
 			<tbody class="info">
@@ -208,20 +235,28 @@ $(".info").on("click", ".cancelModi", function() {
 					<td th:text="${menu.dishName}"></td>
 					<td th:text="${menu.dishIntroduction}"></td>
 					<td th:text="${menu.dishPrice}"></td>
+					<td ><img height="80" th:src='${menu.base64}'> </td>
 					<td><button class="modify btn btn-primary">修改</button><button class="delete btn btn-danger">刪除</button></td>
 				</tr>
 			</tbody>
 		</table>
+		</div>
 		
-		<div class="addDishPlace">
+		<div class="d-flex justify-content-center">
+		<div class="addDishPlace" style="width: 80%">
 		<table id="newDishForm" class="table table-bordered">
 		</table>
-		<div class="alertEmp">
+<!-- 			<div class="alertEmp"> -->
+<!-- 			</div> -->
 		</div>
+		</div>
+		
+		<div style="margin-left: 83%">
 		<button class="btn btn-secondary" hidden="hidden" id="submitButt">送出</button>
 		</div>
 		
-		<div class="buttPlace">
+		<div class="alertEmp"></div>
+		<div class="buttPlace d-flex justify-content-center">
 		<button class="addNewLine btn btn-primary">新增菜品</button>
 		</div>
 	</div>

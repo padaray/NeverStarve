@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,39 +51,36 @@ public class MenuRestController {
 		menuService.deleteByDishId(dishId);
 	}
 	
-	
-	//新增菜品
-	@PostMapping(value="/saveMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void saveMenu(@RequestBody List<MenuBean> menuListS, HttpServletRequest request) {
+	@PostMapping(value="/saveMenu")
+	public void saveMenu(@ModelAttribute MenuBean menuBean, HttpServletRequest request) {
 		StoreBean storeBean = checkCookie(request);
-		menuService.saveMenuList(menuListS, storeBean);
+		menuBean.setStoreBean(storeBean);
+		menuService.saveMenuList(menuBean);
 	}
 	
 	//修改菜品
-	@PostMapping(value="/modifyMenu", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void modifyMenu(@RequestBody MenuBean menuBean, HttpServletRequest request) {
+	@PostMapping(value="/modifyMenu")
+	public void modifyMenu(@ModelAttribute MenuBean menuBean, HttpServletRequest request) {
 		StoreBean storeBean = checkCookie(request);
-		if(storeBean != null) {
-			menuBean.setStoreBean(storeBean);
-			menuService.save(menuBean);
+		menuBean.setStoreBean(storeBean);
+		//判斷是否有照片傳入
+		MultipartFile dishPicture = menuBean.getDishPicture();
+		String ImageName = dishPicture.getOriginalFilename();
+		System.out.println(menuBean.getDishName());
+		System.out.println(menuBean.getDishPrice());
+		System.out.println(menuBean.getDishIntroduction());
+		if(ImageName.isEmpty()) {
+			menuService.saveMenuListNoPic(menuBean);
+		}else {
+			menuService.saveMenuList(menuBean);
 		}
 	}
 	
 	//取消按鈕按下去後，用ID去後端把本來的菜品顯示
-	@GetMapping(value="/findByDishId/{pkDishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/findByDishId/{pkDishId}")
 	public MenuBean findByDishId(@PathVariable int pkDishId) {
 		return menuService.getMenuById(pkDishId);
 	}
-	
-//	@GetMapping("/getMenu")
-//	public List<MenuBean> getMenu(HttpServletRequest request, Model model){
-//		model.addAttribute("storeUser", new StoreBean());  //初始化model的storeUser
-//		checkCookie(request, model);  //用cookie建立model
-//		//把抓到的storeId丟給後端抓菜單
-//		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
-//		return menuService.getMenuByStoreBean(storeBean);
-////		model.addAttribute("menuList", menuList);
-//	}
 	
 	//確認有沒有cookie
 		public StoreBean checkCookie(HttpServletRequest request){

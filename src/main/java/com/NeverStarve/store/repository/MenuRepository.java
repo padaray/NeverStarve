@@ -21,4 +21,8 @@ public interface MenuRepository extends JpaRepository<MenuBean, Integer> {
 	@Transactional
 	void deleteByDishId(int dishId);
 	
+	@Modifying
+	@Query(value = "UPDATE MENU SET dishName = ?1, dishIntroduction = ?2, dishPrice = ?3  WHERE pkDishId = ?4", nativeQuery = true)
+	@Transactional
+	void saveNoPic(String dishName, String dishIntroduction, Double dishPrice, Integer pkDishId);
 }

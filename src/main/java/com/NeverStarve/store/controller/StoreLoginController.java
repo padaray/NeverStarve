@@ -2,6 +2,7 @@ package com.NeverStarve.store.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,159 +26,174 @@ import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
 
 @Controller
-@SessionAttributes({"storeUser"})
+@SessionAttributes({ "storeUser" })
 @RequestMapping("/store")
 public class StoreLoginController {
 
-	@Autowired StoreService storeService;
-	
-	//店家註冊頁面
+	@Autowired
+	StoreService storeService;
+
+	// 店家註冊頁面
 	@GetMapping("/register")
 	public String registerPage(Model model) {
 		model.addAttribute("storeBean", new StoreBean());
 //		StoreBean storeBean = new StoreBean();
 		return "store/register";
 	}
-	
-	//註冊表單輸入
+
+	// 註冊表單輸入
 	@PostMapping("/register")
 	public String register(@Valid StoreBean storeBean, BindingResult result) {
-		
-		//地址字串相加
+
+		// 地址字串相加
 		storeBean.setStoreAddress(storeBean.getStoreCity() + storeBean.getStoreTown() + storeBean.getStoreAddress());
-		
-		//確認帳號是否存在
+
+		// 確認帳號是否存在
 		if (storeService.accountExist(storeBean.getStoreAccount())) {
 			result.rejectValue("storeAccount", "", "帳號申請重複");
 		}
-		//確認兩次密碼輸入一樣
-		if(comfirmPassword(storeBean)) {
-			result.rejectValue("storeCheckPassword","confirmError" ,"密碼不一致");
+		// 確認兩次密碼輸入一樣
+		if (comfirmPassword(storeBean)) {
+			result.rejectValue("storeCheckPassword", "confirmError", "密碼不一致");
 		}
-		//確認validator有沒有抱錯
-		if(result.hasErrors()) {
+		// 確認validator有沒有抱錯
+		if (result.hasErrors()) {
 			return "store/register";
 		}
+
+		// 預設店家等級為一
+		storeBean.setStoreLv(1);
+
+		//將存進來的菜品種類相加
+		String sttp = "";
+		List<String> storeTypeL = storeBean.getStoreTypeList();
+		if(storeTypeL != null) {
+			for(String ST: storeTypeL) {
+				sttp += ST + ",";
+			}
+			sttp.substring(0, sttp.length()-1);
+			storeBean.setStoreType(sttp);
+		}
+
 		storeService.save(storeBean);
 		return "store/login";
 	}
-	
-	//登入頁面頁面
+
+	// 登入頁面頁面
 	@GetMapping("/login")
 	public String loginPage(HttpServletRequest request, Model model) {
 		model.addAttribute("storeBean", new StoreBean());
-		if(checkCookie(request, model)) {
+		if (checkCookie(request, model)) {
 			return "redirect:/store/storeIndex";
 		}
 		return "store/login";
 	}
-	
-	//登入帳號
+
+	// 登入帳號
 	@PostMapping("/login")
-	public String login(@RequestParam String storeAccount,
-						@RequestParam String storePassword,
-						HttpServletRequest request,
-						HttpServletResponse response,
-						Model model) {
+	public String login(@RequestParam String storeAccount, @RequestParam String storePassword,
+			HttpServletRequest request, HttpServletResponse response, Model model) {
 		StoreBean storeBean = storeService.findByStoreAccountAndStorePassword(storeAccount, storePassword);
-		if(storeBean != null) {
+		if (storeBean != null) {
 			model.addAttribute("storeUser", storeBean);
-		}else {
+		} else {
 			return "store/login";
 		}
-		//給cookie
+		// 給cookie
 		processCookies(storeAccount, storePassword, request, response);
 		return "redirect:/store/storeIndex";
-		
+
 	}
-	
-	//登出帳號
+
+	// 登出帳號
 	@GetMapping("/logout")
-	public String logout(HttpSession session, Model model, HttpServletRequest request, HttpServletResponse response, SessionStatus status) {
-		if(model.getAttribute("storeUser") != null) {
-			status.setComplete();   // 移除@SessionAttributes({"storeUser"}) 標示的屬性物件
-			session.invalidate();	// session.invalidate()讓SESSION失效.
+	public String logout(HttpSession session, Model model, HttpServletRequest request, HttpServletResponse response,
+			SessionStatus status) {
+		if (model.getAttribute("storeUser") != null) {
+			status.setComplete(); // 移除@SessionAttributes({"storeUser"}) 標示的屬性物件
+			session.invalidate(); // session.invalidate()讓SESSION失效.
 		}
-		
-		if(checkCookie(request, model)) {
+
+		if (checkCookie(request, model)) {
 			deleteCookie(request, response);
 		}
 		return "redirect:/store/login";
 	}
-	
-	//確認密碼是否依樣
+
+	// 確認密碼是否依樣
 	public boolean comfirmPassword(StoreBean storeBean) {
-		if(storeBean.getStorePassword().equals(storeBean.getStoreCheckPassword())){
+		if (storeBean.getStorePassword().equals(storeBean.getStoreCheckPassword())) {
 			return false;
 		}
 		return true;
-			
+
 	}
-	
-	//給登入商家cookie
-	private void processCookies(String storeAccount, String storePassword, HttpServletRequest request , HttpServletResponse response) {
+
+	// 給登入商家cookie
+	private void processCookies(String storeAccount, String storePassword, HttpServletRequest request,
+			HttpServletResponse response) {
 		Cookie cookieAccount = null;
 		Cookie cookiePassword = null;
-		
+
 		cookieAccount = new Cookie("account", storeAccount);
-		cookieAccount.setMaxAge(2 * 60 * 60);       // Cookie的存活期: 2小時
-		cookieAccount.setPath(request.getContextPath());	//cookie設置路徑(抓到首頁NeverStarve前)
+		cookieAccount.setMaxAge(2 * 60 * 60); // Cookie的存活期: 2小時
+		cookieAccount.setPath(request.getContextPath()); // cookie設置路徑(抓到首頁NeverStarve前)
 
 //		String encodePassword = GlobalService.encryptString(password);
 		cookiePassword = new Cookie("password", storePassword);
-		cookiePassword.setMaxAge( 2 * 60 * 60);       // Cookie的存活期: 2小時
+		cookiePassword.setMaxAge(2 * 60 * 60); // Cookie的存活期: 2小時
 		cookiePassword.setPath(request.getContextPath());
-		
-		//給前段創立cookie
+
+		// 給前段創立cookie
 		response.addCookie(cookieAccount);
 		response.addCookie(cookiePassword);
 
 	}
-	
-	//刪除cookie
-	private void deleteCookie(HttpServletRequest request , HttpServletResponse response) {
+
+	// 刪除cookie
+	private void deleteCookie(HttpServletRequest request, HttpServletResponse response) {
 		Cookie cookieAccount = null;
 		Cookie cookiePassword = null;
-		
+
 		String account = "";
 		String password = "";
-		
+
 		cookieAccount = new Cookie("account", account);
-		cookieAccount.setMaxAge(0);       // Cookie的存活期: 2小時
-		cookieAccount.setPath(request.getContextPath());	//cookie設置路徑(抓到首頁NeverStarve前)
-		
+		cookieAccount.setMaxAge(0); // Cookie的存活期: 2小時
+		cookieAccount.setPath(request.getContextPath()); // cookie設置路徑(抓到首頁NeverStarve前)
+
 		cookiePassword = new Cookie("password", password);
-		cookiePassword.setMaxAge(0);       // Cookie的存活期: 2小時
+		cookiePassword.setMaxAge(0); // Cookie的存活期: 2小時
 		cookiePassword.setPath(request.getContextPath());
-		
-		//給前段創立cookie
+
+		// 給前段創立cookie
 		response.addCookie(cookieAccount);
 		response.addCookie(cookiePassword);
 
 	}
-	
-	
-	//確認有沒有cookie
-	public boolean checkCookie(HttpServletRequest request, Model model){
+
+	// 確認有沒有cookie
+	public boolean checkCookie(HttpServletRequest request, Model model) {
 		Cookie cookies[] = request.getCookies();
-		if(cookies != null){
-			for(Cookie cookie : cookies) {
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
 				StoreBean storeBean = storeService.findCookieByStoreAccount(cookie.getValue());
-		 		if(storeBean != null) {
-		 			model.addAttribute("storeUser", storeBean);
-		 			return true;
-		 		}
-		 	}
-		 }
-		 return false;
+				if (storeBean != null) {
+					model.addAttribute("storeUser", storeBean);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
-	
-	//上傳圖片到本地
+
+	// 上傳圖片到本地
 	public void uploadImage(MultipartFile multipartFile) {
 
 		try {
 			// 保存圖片
-			File file = new File("C:\\_JSP\\workspace\\NeverStarve2.0\\src\\main\\resources\\static\\images\\" + multipartFile.getOriginalFilename());
+			File file = new File("C:\\_JSP\\workspace\\NeverStarve2.0\\src\\main\\resources\\static\\images\\"
+					+ multipartFile.getOriginalFilename());
 			multipartFile.transferTo(file);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -188,16 +204,7 @@ public class StoreLoginController {
 
 //		return modelAndView;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 //	//抓圖片
 //	@RequestMapping(value = "/getPicture/{bookId}", method = RequestMethod.GET)
 //	public ResponseEntity<byte[]> getPicture(HttpServletResponse resp, @PathVariable Integer bookId) {
@@ -234,9 +241,6 @@ public class StoreLoginController {
 //		ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
 //		return responseEntity;
 //	}
-	
-	
-	
 
 //	private byte[] toByteArray(String filepath) {
 //		byte[] b = null;
@@ -254,5 +258,5 @@ public class StoreLoginController {
 //			e.printStackTrace();
 //		}
 //		return b;
-	
+
 }
