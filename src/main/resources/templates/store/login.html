@@ -30,9 +30,12 @@
 				<label for="storePasswordId">密碼:</label>
 				<input type="text" name="storePassword" id="storePasswordId" class="form-controller" th:field="*{storePassword}">
 			</div>
-			<p>
+			<span>
 				<button type="submit" class="btn btn-primary text-center">送出</button>
-			</p>
+			</span>
+			<span>
+				<a th:href="@{/store/register}"><button type="button" class="btn btn-link">註冊</button></a>
+			</span>
 			</form>
 			</div>
 	</div>

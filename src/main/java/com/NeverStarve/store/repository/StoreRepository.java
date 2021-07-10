@@ -2,6 +2,8 @@ package com.NeverStarve.store.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.NeverStarve.store.model.StoreBean;
@@ -13,5 +15,11 @@ public interface StoreRepository extends JpaRepository<StoreBean, Integer> {
 	StoreBean  findByStoreAccountAndStorePassword(String storeAccount, String storePassword);
 	
 	StoreBean  findCookieByStoreAccount(String storeAccount);
+		
+	Page<StoreBean> findByStoreAddressContaining(Pageable pageable, String address);
+
+	List<StoreBean> findByStoreAddressContaining(String address);
 	
+	Long countByStoreAddressContaining(String address);
+
 }

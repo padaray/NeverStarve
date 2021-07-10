@@ -48,9 +48,12 @@ public class MenuBean {
 	
 	@JsonIgnore
 	Blob coverImage;
+	
 	@Transient
 	MultipartFile dishPicture;
+	
 	String dishImageName;
+	
 	@Transient
 	String base64;
 	

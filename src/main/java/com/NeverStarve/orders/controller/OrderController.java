@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +52,8 @@ public class OrderController {
 	OrderListService orderListService;
 	@Autowired
     HttpSession session;
+	@Autowired
+	ServletContext context;
 	
 	private String productIDName = "productIDName";
 	private String productQuantityName = "productQuantityName";
@@ -119,13 +123,14 @@ public class OrderController {
 
 			}
 			if (productID.contains("_")) {
+				
 				List<MenuBean> manyProducts = orderservice.getOrderList(productID.split("_"));
 				for (int i = 0; i < manyProducts.size(); i++) {
 					manyProducts.get(i).setQuantity(Integer.valueOf(productQuantity.split("_")[i]));
 
 				}
-
-				return manyProducts;
+				
+				return  manyProducts;
 
 			} else {
 				List<MenuBean> oneProductList = new ArrayList<MenuBean>();
@@ -236,8 +241,7 @@ public class OrderController {
 			orderBean.setTotalCost(alltotal);
 			orderBean.setOrderDate(LocalDateTime.now().withNano(0));
 			orderBean.setShipping_address(addres);
-			
-//			orderservice.getNewestOrderByMember(memberService.getMamberById(1).get());
+			orderBean.setTrading(0);
 			
 			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
 				productIDCookie.setMaxAge(0);
@@ -253,10 +257,11 @@ public class OrderController {
 		
 	}
 	
+	//用會員ID找到會員的地址
 	@GetMapping(value = "/getaddresByID",
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Optional<MemberBean> getMaddresById(HttpServletRequest request) {
+	public Optional<MemberBean> getMaddresById(HttpServletRequest request ) {
 		Cookie[] cookieList = request.getCookies();
 		if (cookieList != null) {
 			for (Cookie cookie : cookieList) {
@@ -294,36 +299,50 @@ public class OrderController {
 		aio.setTradeDesc("test shopping");
 		aio.setItemName(orderBean.get().getItemName());
 		aio.setReturnURL("http://localhost:9527/NeverStarve/Order/returnURL");
+		aio.setOrderResultURL("http://localhost:9527/NeverStarve/Order/order/EcpayOrder");
 		ecpay.setHi(aioOne.aioCheckOut(aio,null));
 		System.out.println(aioOne.aioCheckOut(aio,null));
 		return ecpay ;
 	}
 
-		//0705綠界交易驗證
-		@PostMapping("/returnURL")
-	    public void returnURL(
-	    		@RequestParam("merchantTradeNo")String merchantTradeNo,
-	            @RequestParam("rtnCode")int rtnCode,
-	            @RequestParam("tradeAmt")int tradeAmt,
-	            HttpServletRequest request)
-	    {
-	        if((request.getRemoteAddr().equalsIgnoreCase("175.99.72.41"))&& rtnCode==1)
-	                {
-	        	System.out.println("======================================================================================");
-	        	System.out.println("AAAAAAAAAAAAAAAAAAAAA");
-	        	System.out.println("===============================================================================================");
-	                }
-	    }
-		
-		
-		//0706訂單的展示
-		@GetMapping("order/{id}")
-		public String getOrder(@PathVariable int id, Model model) {
-			Optional<MemberBean> member = memberService.getMamberById(id);
-			MemberBean m = member.get();
-			Set<OrderBean> order = m.getOrders();
-			model.addAttribute("id", m.getPkMemberId());
-			model.addAttribute("orderSet",order);
+		//0707訂單的展示
+		@GetMapping("order/NowOrder")
+		public String getNowOrder(Model model,
+				@CookieValue(value = "userId") String userid) {
+			
+			MemberBean m =null ;
+			m = memberService.getMamberById(Integer.valueOf(userid)).get();
+			if (m!=null) {
+				List<OrderBean> order = orderservice.findOrderByMemberBean(m);
+				model.addAttribute("id", m);
+				model.addAttribute("orderSet",order);
+			}
+			return "order/OrderMember" ;
+		}
+		//0709給綠界的
+		@PostMapping("order/EcpayOrder")
+		public String getEcpayOrder(Model model,
+				@RequestParam("RtnCode") int RtnCode,
+				@RequestParam("MerchantTradeNo") String MerchantTradeNo) {
+			MemberBean member =(MemberBean) session.getAttribute("member");	
+//			MemberBean m =null ;
+//			m = memberService.getMamberById(Integer.valueOf(userid)).get();
+			System.out.println("屁屁髒兮兮"+ member);
+			if (member!=null) {
+				List<OrderBean> order = orderservice.findOrderByMemberBean(member);
+				model.addAttribute("id", member);
+				model.addAttribute("orderSet",order);
+			}
+			if(RtnCode == 1) {
+				System.out.println("^_^凸，抓到你囉字串"+ MerchantTradeNo);
+			 	 String mno= MerchantTradeNo.replace("NeverStarve","");
+			 	 int ino = Integer.valueOf(mno);
+			 	  OrderBean findorder = orderservice.findByPkOrderId(ino).get();
+			 	  findorder.setTrading(1);
+			 	  orderservice.update(findorder);
+			 	  
+			}
+			
 			return "order/OrderMember" ;
 		}
 		
@@ -333,9 +352,13 @@ public class OrderController {
 			OrderBean o = order.get();
 			Set<OrderListBean> list = o.getOrderListBean();
 			model.addAttribute("orderList",list);
-			return "order/OrderListMember";
+			return "order/OrderList";
 			
 		}
+	
 		
+		
+	
+
 	
 }

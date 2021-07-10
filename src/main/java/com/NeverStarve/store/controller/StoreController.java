@@ -77,6 +77,8 @@ public class StoreController {
 				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
 			}
 		}
+		//預設店家等級為一
+		storeBean.setStoreLv(1);
 		storeService.save(storeBean);
 		return "redirect:/store/storeIndex";
 	}
