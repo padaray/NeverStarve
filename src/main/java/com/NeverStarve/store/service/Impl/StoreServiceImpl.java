@@ -35,7 +35,9 @@ public class StoreServiceImpl implements StoreService {
 	@Autowired
 	ServletContext context;
 	
-	private int recordsPerPage = 5; // 預設每頁三筆;
+	NeverStarveUtil util = new NeverStarveUtil();
+	
+	private int recordsPerPage = 5; // 預設頁數;
 	private int totalPages = -1;
 	private long totalcount=0;
 
@@ -81,6 +83,7 @@ public class StoreServiceImpl implements StoreService {
 		setTotalcount(beans.getTotalElements());
 		List<StoreBean> list = beans.getContent();
 		for (StoreBean bean : list) {
+			bean.setTotalcount(beans.getTotalElements());
 			map.put(bean.getPkStoreId(), bean);
 		}
 	
@@ -95,7 +98,7 @@ public class StoreServiceImpl implements StoreService {
 		String filePath = "/images/NoImage.jpg";
 		StringBuffer sb = new StringBuffer();
 		byte[] media = null;
-		NeverStarveUtil util = new NeverStarveUtil();
+		
 		for (Entry<Integer, StoreBean> m : memberMap.entrySet()) {
 			sb.setLength(0);
 			String filename = m.getValue().getStoreImageName();
@@ -133,5 +136,49 @@ public class StoreServiceImpl implements StoreService {
 		}
 		return b;
 	}
+
+	@Override
+	public Map<Integer, StoreBean> findByAddressContaining(int pageNo,String adderss){
+		Map<Integer, StoreBean> map = new LinkedHashMap<>();	
+		Page<StoreBean> beans 	= storeRepository.findByStoreAddressContaining(PageRequest.of(pageNo - 1, recordsPerPage), adderss);
+		List<StoreBean> list = beans.getContent();
+		setTotalcount(beans.getTotalElements());
+		for (StoreBean bean : list) {
+			bean.setTotalcount(beans.getTotalElements());
+			map.put(bean.getPkStoreId(), bean);
+		}
+		return tobase64(map);
+	}
+
+	@Override
+	public int getRecordsPerPage() {
+		return recordsPerPage;
+	}
+
+	@Override
+	public long getRecordCounts() {
+		return storeRepository.count();
+	}
+
+	@Override
+	public int getTotalPages() {
+		totalPages = (int) (Math.ceil(getTotalcount() / (double) recordsPerPage));
+		return totalPages;
+	}
+
+	@Override
+	public void setRecordsPerPage(int recordsPerPage) {
+		this.recordsPerPage = recordsPerPage;
+	}
+
+	@Override
+	public long getTotalcount() {
+		return totalcount;
+	}
+
+	@Override
+	public long getCityCount(String address) {
+		return storeRepository.countByStoreAddressContaining(address);
+	} 
 	
 }

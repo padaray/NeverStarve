@@ -8,137 +8,267 @@
 <script type="text/javascript" src="/NeverStarve/js/jquery-2.2.3.min.js"></script>
 
 <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+	crossorigin="anonymous">
 
 <!-- 首頁樣式 -->
 <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />
 
 <!-- 網頁小圖 -->
-<link rel="shortcut icon"  th:href="@{/favicon.ico}"/>
-<script th:src="@{/js/jquery.twzipcode.min.js}"></script>  
+<link rel="shortcut icon" th:href="@{/favicon.ico}" />
+<script th:src="@{/js/jquery.twzipcode.min.js}"></script>
 <style th:inline="css">
-.table{
-	margin:auto ;
-	margin-top:20px;  	
+.table {
+	margin: auto;
+	margin-top: 20px;
 	width: 1300px;
-	text-align:center;
+	text-align: center;
 	align-items: center
-	
 }
-.center{
-	text-align:center;
-	margin:auto ;
-	
+
+.center {
+	text-align: center;
+	margin: auto;
 }
-.tit{
+
+.tit {
 	font-weight: 700;
 	margin-top: 30px;
 }
-.inp1{
-	position: absolute;
-	top:270px;
-	right:80px;
-}
 
+.inp1 {
+	position: absolute;
+	top: 270px;
+	right: 80px;
+}
 </style>
+<script>
+$(function(){
+		let pag = 1;
+		let recordsPerPage = parseInt("[[${recordsPerPage}]]");
+		let b1 =true;
+		
+// ---function區------------------------------------------------------------------
+		function getPage(){
+			let totalpages="";
+			let count ="";
+			
+			$.ajax({
+				type:"POST",
+				contentType:"application/json",
+				url:"[[@{/Backstage/Store/getPageStore}]]"+"/"+pag,
+				success:function (data) {
+					$("#tbody").empty();
+					$.each(data, function(index, element){ 
+						if(totalpages == ""){
+							count = element.totalcount;
+							
+							if(count%recordsPerPage==0){
+								totalpages = count/recordsPerPage;
+							}else{
+								totalpages = Math.ceil(count/recordsPerPage);
+							}
+								
+						}
+						$('<tr>').appendTo("#tbody")
+						.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkStoreId+"'>" +element.pkStoreId+ "</a></th>")
+						.append($('<td valign="middle">').text(element.storeName))
+						.append($('<td valign="middle">').text(element.storeAddress))
+						.append($('<td valign="middle">').text(element.storeLv))
+						.append($('<td valign="middle">').text(element.storePhone))
+						.append($('<td valign="middle">').text(element.seatNumber))
+						.append("<td><img  height='120' src='"+element.base64 +"'/></td>")
+					})
+					$("#pageno").text(pag+"/"+totalpages);
+					if(count == ""){
+						count = "查無資料";
+						$("#seleblock").hide();
+					}else{
+						count = "結果共:"+count+"筆";
+						$("#seleblock").show();
+					}
+					$("#resl").text(count)
+					$("#tit").text("所有店家")
+				}
+				});
+		};
+		
+		function getPagebycity(){
+			var city=$(".city").val();
+			let totalpages="";
+			let count ="";
+			if(city != ""){
+				
+			$.ajax({
+				type:"POST",
+				contentType:"application/json",
+				url:"[[@{/Backstage/Store/getPageStore}]]"+"/"+pag+"/"+city,
+				success:function (data) {
+					$("#tbody").empty();
+					$.each(data, function(index, element){ 
+						if(totalpages == ""){
+							count = element.totalcount;
+							if(count%recordsPerPage==0){
+								totalpages = count/recordsPerPage;
+							}else{
+								totalpages = Math.ceil(count/recordsPerPage);
+							}
+						}
+						$('<tr>').appendTo("#tbody")
+						.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkStoreId+"'>" +element.pkStoreId+ "</a></th>")
+						.append($('<td valign="middle">').text(element.storeName))
+						.append($('<td valign="middle">').text(element.storeAddress))
+						.append($('<td valign="middle">').text(element.storeLv))
+						.append($('<td valign="middle">').text(element.storePhone))
+						.append($('<td valign="middle">').text(element.seatNumber))
+						.append("<td><img  height='120' src='"+element.base64 +"'/></td>")
+					})
+					$("#pageno").text(pag+"/"+totalpages);
+					if(count == ""){
+						count = "查無資料";
+						$("#seleblock").hide();
+					}else{
+						count = "結果共:"+count+"筆";
+						$("#seleblock").show();
+					}
+					$("#resl").text(count);
+					$("#tit").text(city+"店家")
+				}
+				});
+		}else{
+			alert("請選擇地址")
+		}
+		};
+		
+		function way(){
+			if(b1){
+				getPage();
+			}else{
+				getPagebycity();
+			}
+		}
+//---------------------------------------------------------------------
+	
+	$("#sele").click(function(){
+		pag = 1;
+		getPagebycity();
+		b1 = false;
+	})
+	$("#seleall").click(function(){
+		pag = 1;		
+		getPage();
+		b1 = true;
+	})
+	$("#firstbt").click(function(){
+		pag = 1;
+		way();
+	})
+	$("#prevbt").click(function(){
+		pag--;
+		if(pag < 1){
+			pag = 1;
+		}
+		way();
+	})
+	$("#nextbt").click(function(){
+		pag ++;
+		let str = $("#pageno").text();
+		let maxpag = str.substring(str.indexOf("/")+1);
+		if(pag > maxpag){
+			pag = maxpag;
+		}
+		way();
+	})
+	$("#lastbt").click(function(){
+		let str = $("#pageno").text();
+		let maxpag = str.substring(str.indexOf("/")+1);
+		pag = maxpag;
+		way();
+	})
+	
+})
+
+</script>
 </head>
-<body class="article_type" th:fragment="article_type" th:inline="text" >
+<body class="article_type" th:fragment="article_type" th:inline="text">
 	<div th:insert="Generic :: Header"></div>
 	<div th:insert="backstage/BackstageHeader :: Header"></div>
 	<div>
-		<h1 class="center tit"  id="tit">[[${SearchResult}]]</h1>
-		<h2 id="resl" class="center tit" style="margin-top: 20px">結果共:[[${pagecounts}]]筆</h2>	
-		
-<!-- 		<div style="width: 800px ;margin: 0 auto;"> -->
-<!-- 			 <form action="#" class="row"> -->
-<!-- 	            <div class="col-md-6"> -->
-<!-- 	                <div class="form-group"> -->
-<!-- 	                    <label for="start">From</label> -->
-<!-- 	                  <input type="text" class="form-control" id="start" placeholder="Start Date"> -->
-<!-- 	                </div> -->
-<!-- 	            </div> -->
-<!-- 	            <div class="col-md-6"> -->
-<!-- 	                <div class="form-group"> -->
-<!-- 	                    <label for="end">To</label> -->
-<!-- 	                  <input type="text" class="form-control" id="end" placeholder="End Date"> -->
-<!-- 	                </div> -->
-<!-- 	            </div> -->
-<!-- 	          </form> -->
-<!-- 		</div> -->
-<!-- 		<div class="inp1" style="width: 200px" > -->
-<!-- 			<input type="text" id="semail" class="form-control"  placeholder="查詢Email"> -->
-<!-- 		</div> -->
-		
-		<div  class="center">
-			<button id="allMember" class="btn btn-primary">查詢所有店家</button>			
+		<h1 class="center tit" id="tit">[[${SearchResult}]]</h1>
+		<h5 id="resl" class="center tit" style="margin-top: 20px">結果共:[[${pagecounts}]]筆</h2>
+
+		<div style="margin-top: 20px" class="center" id="selectCity"></div>
+		<div class="center">
+			<button id="seleall" class="btn btn-primary">查詢所有店家</button>
 			<button id="sele" class="btn btn-primary">查詢</button>
-		
+
 		</div>
-		<div style="margin-top: 20px" class="center" id="selectCity"></div>	
-		<div style="margin-top: 20px" class="center" id="selectCity">
-		<div th:inline="text" style="margin-bottom: 30px;" >
-			<table width=400px; class="table table-striped table-dark " >
+		<div th:inline="text" style="margin-bottom: 30px;" id="seleblock">
+			<table width=400px; class="table table-striped table-dark ">
 				<thead>
 					<tr>
-					<th>店家編號</th>
-					<th>店家名稱</th>
-					<th>店家位置</th>
-					<th>店家密碼</th>
-					<th>電話號碼</th>
-					<th>座位數量</th>
-					<th>會員圖片</th>
-					</tr>		
+						<th>店家編號</th>
+						<th>店家名稱</th>
+						<th>店家位置</th>
+						<th>店家等級</th>
+						<th>電話號碼</th>
+						<th>座位數量</th>
+						<th>會員圖片</th>
+					</tr>
 				</thead>
 				<tbody id="tbody">
 					<tr th:each="store,loopStatus: ${products_DPP}">
-						<th valign="middle"><a id="a" th:inline="text" th:href="@{'/Backstage/Store/Showstore/'+${store.value.pkStoreId}}">[[${store.value.pkStoreId}]] </a></th>
-						<td valign="middle">[[${store.value.storeName}]] </td>
+						<th valign="middle"><a id="a" th:inline="text"
+							th:href="@{'/Backstage/Store/Showstore/'+${store.value.pkStoreId}}">[[${store.value.pkStoreId}]]
+						</a></th>
+						<td valign="middle">[[${store.value.storeName}]]</td>
 						<td valign="middle">[[${store.value.storeAddress}]]</td>
-						<td valign="middle">[[${store.value.storePassword}]] </td>
+						<td valign="middle">[[${store.value.storeLv}]]</td>
 						<td valign="middle">[[${store.value.storePhone}]]</td>
-						<td valign="middle">[[${store.value.seatNumber}]] </td>
-						<td ><img height="120" th:src='${store.value.base64}'> </td>
+						<td valign="middle">[[${store.value.seatNumber}]]</td>
+						<td><img height="120" th:src='${store.value.base64}'>
+						</td>
 					</tr>
 				</tbody>
 			</table>
-		</div>
-		
+	<div class="center" style="margin: 20px">
+		<button id="firstbt" class="btn btn-primary" width='250px'>第一頁</button>
+		<button id="prevbt" class="btn btn-primary" width='250px'>上一頁</button>
+		<span id="pageno">[[${pageNo}]] / [[${totalPages}]]</span>
+		<button id="nextbt" class="btn btn-primary" width='250px'>下一頁</button>
+		<button id="lastbt" class="btn btn-primary" width='250px'>最尾頁</button>
 	</div>
-	<div  class="center" style="margin: 20px">	
-			<button id="but00" width='250px' >第一頁</button>
-			<button id="but0" width='250px' >上一頁</button>
-			<span id="pageno">[[${pageNo}]] / [[${totalPages}]]</span>
-			<button id="but1" width='250px' >下一頁</button>
-			<button id="but2" width='250px' >最尾頁</button>
-	</div> 
-	
-	
-	
-	
-				<div class="form-group">
-	
-					<div id="twzipcode">
-					</div>
-				
-				</div>
-	
-	
+		</div>
+
+	</div>
+
+
+
+
+	<div class="form-group">
+
+		<div id="twzipcode"></div>
+
+	</div>
+
+
 	<script>
-$("#selectCity").twzipcode({
-// countySel: "臺北市", // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
-// districtSel: "大安區", // 地區預設值
-zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
-css: ["city form-select", "town form-control"], // 自訂 "城市"、"地區" class 名稱
-countyName: "memberCity", // 自訂城市 select 標籤的 name 值
-districtName: "memberTown" // 自訂地區 select 標籤的 name 值
-});
-$(".town").css('display','none');
-$(".city").prepend("<option value='0' disabled selected>請選擇城市</option>");
-// $(".city option [index= '0'] ").remove(); 
-$(".city").css({
-	"width": "200px",
-	"margin": "10px auto"
-	  });
-</script>
+		$("#selectCity").twzipcode({
+			// countySel: "臺北市", // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+			// districtSel: "大安區", // 地區預設值
+			zipcodeIntoDistrict : true, // 郵遞區號自動顯示在地區
+			css : [ "city form-select", "town form-control" ], // 自訂 "城市"、"地區" class 名稱
+			countyName : "memberCity", // 自訂城市 select 標籤的 name 值
+			districtName : "memberTown" // 自訂地區 select 標籤的 name 值
+		});
+		$(".town").css('display', 'none');
+		$(".city").css({
+			"width" : "200px",
+			"margin" : "10px auto"
+		});
+	</script>
 </body>
 </html>

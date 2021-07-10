@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
 
 public interface StoreService {
@@ -21,4 +22,17 @@ public interface StoreService {
 	StoreBean  findCookieByStoreAccount(String storeAccount);
 	
 	Map<Integer, StoreBean> getPageStores(int pageNo);
+	Map<Integer, StoreBean> findByAddressContaining(int pageNo,String adderss);
+
+	int getRecordsPerPage();
+
+	long getRecordCounts();
+
+	int getTotalPages();
+
+	void setRecordsPerPage(int recordsPerPage);
+
+	long getTotalcount();
+	
+	long getCityCount(String address);
 }
