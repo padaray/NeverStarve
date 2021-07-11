@@ -8,7 +8,9 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"> <!-- bootstrap樣式 -->
 <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->
 <link rel="shortcut icon"  th:href="@{/favicon.ico}"/> <!-- 網站小圖 -->	
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <title>這是購物車</title>
 
 <script type="text/javascript" th:inline="javascript">
@@ -102,22 +104,38 @@ $(function () {
     	                contentType: "application/json"
 
     	            });
-    	            var b2 = confirm('前往結帳畫面!!!，若要繼續點餐請按取消按鈕謝謝~');
+    	        	Swal.fire({
+    	        		  title: '即將前往訂單畫面，確認好餐點了嗎?',
+    	        		  showDenyButton: true,
+    	        		  confirmButtonText: `確定好了`,
+    	        		  denyButtonText: `還想要繼續點餐`,
+    	        		}).then((result) => {
+    	        		  if (result.isConfirmed) {
+    	        			  setTimeout(function(){
+   	       					uu=/*[[@{/Order/order}]]*/
+   	       	                window.location = uu
+   	       	            	},750) 
+   	       	          		Swal.fire('即將前往付款畫面', '', 'success')
+    	        		  } else if (result.isDenied) {
+    	        		    Swal.fire('繼續點餐吧，要點到吃飽為止唷:D', '', 'info')
+    	        		  }
+    	        		})
+//     	            var b2 = confirm('前往結帳畫面!!!，若要繼續點餐請按取消按鈕謝謝~');
 
-    	            if (b2) {
-    	            	setTimeout(function(){
-    					uu=/*[[@{/Order/order}]]*/
-    	                window.location = uu
-    	                alert('將跳轉到結帳畫面');
-    	            	},750)
-    	            } else {
-    	                alert('請繼續選擇您的餐點');
-    	            }
+//     	            if (b2) {
+//     	            	setTimeout(function(){
+//     					uu=/*[[@{/Order/order}]]*/
+//     	                window.location = uu
+//     	                alert('將跳轉到結帳畫面');
+//     	            	},750)
+//     	            } else {
+//     	            	swal("繼續點餐囉!!!", "要點到吃飽為止唷^~^")
+//     	            }
     	        }
     	}else{
     		nologin=/*[[@{/Member/login }]]*/
             window.location = nologin 
-    		alert("請登入會員唷!!!")
+            swal("請先登入會員在使用唷!!!", "乖乖先登入/註冊會員")
     	}
        
     })
@@ -146,7 +164,23 @@ navigator.geolocation.getCurrentPosition(function(position){
     border-bottom-color: snow;
 }
 
+.table-striped>tbody>tr:nth-child(odd)>td
+{
+   background-color: 	#D1E9E9; 
+ }
+
+.table-striped>tbody>tr:nth-child(even)>td
+{
+   background-color: white; 
+ }
+
+.table-hover tbody tr:hover td {
+  background-color: #C1FFE4;
+}
 </style>
+
+
+
 </head>
 <body>
  <div th:insert="Generic :: Header"></div>
@@ -178,18 +212,18 @@ navigator.geolocation.getCurrentPosition(function(position){
 		</div>
 	</div>
 
-<div class="container" style="max-width: 1200px; margin-top: 50px">
+<div class="container" style="max-width: 1230px; margin-top: 50px">
 
-	<table id="tab"  class="table table-striped" >
+	<table id="tab"   >
 		<thead>
 			<tr>
-				<th width="150">編號</th>
-				<th width="150">商品</th>
-				<th width="150">商品信息</th>
-				<th width="150">單價</th>
-				<th width="200">數量</th>
-				<th width="200">單價總金額</th>
-				<th width="200">圖片</th>
+				<th width="250"><i class="fa fa-book" aria-hidden="true"></i> 編號</th>
+				<th width="250"><i class="bi bi-egg-fried"></i> 商品</th>
+				<th width="250"><i class="bi bi-stickies"></i> 商品信息</th>
+				<th width="250" ><i class="bi bi-currency-dollar"></i>單價</th>
+				<th width="250"><i class="bi bi-newspaper"></i> 數量</th>
+				<th width="250"><i class="fa fa-rocket" ></i> 單價總金額</th>
+				<th width="250"><i class="bi bi-images"></i> 圖片</th>
 
 			</tr>
 
@@ -203,18 +237,18 @@ navigator.geolocation.getCurrentPosition(function(position){
 					<td th:text="${iterStat.count}"></td>
 					<td class="dishName" th:text="${menu.dishName}"></td>
 					<td class="dishIntroduction" th:text="${menu.dishIntroduction}"></td>
-					<td  id="price" class="price" th:text="${menu.dishPrice}+'元'"></td>	
+					<td  id="price" class="price" th:text=" ${menu.dishPrice}+'元'"></td>	
 					
 					
 				<td>
 				
-				<input  class="min" name="" value="-"  type="button"/>
-				<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="0" disabled="disabled"/>
-				<input class="add" name="" value="+" type="button" />
+				<input  class="min  btn btn-outline-secondary btn-sm"  value="-"  type="button"/>
+				<input style="width: 25px " id="text_box"  class="text_box "  type="text" value="0" disabled="disabled"/>
+				<input class="add  btn btn-outline-secondary btn-sm" name="" value="+" type="button" />
 				
 				</td>
 
-				<td ><label class="onetotal" id="onetotal">0.0</label>元</td>
+				<td > <label class="onetotal" id="onetotal"> 	0.0</label>元</td>
 				<td ><img height="100" th:src='${menu.base64}'> </td>
 				
 				</tr>
@@ -225,8 +259,8 @@ navigator.geolocation.getCurrentPosition(function(position){
 	<div class="container" style="max-width: 1200px; margin-top: 50px">
 
 	<section class="navbar navbar-expand-sm bg-light justify-content-around" >
-		<div id="alltotalDiv" class="car"><span class="text-success " id="alltotal">0</span>元</div>
- 		<div class="btn orgbtn " ><button  disabled="disabled" id="save" class="btn btn-primary" >存入購物車</button></div>
+		<div id="alltotalDiv" class="car"> <span class="text-success " id="alltotal"> 0</span>元</div>
+ 		<div class="btn orgbtn " ><button  disabled="disabled" id="save" class="btn btn-primary" >存入購物車  <i class="bi bi-cart-fill"></i></button></div>
 	</section>
 	</div>
 	

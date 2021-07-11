@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.util.http.SameSiteCookies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -308,7 +309,8 @@ public class OrderController {
 		//0707訂單的展示
 		@GetMapping("order/NowOrder")
 		public String getNowOrder(Model model,
-				@CookieValue(value = "userId") String userid) {
+				@CookieValue(value = "userId") String userid,
+				SameSiteCookies String ) {
 			
 			MemberBean m =null ;
 			m = memberService.getMamberById(Integer.valueOf(userid)).get();
@@ -323,11 +325,11 @@ public class OrderController {
 		@PostMapping("order/EcpayOrder")
 		public String getEcpayOrder(Model model,
 				@RequestParam("RtnCode") int RtnCode,
-				@RequestParam("MerchantTradeNo") String MerchantTradeNo) {
-			MemberBean member =(MemberBean) session.getAttribute("member");	
-//			MemberBean m =null ;
-//			m = memberService.getMamberById(Integer.valueOf(userid)).get();
-			System.out.println("屁屁髒兮兮"+ member);
+				@RequestParam("MerchantTradeNo") String MerchantTradeNo,
+				@CookieValue(value = "userId") String userid) {
+//			MemberBean member =(MemberBean) session.getAttribute("member");	
+			MemberBean member =null ;
+			member = memberService.getMamberById(Integer.valueOf(userid)).get();
 			if (member!=null) {
 				List<OrderBean> order = orderservice.findOrderByMemberBean(member);
 				model.addAttribute("id", member);
