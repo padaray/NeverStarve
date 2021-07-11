@@ -18,6 +18,7 @@ public interface BookingRepository extends JpaRepository<BookingTableBean, Integ
 
 	List<BookingTableBean> findByMemberBean(MemberBean memberBean);
 
+	List<BookingTableBean> findByStoreBean(StoreBean storeBean);
 	
 //	List<BookingTableBean> findByMemberId(String memberId);
 	

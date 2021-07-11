@@ -14,6 +14,7 @@ import com.NeverStarve.booking.repository.BookingRepository;
 import com.NeverStarve.booking.service.BookingService;
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.repository.MemberRepository;
+import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.repository.StoreRepository;
 
 @Service
@@ -84,4 +85,20 @@ public class BookingServiceImpl implements BookingService {
 		return decsList;
 	}
 
+	@Override
+	public List<BookingTableBean> getStoreBookings(StoreBean storeBean) {
+		List<BookingTableBean> list = bookingRepository.findByStoreBean(storeBean);
+		//降冪排序所有訂單
+		List<BookingTableBean> decsList = new ArrayList<BookingTableBean>();
+		for (int i = list.size()-1; i >= 0; i--) {
+			BookingTableBean decsBookings = list.get(i);
+			decsList.add(decsBookings);
+		}
+		return decsList;
+	}
+
+	@Override
+	public Optional<BookingTableBean> findOneById(Integer bookingNo) {
+		return bookingRepository.findById(bookingNo);
+	}
 }

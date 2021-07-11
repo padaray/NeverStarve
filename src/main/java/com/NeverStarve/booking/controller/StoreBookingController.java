@@ -1,6 +1,7 @@
 package com.NeverStarve.booking.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.NeverStarve.booking.model.BookingTableBean;
 import com.NeverStarve.booking.model.StoreBookingBean;
+import com.NeverStarve.booking.service.BookingService;
 import com.NeverStarve.booking.service.StoreBookingService;
+import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
 
@@ -30,7 +33,10 @@ public class StoreBookingController {
 	
 	@Autowired
 	StoreService storeService;
-
+	
+	@Autowired
+	BookingService bookingService;
+	
 	@GetMapping("/")
 	public String toBookingTable(Model model, SessionStatus status) {
 		
@@ -100,6 +106,50 @@ public class StoreBookingController {
 		}
 		
 		return "booking/storeBookingConfirm";
+	}
+	
+	@GetMapping("/findBookings/{BookingNo}")
+	public String modifyBookingByMemberAndBookingNo(@PathVariable Integer BookingNo, 
+														BookingTableBean btb, Model model, SessionStatus status) {
+		
+		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
+		if (storeBean == null) {
+			status.setComplete();
+			return "redirect:/store/login";
+		}
+		
+		// 由路徑變數的bookingNo取得該bookingTableBean(測試中)
+		BookingTableBean btb1 = null;
+		Optional<BookingTableBean> opt = bookingService.findOneById(BookingNo);
+		if (opt.isPresent()) {
+			btb1 = opt.get();
+		} else {
+			return "redirect:/booking/storeAllBookings";
+		}
+		model.addAttribute("modifyBtb", btb1);
+		System.out.println(btb1);
+		
+		return "booking/modifyBookingTable";
+	}
+	
+	//店家查詢所有預約訂單，根據StroeBean
+	@GetMapping("/findBookings")
+	public String findBookingsByStoreId(Model model, SessionStatus status) {
+		
+		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
+		if (storeBean == null) {
+			status.setComplete();
+			return "redirect:/store/login";
+		}
+
+		List<BookingTableBean> bookings = bookingService.getStoreBookings(storeBean);
+		model.addAttribute("bookingList", bookings);
+//		System.out.println(bookings);
+		
+//		Date todayDate = new Date();
+//		model.addAttribute("todayDate", todayDate);
+		
+		return "/booking/storeAllBookings";
 	}
 
 }

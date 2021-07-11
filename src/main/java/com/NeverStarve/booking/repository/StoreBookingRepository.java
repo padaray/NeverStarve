@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import com.NeverStarve.booking.model.BookingTableBean;
 import com.NeverStarve.booking.model.StoreBookingBean;
 import com.NeverStarve.store.model.StoreBean;
 
@@ -18,6 +19,8 @@ public interface StoreBookingRepository extends JpaRepository<StoreBookingBean, 
 //	List<StoreBookingBean> findTimesByBookingDate(StoreBookingBean sbb);
 
 	List<StoreBookingBean> findTimesByBookingDateAndStoreBean(Date d, StoreBean storeId);
+
+	
 
 	
 }
