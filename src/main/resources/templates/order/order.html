@@ -10,6 +10,9 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" ></script>
 <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->
 <link rel="shortcut icon"  th:href="@{/favicon.ico}"/> <!-- 網站小圖 -->	
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	
 <title>結帳畫面</title>
 <script>
 	$.ajax({ type: "GET", 
@@ -26,7 +29,7 @@
     						'<input style="width: 30px" id="text_box"  class="text_box"  type="text" value="'+element.quantity+'" disabled="disabled"/>'+
        						'<input class="add" name="" value="+" type="button" /></td>'+
          					'<td class="onetotal">'+ '單價總額：'+element.dishPrice*element.quantity+'</td>'+
-         					'<td><button class="delete">刪除</button></td></tr>')
+         					'<td><button class="delete"><i class="bi bi-trash" style="font-size:25px"></i></button></td></tr>')
 
 				 }
 			 )}
@@ -81,15 +84,25 @@ function setAllTotal () {
 $(".delete").click(DeleteProduct)
 function DeleteProduct(){
 	
-	var b2 = confirm ("確定要刪除該筆資料嗎?")
-	if(b2){
-		$(this).parent().parent().remove();
-		var menuID = $(this).parent().parent().find(".p").text()
-		$.ajax({ type: "GET", 
-			url: "[[@{/Order//deleteProduct/}]]"+ menuID
-			
-	});		
-	}
+	Swal.fire({
+		  title: '確定要刪掉此餐點嗎??',
+		  showDenyButton: true,
+		  confirmButtonText: `確定`,
+		  denyButtonText: `讓我在想想`,
+		}).then((result) => {
+		  if (result.isConfirmed) {
+			  $(this).parent().parent().remove();
+				var menuID = $(this).parent().parent().find(".p").text()
+				$.ajax({ type: "GET", 
+					url: "[[@{/Order//deleteProduct/}]]"+ menuID
+					
+				});
+		    Swal.fire('該餐點已經移除囉', '', 'success')
+		  } else if (result.isDenied) {
+		    Swal.fire('看起來你還在思考呢', '', 'info')
+		  }
+		})
+	
 	setAllTotal ();
 }
 $("#save").click(function(){
@@ -129,15 +142,19 @@ $("#save").click(function(){
 				dataType: "json", 
 				contentType: "application/json",
 				success: function (response) {	
+					alert("訂單送出成功，即將前往線上付款頁面")
 					$("#divforEcpay").html(response.hi)
 						
 				}
-				
 			});
 		}, 750); 
-					}setTimeout(function(){
-						window.location = "[[@{/Order/order/NowOrder}]]"
-					}, 750);
+					}else{
+						setTimeout(function(){
+							alert("訂單送出成功，即將前往歷史訂單")
+							window.location = "[[@{/Order/order/NowOrder}]]"
+						}, 750);
+					}
+		
 	}else{
 		$.ajax({ type: "POST", 
 			url:"[[@{/Order/saveOrder}]]"+"/"+$("#addressId").val(),
@@ -152,6 +169,7 @@ $("#save").click(function(){
 				dataType: "json", 
 				contentType: "application/json",
 				success: function (response) {
+					alert("訂單送出成功，即將前往線上付款頁面")
 					$("#divforEcpay").html(response.hi)
 				}
 				
@@ -159,6 +177,7 @@ $("#save").click(function(){
 			}, 750);
 		}else{
 			setTimeout(function(){
+			alert("訂單送出成功，即將前往歷史訂單")
 			window.location = "[[@{/Order/order/NowOrder}]]"
 			}, 750);
 		}
@@ -240,10 +259,10 @@ $('input[name=checktake]').change(function(){
   <input type="radio" id="home" name="checktake" value="2">
   <label for="home">送餐至住家</label><br>
 
-<p>付款方式:</p>
+<p>付款方式: </p>
 <select id="payment">
     <option value="cash">現金</option>
-    <option value="onlineCash">線上刷卡</option>
+    <option value="onlineCash" >  線上刷卡 </option>
 </select>
  </div>
 	
@@ -254,7 +273,7 @@ $('input[name=checktake]').change(function(){
 		<div class="form-group" id="ggininder" >
 		<br>
 					<label for="addressId">地址</label>
-					<div class="btn orgbtn fr" ><p  id="maddres" >使用會員地址</p></div>
+					<div class="btn orgbtn fr" ><button  id="maddres" class="btn btn-primary">使用會員地址 <i class="bi bi-mailbox"></i></button></div>
 					<div id="twzipcode">
 					</div>
 					<input type="text" name="inputaddress" id="inputaddressId" class="form-control">
@@ -269,7 +288,7 @@ $('input[name=checktake]').change(function(){
 	<div class="navbar navbar-expand-sm bg-light justify-content-around">
 		<div id="alltotalDiv" class="fl"><span class="text-success" id="alltotal">0</span>元</div>
  		
- 		<div class="btn orgbtn "><button  id="save" class="btn btn-primary " >送出訂單</button></div>
+ 		<div class="btn orgbtn "><button  id="save" class="btn btn-primary " >送出訂單  <i class="bi bi-calendar-check-fill"></i></button></div>
 	</div>
 <script>
 $("#twzipcode").twzipcode({
