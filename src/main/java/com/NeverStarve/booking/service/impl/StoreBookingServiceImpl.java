@@ -1,11 +1,13 @@
 package com.NeverStarve.booking.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.NeverStarve.booking.model.BookingTableBean;
 import com.NeverStarve.booking.model.StoreBookingBean;
 import com.NeverStarve.booking.repository.StoreBookingRepository;
 import com.NeverStarve.booking.service.StoreBookingService;
@@ -60,5 +62,7 @@ public class StoreBookingServiceImpl implements StoreBookingService {
 	public List<StoreBookingBean> findTimesByDateAndStoreId(Date d, StoreBean storeId) {
 		return storeBookingRepository.findTimesByBookingDateAndStoreBean(d, storeId);
 	}
+
+	
 
 }
