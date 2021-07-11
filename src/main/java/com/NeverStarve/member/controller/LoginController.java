@@ -66,6 +66,7 @@ public class LoginController {
 			member.setLongTime(new Date());
 			member.setMemberCity("1");
 			member.setMemberTown("1");
+			memberService.sendSimpleMail(member.getEmail(), "NeverStarve永不飢餓萬事屋", "您好"+member.getName()+"，您已於"+member.getLongTime()+"時登入");
 			memberService.save(member);
 		}else {
 			// NG, 登入失敗, userid與密碼的組合錯誤，放相關的錯誤訊息到 errorMsgMap 之內

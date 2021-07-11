@@ -1,13 +1,11 @@
 package com.NeverStarve.member.controller;
 
-import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import javax.sql.rowset.serial.SerialBlob;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.response.MemberResponse;

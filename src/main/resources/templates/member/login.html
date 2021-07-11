@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- i標籤小圖 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"> <!-- 新版I標籤小圖 -->
 <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->	
+<link rel="shortcut icon" th:href="@{/favicon.ico}" /><!-- 網頁小圖 -->
 <title>登入</title>
 <style type="text/css" th:inline="text">
 body{
@@ -75,8 +76,10 @@ body{
 					<p class="text-center">
 						<button  type="submit" class="btn btn-primary" style="margin-top: 20px">登入</button>
 					</p>
-					
 			</form>
+				
+						<a style="color:white;" th:href="@{/Member/forgotPassword}">忘記密碼?</a>
+
 
 		</div>
 
