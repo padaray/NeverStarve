@@ -18,6 +18,33 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" ></script>
 <script src="/js/jquery.twzipcode.min.js"></script>
+<script>
+$(function () {
+	$(".min").click(function(){
+		var min = $(this).next().val();
+		var object = $(this).parent();
+		min	--;
+		if(min < 0){
+			min = 0;
+		}
+		$(this).next().val(min)
+	})
+	
+	$(".add").click(function(){
+		var object = $(this).parent();	
+		var add = $(this).prev().val();
+		add ++;
+		$(this).prev().val(add);
+	})
+	
+	$("#seatNumberId").change(function(){
+		if($(this).val() == ""){
+			$(this).val(0);
+		}
+	})
+	    
+})
+</script>
 <style>
 /* .zipcode { */
 /*     color: #fff; */
@@ -44,34 +71,39 @@
 					<input type="text" name="storeAccount" id="storeAccountId" class="form-control" th:field="*{storeAccount}">
 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeAccount')}" th:errors="*{storeAccount}"></p>
 				</div>
+				
 				<div class="form-group">
 					<label for="storePasswordId">密碼:</label> 
 					<input type="text" name="storePassword" id="storePasswordId" class="form-control" th:field="*{storePassword}" placeholder="需要英文與數字，合計至少8位">
 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storePassword')}" th:errors="*{storePassword}"></p>
 				</div>
+				
 				<div class="form-group">
 					<label for="storeCheckPasswordId">確認密碼:</label> 
 					<input type="text" name="storeCheckPassword" id="storeCheckPasswordId" class="form-control" th:field="*{storeCheckPassword}">
 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeCheckPassword')}" th:errors="*{storeCheckPassword}"></p>					
 				</div>
+				
 				<div class="form-group">
 					<label for="storeNameId">店家名稱:</label> 
 					<input type="text" name="storeName" id="storeNameId" class="form-control" th:field="*{storeName}">
 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeName')}" th:errors="*{storeName}"></p>
 				</div>
+				
 				<div class="form-group">
 					<label for="storeAddressId">地址:</label>
 					<!-- 外掛的台灣縣市選擇器 -->
 					<div id="twzipcode"></div>
 					<input type="text" name="storeAddress" id="storeAddressId" class="form-control">
 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeAddress')}" th:errors="*{storeAddress}"></p>
-					
 				</div>
+				
 				<div class="form-group">
 					<label for="storePhoneId">電話:</label> 
 					<input type="text" name="storePhone" id="storePhoneId" class="form-control" th:field="*{storePhone}">
 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storePhone')}" th:errors="*{storePhone}"></p>
 				</div>
+				
 				<div class="form-group">
 					<label for="storeTypeId">菜色種類:</label>
 					<div data-toggle="buttons" class="btn-group-toggle" >
@@ -97,14 +129,25 @@
 					<input type="text" name="storeTypeList" id="storeTypeId" class="form-control" th:field="*{storeType}" placeholder="其他類型">
 					<p class="form-control-static text-danger"></p>
 				</div>
+				
 				<div class="form-group">
-					<label for="seatNumberId">座位數量:</label> 
-					<input type="text" name="seatNumber" id="seatNumberId" class="form-control" th:field="*{seatNumber}">
-					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('seatNumber')}" th:errors="*{seatNumber}"></p>
+					<label for="seatNumberId">座位數量:</label><br> 
+					<div class="input-group" style="width: 50%">
+						<input class="min btn btn-secondary form-control" value="-"  type="button"/>
+						<input class="form-control text-center" name="seatNumber" id="seatNumberId" type="text" value="0" th:field="*{seatNumber}"/>
+						<input class="add btn btn-secondary form-control" value="+" type="button" />
+					</div>
+<!-- 					<input type="text" name="seatNumber" id="seatNumberId" class="form-control" th:field="*{seatNumber}"> -->
+<!-- 					<p class="form-control-static text-danger" th:if="${#fields.hasErrors('seatNumber')}" th:errors="*{seatNumber}"></p> -->
 				</div>
-				<p>
-					<button type="submit" class="btn btn-primary text-center">送出</button>
-				</p>
+				<br>
+				<br>
+				<div>
+					<p class="text-center">
+						<button type="submit" class="btn btn-primary">送出</button>
+					</p>
+				</div>
+				
 			</form>
 		</div>
 	</div>
