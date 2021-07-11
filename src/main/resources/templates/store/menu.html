@@ -20,25 +20,6 @@
 <script src="/js/jquery.twzipcode.min.js"></script>
 <script>
 $(function() {
-// 	$(".butest").click(function() {
-// 		$.ajax({
-// 			type : "GET",
-// 			url : "[[@{/store/getMenu}]]",
-// 			dataType : "json",
-// 			contentType : "application/json",
-// 			success : function(response) {
-// 				$.each(response, function(index, element){
-// 				$('.info').append(
-// 					'<tr><td>'+ [index+1] + '</td>'+
-// 					'<td style="display: none" class="p">'+ element.pkDishId + '</td>'+
-// 		        	'<td>'+ element.dishName + '</td>' +
-// 		        	'<td>'+ element.dishIntroduction + '</td>' +
-// 		        	'<td>'+ element.dishPrice + '</td>' +
-// 		         	'<td><button class="delete">刪除</button></td></tr>')
-// 					 }
-// 				)}
-// 			});
-// 		})
 	
 	
  
@@ -77,7 +58,7 @@ $(".addDishPlace").on("click", ".deleteLine", function() {
 
 //將新增的菜單透過AJAX方式傳到後端
 // $("#submitButt").click(function(){
-$(".addDishPlace").on("click", "#submitButt", function() {
+$(".newDishPlace").on("click", "#submitButt", function() {
 	var saveMenu = [];
 	
 	var  allDishlength =$("#newDishForm").find(".menuInp").length;
@@ -242,6 +223,8 @@ $(".info").on("click", ".cancelModi", function() {
 		</table>
 		</div>
 		
+		
+		<div class="newDishPlace">
 		<div class="d-flex justify-content-center">
 		<div class="addDishPlace" style="width: 80%">
 		<table id="newDishForm" class="table table-bordered">
@@ -251,11 +234,13 @@ $(".info").on("click", ".cancelModi", function() {
 		</div>
 		</div>
 		
+		
+		<div class="alertEmp" style="margin-left: 75%"></div>
 		<div style="margin-left: 83%">
 		<button class="btn btn-secondary" hidden="hidden" id="submitButt">送出</button>
 		</div>
+		</div>
 		
-		<div class="alertEmp"></div>
 		<div class="buttPlace d-flex justify-content-center">
 		<button class="addNewLine btn btn-primary">新增菜品</button>
 		</div>

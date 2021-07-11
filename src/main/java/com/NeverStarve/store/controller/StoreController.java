@@ -18,23 +18,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
+import com.NeverStarve.store.service.MenuService;
 import com.NeverStarve.store.service.StoreService;
 
 @Controller
-@SessionAttributes({"storeUser"})
+@SessionAttributes({"storeUser", "menuList"})
 @RequestMapping("/store")
 public class StoreController {
 
-	@Autowired StoreService storeService;
+	@Autowired 
+	StoreService storeService;
+	
+	@Autowired 
+	MenuService menuService;
 	
 	//店家首頁
 	@GetMapping("/storeIndex")
 	public String storeIndex(HttpServletRequest request, Model model) {
-		if(!checkCookie(request, model)) {
+		StoreBean storebean = checkCookie(request, model);
+		if(storebean == null) {
 			return "store/login";
+		}else {
+			List<MenuBean> menuList = menuService.getMenuByStoreBean(storebean);
+			model.addAttribute("menuList", menuList);
+			return "store/storeIndex";
 		}
-		return "store/storeIndex";
 	}
 	
 //	//店家查看訂單 
@@ -49,7 +59,8 @@ public class StoreController {
 	//修改店家詳細資料頁面
 	@GetMapping("/modifyInfo")
 	public String modifyInfoPage(HttpServletRequest request, Model model) {
-		if(!checkCookie(request, model)) {
+		StoreBean storebean = checkCookie(request, model);
+		if(storebean == null) {
 			model.addAttribute("storeUser", new StoreBean());
 		}
 		return "store/modifyInfo";
@@ -93,18 +104,19 @@ public class StoreController {
 	
 	
 	//確認有沒有cookie
-	public boolean checkCookie(HttpServletRequest request, Model model){
+	public StoreBean checkCookie(HttpServletRequest request, Model model){
+		StoreBean storeBean = null;
 		Cookie cookies[] = request.getCookies();
 		if(cookies != null){
 			for(Cookie cookie : cookies) {
-				StoreBean storeBean = storeService.findCookieByStoreAccount(cookie.getValue());
+				storeBean = storeService.findCookieByStoreAccount(cookie.getValue());
 		 		if(storeBean != null) {
 		 			model.addAttribute("storeUser", storeBean);
-		 			return true;
+		 			return storeBean;
 		 		}
 		 	}
 		 }
-		 return false;
+		 return storeBean;
 	}
 	@GetMapping("/findAll")
 	public String findAll(Model model){

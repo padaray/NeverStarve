@@ -66,9 +66,6 @@ public class MenuRestController {
 		//判斷是否有照片傳入
 		MultipartFile dishPicture = menuBean.getDishPicture();
 		String ImageName = dishPicture.getOriginalFilename();
-		System.out.println(menuBean.getDishName());
-		System.out.println(menuBean.getDishPrice());
-		System.out.println(menuBean.getDishIntroduction());
 		if(ImageName.isEmpty()) {
 			menuService.saveMenuListNoPic(menuBean);
 		}else {
