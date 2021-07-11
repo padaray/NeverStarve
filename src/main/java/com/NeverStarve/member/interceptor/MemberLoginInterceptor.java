@@ -11,6 +11,8 @@ public class MemberLoginInterceptor implements HandlerInterceptor{
 							HttpServletResponse response,
 							Object handler) throws Exception{
 		if(request.getSession().getAttribute("member") == null) {
+			
+			
 			response.sendRedirect("/NeverStarve/Member/login");
 			return false;
 		}

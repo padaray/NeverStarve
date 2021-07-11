@@ -42,22 +42,22 @@
 <body>
 	<div th:insert="Generic :: Header"></div>
 
-	<div th:if="${session.member!=null}">
-		<div th:if="${session.member.userType=='0'}"
-			th:insert="backstage/BackstageHeader :: Header"></div>
+<!-- 	<div th:if="${session.member!=null}"> -->
+<!-- 		<div th:if="${session.member.userType=='0'}" -->
+<!-- 			th:insert="backstage/BackstageHeader :: Header"></div> -->
 
-		<p>
-			<span th:text="用戶姓名+${session.member.name}">用戶姓名</span>
-		</p>
-		<p>
-			<span th:text="用戶狀態 +${session.member.userType}">用戶狀態</span>
-		</p>
-		<p th:text="註冊時間+${session.member.registerTime}">註冊時間</p>
-		<p th:switch=${session.member.userType}>
-			<span th:case="0">管理員</span> <span th:case="1">一般會員</span> <span
-				th:case="2">高級會員</span> <span th:case="3">白金會員</span>
-		</p>
-	</div>
+<!-- 		<p> -->
+<!-- 			<span th:text="用戶姓名+${session.member.name}">用戶姓名</span> -->
+<!-- 		</p> -->
+<!-- 		<p> -->
+<!-- 			<span th:text="用戶狀態 +${session.member.userType}">用戶狀態</span> -->
+<!-- 		</p> -->
+<!-- 		<p th:text="註冊時間+${session.member.registerTime}">註冊時間</p> -->
+<!-- 		<p th:switch=${session.member.userType}> -->
+<!-- 			<span th:case="0">管理員</span> <span th:case="1">一般會員</span> <span -->
+<!-- 				th:case="2">高級會員</span> <span th:case="3">白金會員</span> -->
+<!-- 		</p> -->
+<!-- 	</div> -->
 	<div class="jumbotron jumbotron-fluid" style="height: 250px">
 		<div class="container" style="width: 1000px;">
 			<h1>NeverStarve 永不飢餓萬事屋</h1>
