@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.NeverStarve.booking.model.BookingTableBean;
 import com.NeverStarve.booking.model.StoreBookingBean;
 import com.NeverStarve.booking.model.StrDateBean;
 import com.NeverStarve.booking.service.BookingService;
@@ -63,6 +66,18 @@ public class BookingRestController {
 		System.out.println(storeBookingService.findTimesByDateAndStoreId(d, storeId));
 		
 		return storeBookingService.findTimesByDateAndStoreId(d, storeId);
+	}
+	
+	@PostMapping("/cancelBooking/{bookingNo}")
+	public void cancelBooking(@PathVariable Integer bookingNo) {
+		
+		//以預約單號(bookingNo)取得該筆預約訂單，更新cancelTag的數值，save方法存入該筆訂單(originBtb)即可
+		//可以加入判斷式，以登入資料的memberId，判斷該memberId等於該筆訂單的fkMemberId時，才執行動作；否則不動作
+		BookingTableBean originBtb = bookingService.findOneById(bookingNo).get();
+//		System.out.println(originBtb);
+		originBtb.setCancelTag(-1);
+		
+		bookingService.save(originBtb);
 	}
 	
 }

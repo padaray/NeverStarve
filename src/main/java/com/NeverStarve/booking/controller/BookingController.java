@@ -85,6 +85,8 @@ public class BookingController {
 		btb.setPostTime(new Date());
 		model.addAttribute("btb", btb);
 		
+		btb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
+		
 		bookingService.save(btb);
 				
 		return "booking/bookingConfirm";

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -46,11 +47,11 @@ public class StoreBookingController {
 			return "redirect:/store/login";
 		}
 		
-		return "booking/storebooking";
+		return "booking/storeBooking";
 	}
 	
 	@GetMapping("/storeBookingByStoreId/{storeId}")
-	public String postBookingByStoreId(@PathVariable Integer storeId, BookingTableBean btb, 
+	public String toBookingTableByStoreId(@PathVariable Integer storeId, BookingTableBean btb, 
 													 Model model, SessionStatus status) {
 		
 		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
@@ -65,16 +66,16 @@ public class StoreBookingController {
 		if (opt.isPresent()) {
 			store = opt.get();
 		}else {
-			return "redirect:/";
+			return "redirect:/store/storeIndex";
 		}
 		model.addAttribute("store", store);
 		System.out.println(store);
 		
-		return "booking/storebooking";
+		return "booking/storeBooking";
 	}
 	
 	@PostMapping("/storeBookingPost")
-	public String postBooking(StoreBookingBean sbb, BindingResult result, Model model) {
+	public String postBookingSettings(StoreBookingBean sbb, BindingResult result, Model model) {
 	
 		//取得店家的id傳進預約資料表中
 		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
@@ -119,17 +120,65 @@ public class StoreBookingController {
 		}
 		
 		// 由路徑變數的bookingNo取得該bookingTableBean(測試中)
-		BookingTableBean btb1 = null;
+//		BookingTableBean modBtb = new BookingTableBean();
+		BookingTableBean modBtb = null;
 		Optional<BookingTableBean> opt = bookingService.findOneById(BookingNo);
 		if (opt.isPresent()) {
-			btb1 = opt.get();
+			modBtb = opt.get();
 		} else {
 			return "redirect:/booking/storeAllBookings";
 		}
-		model.addAttribute("modifyBtb", btb1);
-		System.out.println(btb1);
+		
+//		storeService.findoneById(storeBean.getPkStoreId());
+		model.addAttribute("modBtb", modBtb);
+		
+//		Date modDate = btb.getBookingDate();
+//		Date modTime= btb.getBookingTime();
+//		Integer modPplNum = btb.getBookingNum();
+//		
+//		modBtb.setBookingDate(modDate);
+//		modBtb.setBookingTime(modTime);
+//		modBtb.setBookingNum(modPplNum);
+		
+//		StoreBean store = modBtb.getStoreBean();
+//		System.out.println(modBtb);
+//		model.addAttribute("modifyBtb", modBtb);
+//		model.addAttribute("btb", btb);
+		
+//		System.out.println(modBtb);
+//		bookingService.save(modBtb);
 		
 		return "booking/modifyBookingTable";
+	}
+	
+	@PostMapping("/bookingPostByStore")
+	public String postModifyBooking( BookingTableBean btb, BindingResult result, Model model) {
+	
+		Integer bNo = btb.getPkBookingNo();
+//		System.out.println("hi1: " + bNo);
+		BookingTableBean originBtb = bookingService.findOneById(bNo).get();
+//		System.out.println("hi2: " + btb);
+		
+		//取得店家的id傳進預約資料表中
+		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
+//		System.out.println("hi3: " + storeBean);
+		
+		btb.setPostTime(new Date());
+		model.addAttribute("modBtb", btb);
+		
+		btb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
+		
+		originBtb.getMemberBean();
+//		System.out.println("hi4: " + originBtb.getMemberBean());
+//		System.out.println("hi5: " + originBtb);
+		
+		originBtb.setBookingDate(btb.getBookingDate());
+		originBtb.setBookingNum(btb.getBookingNum());
+		originBtb.setBookingTime(btb.getBookingTime());
+		
+		bookingService.save(originBtb);
+				
+		return "booking/modifyBookingConfirm";
 	}
 	
 	//店家查詢所有預約訂單，根據StroeBean
