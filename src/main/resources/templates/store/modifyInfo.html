@@ -18,6 +18,33 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" />
 <script src="/js/jquery.twzipcode.min.js"></script>
+<script>
+$(function () {
+	$(".min").click(function(){
+		var min = $(this).next().val();
+		var object = $(this).parent();
+		min	--;
+		if(min < 0){
+			min = 0;
+		}
+		$(this).next().val(min)
+	})
+	
+	$(".add").click(function(){
+		var object = $(this).parent();	
+		var add = $(this).prev().val();
+		add ++;
+		$(this).prev().val(add);
+	})
+	
+	$("#seatNumberId").change(function(){
+		if($(this).val() == ""){
+			$(this).val(0);
+		}
+	})
+	    
+})
+</script>
 <title>修改資料</title>
 </head>
 <body>
@@ -57,8 +84,12 @@
 					<input type="text" name="storeType" id="storeTypeId" class="form-control" th:field="*{storeType}">
 				</div>
 				<div class="form-group">
-					<label for="seatNumberId">座位數量:</label> 
-					<input type="text" name="seatNumber" id="seatNumberId" class="form-control" th:field="*{seatNumber}">
+					<label for="seatNumberId">座位數量:</label><br> 
+					<div class="input-group" style="width: 50%">
+						<input class="min btn btn-secondary form-control" value="-"  type="button"/>
+						<input class="form-control text-center" name="seatNumber" id="seatNumberId" type="text" value="0" th:field="*{seatNumber}"/>
+						<input class="add btn btn-secondary form-control" value="+" type="button" />
+					</div>	
 				</div>
 				<div class="form-group">
 					<label for="storeImageId">商家照片:</label> 

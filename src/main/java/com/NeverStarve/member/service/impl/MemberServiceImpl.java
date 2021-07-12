@@ -14,12 +14,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,8 +40,11 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	ServletContext context;
-
+	
 	NeverStarveUtil nsUtil = new NeverStarveUtil();
+	
+
+	
 
 	private int recordsPerPage = 5; // 預設每頁三筆;
 	private int totalPages = -1;
@@ -53,11 +60,45 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.findAll();
 	}
 
+	
+	//註冊時使用
 	@Override
 	public MemberBean save(MemberBean bean) {
+		
+		MultipartFile memberImage = bean.getMemberImage();
+		if (memberImage != null && !memberImage.isEmpty() ) {
+			String ImageFileName = memberImage.getOriginalFilename();
+			bean.setFileName(ImageFileName);
+			try {
+				byte[] b = memberImage.getBytes();
+				Blob blob = new SerialBlob(b);
+				bean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
+			}
+			//如果沒圖片的話就存入吉祥物圖片
+		}else if(bean.getCoverImage()==null && memberImage == null) {
+			try {
+				byte[] b = toByteArrayJSON("/images/NeverStarvefavicon.png");
+				bean.setFileName("NeverStrave.png");
+				Blob blob = new SerialBlob(b);
+				bean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
+			}
+			
+		}
+		
+		
 		return memberDao.save(bean);
 	}
 
+	
+	
+	
+	
 	@Override
 	public MemberBean updateMember(MemberBean bean) {
 		bean.setAddress(bean.getMemberCity() + " " + bean.getMemberTown() + " " + bean.getAddress());
@@ -91,9 +132,7 @@ public class MemberServiceImpl implements MemberService {
 				bean.setCoverImage(orinigBean.getCoverImage());
 			}
 		}
-
 		return memberDao.save(bean);
-
 	}
 
 	@Override
@@ -128,6 +167,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return exist;
 	}
+
 
 	@Override
 	public Map<Integer, MemberBean> getPageMembers(int pageNo) {
@@ -363,6 +403,34 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public long getCityCount(String address) {
 		return memberDao.countByAddressContaining(address);
+	}
+
+//--------------------------email----------------------------
+	//email使用
+	@Resource
+    private JavaMailSender mailSender;
+	
+	//email使用
+	@Value("${spring.mail.username}")
+    private String from;
+
+	
+	
+	@Override
+	public void sendSimpleMail(String to, String subject, String content) {
+		
+		SimpleMailMessage message = new SimpleMailMessage();
+		//從哪裡寄出
+        message.setFrom(from);
+        //收件人
+        message.setTo(to);
+        //信的開頭
+        message.setSubject(subject);
+        //信的內容
+        message.setText(content);
+        
+        mailSender.send(message);
+ 		
 	}
 
 }

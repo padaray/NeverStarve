@@ -66,6 +66,7 @@ public class LoginController {
 			member.setLongTime(new Date());
 			member.setMemberCity("1");
 			member.setMemberTown("1");
+			memberService.sendSimpleMail(member.getEmail(), "NeverStarve永不飢餓萬事屋", "您好"+member.getName()+"，您已於"+member.getLongTime()+"時登入");
 			memberService.save(member);
 		}else {
 			// NG, 登入失敗, userid與密碼的組合錯誤，放相關的錯誤訊息到 errorMsgMap 之內
@@ -97,16 +98,16 @@ public class LoginController {
 		String userId = String.valueOf(bean.getPkMemberId());
 		
 		cookieEmail = new Cookie("email", userEmail); 
-		cookieEmail.setMaxAge(2 * 60 * 60);       // Cookie的存活期: 2小時
+		cookieEmail.setMaxAge(24 * 60 * 60);       // Cookie的存活期: 2小時
 		cookieEmail.setPath(request.getContextPath());
 
 //		String encodePassword = GlobalService.encryptString(password);
 		cookiePassword = new Cookie("password", password);
-		cookiePassword.setMaxAge( 2 * 60 * 60);
+		cookiePassword.setMaxAge( 24 * 60 * 60);
 		cookiePassword.setPath(request.getContextPath());
 		
 		cookieId = new Cookie("userId" , userId);
-		cookieId.setMaxAge( 2 * 60 * 60);
+		cookieId.setMaxAge( 24 * 60 * 60);
 		cookieId.setPath(request.getContextPath());
 		
 		response.addCookie(cookieEmail);

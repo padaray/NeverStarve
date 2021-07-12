@@ -52,5 +52,9 @@ public interface MemberService {
 
 	public MemberBean cookieLogin(String email);
 	
+	//寄新密碼
+    void sendSimpleMail(String to, String subject, String content);
+
+	
  
 }

@@ -45,7 +45,6 @@ $(function () {
             url:'http://localhost:9527/NeverStarve/Member/update',
             data:$('#updateForm').serialize(),
             success: function (res) {
-            	 alert(123456)
                 if (res.validated) {
                     //take your successful action here; you may want to redirect to another page         
                     $("#prompt").html('<span class="error" style="color: green;" >更新成功</span>')
@@ -101,11 +100,12 @@ $(function () {
 		<div class="jumbotron text-center">
 			<form id="updateForm" method="post" th:object="${member}" enctype="multipart/form-data">
 				<span id="prompt"></span>
-			
+			<div th:if="*{bas64}!=null">
 					<label for="tobas64">圖片</label>
 				<div class="form-group">
 					<img alt="" th:src="*{bas64}">
 				</div>
+			</div>
 				<div class="form-group">
 					<label for="emailId">帳號(E-MAIL)</label>
 					<input type="text" name="email" id="emailId" class="form-control"  th:field="*{email}" readonly>
