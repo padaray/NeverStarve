@@ -111,11 +111,12 @@ $(function () {
     	        		  denyButtonText: `還想要繼續點餐`,
     	        		}).then((result) => {
     	        		  if (result.isConfirmed) {
-    	        			  setTimeout(function(){
-   	       					uu=/*[[@{/Order/order}]]*/
-   	       	                window.location = uu
-   	       	            	},750) 
+    	        			  
    	       	          		Swal.fire('即將前往付款畫面', '', 'success')
+    	        			setTimeout(function(){
+   	       					uu=/*[[@{/Order/order}]]*/
+   	       					window.location.href = uu
+   	       	            	},1000) 
     	        		  } else if (result.isDenied) {
     	        		    Swal.fire('繼續點餐吧，要點到吃飽為止唷:D', '', 'info')
     	        		  }
@@ -214,7 +215,7 @@ navigator.geolocation.getCurrentPosition(function(position){
 
 <div class="container" style="max-width: 1230px; margin-top: 50px">
 
-	<table id="tab"   >
+	<table id="tab"  class="tabsty text-center" >
 		<thead>
 			<tr>
 				<th width="250"><i class="fa fa-book" aria-hidden="true"></i> 編號</th>
@@ -260,7 +261,7 @@ navigator.geolocation.getCurrentPosition(function(position){
 
 	<section class="navbar navbar-expand-sm bg-light justify-content-around" >
 		<div id="alltotalDiv" class="car"> <span class="text-success " id="alltotal"> 0</span>元</div>
- 		<div class="btn orgbtn " ><button  disabled="disabled" id="save" class="btn btn-primary" >存入購物車  <i class="bi bi-cart-fill"></i></button></div>
+ 		<div class="btn orgbtn " ><button  disabled="disabled" id="save" class="btn btn-primary" type="button" >存入購物車  <i class="bi bi-cart-fill"></i></button></div>
 	</section>
 	</div>
 	

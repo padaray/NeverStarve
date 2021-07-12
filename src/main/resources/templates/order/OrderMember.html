@@ -71,8 +71,13 @@ $(function(){
 	var orderURL= /*[[@{/Order/list/}]]*/
 	window.open( orderURL+id, '_blank', 'toolbar=0, location=no, menubar=0, height=400,  width=800, top=120px, left=520px');
 	});
-	
-	
+	$(function(){
+		var elements = document.getElementsByClassName("dd");
+		var ddlist = $(".dd").get()
+		for(let i=0; i<ddlist.length; i++){
+			ddlist[i].innerHTML=ddlist[i].innerHTML.replace("-","年").replace("-","月").replace("T","日").substr(0,19)
+		}
+	})
 })
 
 
@@ -106,8 +111,8 @@ $(function(){
 					<tr th:each="order, loopStatus: ${orderSet}">
 						<td valign="middle" >[[${order.pkOrderId}]]</td>
 						<td valign="middle">[[${order.totalCost}]]元</td>
-						<td valign="middle">[[${order.orderDate}]] </td>
-						<td valign="middle">[[${order.shipping_address}]] </td>						
+						<td class="dd" id="date" valign="middle">[[${order.orderDate}]]</td>
+						<td valign="middle">[[${order.shipping_address}]] </td>	
 						<td valign="middle" th:switch="${order.trading}"> 
 						<span th:case="0">未付款</span> 
 						<span th:case="1">已付款</span>

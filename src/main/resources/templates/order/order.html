@@ -35,9 +35,10 @@
 			 )}
 			
 		});	
-
 $(function() {
+setTimeout(function(){
 setAllTotal ();
+},100) 
 $(".min").click(function(){
 	var min = $(this).next().val();
 	var object = $(this).parent();
@@ -147,12 +148,12 @@ $("#save").click(function(){
 						
 				}
 			});
-		}, 750); 
+		}, 1000); 
 					}else{
 						setTimeout(function(){
 							alert("訂單送出成功，即將前往歷史訂單")
 							window.location = "[[@{/Order/order/NowOrder}]]"
-						}, 750);
+						}, 1000);
 					}
 		
 	}else{
@@ -174,12 +175,12 @@ $("#save").click(function(){
 				}
 				
 			});
-			}, 750);
+			}, 1000);
 		}else{
 			setTimeout(function(){
 			alert("訂單送出成功，即將前往歷史訂單")
 			window.location = "[[@{/Order/order/NowOrder}]]"
-			}, 750);
+			}, 1000);
 		}
 		
 	}
