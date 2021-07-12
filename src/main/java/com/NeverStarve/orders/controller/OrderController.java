@@ -191,6 +191,7 @@ public class OrderController {
 			carProductQuantity.setPath(request.getContextPath());
 			response.addCookie(carProductID);
 			response.addCookie(carProductQuantity);
+			
 		}
 
 	}
@@ -326,8 +327,8 @@ public class OrderController {
 				@RequestParam("MerchantTradeNo") String MerchantTradeNo,
 				HttpServletResponse response,
 				HttpServletRequest request) {
-//			MemberBean member =(MemberBean) session.getAttribute("member");	
-			MemberBean member =null ;
+			MemberBean member =(MemberBean) session.getAttribute("member");	
+			MemberBean memberCookie =null ;
 			String userid = null;
 			Cookie[] cookieList = request.getCookies();
 			
@@ -338,9 +339,23 @@ public class OrderController {
 					}
 				}
 			}
-			member = memberService.getMamberById(Integer.valueOf(userid)).get();
-			response.addHeader("SameSite", "None");
-			if (member!=null) {
+			if(userid != null) {
+				
+				memberCookie = memberService.getMamberById(Integer.valueOf(userid)).get();
+			}
+			if (memberCookie!=null) {
+				System.out.println("08是餅乾啦耖");
+				List<OrderBean> order = orderservice.findOrderByMemberBean(memberCookie);
+				model.addAttribute("id", memberCookie);
+				model.addAttribute("orderSet",order);
+			}else if(member!=null) {
+				System.out.println("08是Session啦");
+				List<OrderBean> order = orderservice.findOrderByMemberBean(member);
+				model.addAttribute("id", member);
+				model.addAttribute("orderSet",order);
+			}else {
+				System.out.println("08是死人啦");
+				member = memberService.getMamberById(1).get();
 				List<OrderBean> order = orderservice.findOrderByMemberBean(member);
 				model.addAttribute("id", member);
 				model.addAttribute("orderSet",order);

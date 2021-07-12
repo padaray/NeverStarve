@@ -98,6 +98,10 @@
     		<version>1.2.17</version>
 		</dependency>
 		
+		<dependency>
+    	<groupId>org.springframework.session</groupId>
+    	<artifactId>spring-session-core</artifactId>
+		</dependency>
 
 	</dependencies>
 

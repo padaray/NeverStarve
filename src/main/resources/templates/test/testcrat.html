@@ -113,11 +113,10 @@ $(function () {
     	        		  if (result.isConfirmed) {
     	        			  
    	       	          		Swal.fire('即將前往付款畫面', '', 'success')
-    	        			
     	        			setTimeout(function(){
    	       					uu=/*[[@{/Order/order}]]*/
    	       					window.location.href = uu
-   	       	            	},950) 
+   	       	            	},1000) 
     	        		  } else if (result.isDenied) {
     	        		    Swal.fire('繼續點餐吧，要點到吃飽為止唷:D', '', 'info')
     	        		  }
