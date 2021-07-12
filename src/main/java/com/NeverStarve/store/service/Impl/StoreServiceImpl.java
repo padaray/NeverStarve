@@ -13,12 +13,14 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.repository.StoreRepository;
@@ -43,8 +45,36 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public StoreBean save(StoreBean storeBean) {
+		//寫入圖片
+		MultipartFile storeImage = storeBean.getStoreImage();
+		if (storeImage != null && !storeImage.isEmpty()) {
+			String ImageFileName = storeImage.getOriginalFilename();
+			storeBean.setStoreImageName(ImageFileName);
+			try {
+				byte[] b = storeImage.getBytes();
+				Blob blob = new SerialBlob(b);
+				storeBean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
+			}
+		}
 		return storeRepository.save(storeBean) ;
 	}
+	
+	@Override
+	public Integer saveNoPic(StoreBean storeBean) {
+		Integer pkStoreId = storeBean.getPkStoreId();
+		String storeAccount = storeBean.getStoreAccount();
+		String storePassword = storeBean.getStorePassword();
+		String storeName = storeBean.getStoreName();
+		String storeAddress = storeBean.getStoreAddress();
+		String storePhone = storeBean.getStorePhone();
+		String storeType = storeBean.getStoreType();
+		Integer seatNumber = storeBean.getSeatNumber();
+		return storeRepository.saveNoPic(pkStoreId, storeAccount, storePassword, storeName, storeAddress, storePhone, storeType, seatNumber);
+	} 
+	
 
 	@Override
 	public Optional<StoreBean> findoneById(int id) {
@@ -179,6 +209,9 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public long getCityCount(String address) {
 		return storeRepository.countByStoreAddressContaining(address);
-	} 
+	}
+
+
+
 	
 }

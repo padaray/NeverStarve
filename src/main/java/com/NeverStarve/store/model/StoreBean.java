@@ -49,7 +49,7 @@ public class StoreBean implements Serializable{
 	String storeName;
 	@NotBlank
 	String storeAccount;
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message="請輸入至少8個字包含一個英文及數字")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message="請輸入至少8個字符包含一個英文及數字")
 	String storePassword;
 	
 	@Transient
