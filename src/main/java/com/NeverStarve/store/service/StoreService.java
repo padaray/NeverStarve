@@ -11,6 +11,8 @@ public interface StoreService {
 	
 	StoreBean save(StoreBean storeBean);
 	
+	Integer saveNoPic(StoreBean storeBean);
+	
 	Optional<StoreBean> findoneById(int id);
 	
 	List<StoreBean> findAll();

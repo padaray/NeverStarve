@@ -7,14 +7,17 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialBlob;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,30 +70,35 @@ public class StoreController {
 		
 	}
 	
+	
+	
 	//修改店家詳細資料
 	@PostMapping("/modifyInfo")
-	public String modifyInfo(StoreBean storeBean, BindingResult result) {
-	//確認兩次密碼輸入一樣
-		if(comfirmPassword(storeBean)) {
-			result.rejectValue("storeCheckPassword","confirmError" ,"密碼不一致");
-		}	
-		//寫入圖片
-		MultipartFile storeImage = storeBean.getStoreImage();
-		if (storeImage != null && !storeImage.isEmpty()) {
-			String ImageFileName = storeImage.getOriginalFilename();
-			storeBean.setStoreImageName(ImageFileName);
-			try {
-				byte[] b = storeImage.getBytes();
-				Blob blob = new SerialBlob(b);
-				storeBean.setCoverImage(blob);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
-			}
+	public String modifyInfo(@Valid @ModelAttribute("storeUser") StoreBean storeUser, BindingResult result, Model model) {
+		model.addAttribute("storeUser", storeUser);
+		storeUser.setStoreAddress(storeUser.getStoreCity() + " " + storeUser.getStoreTown() + " " + storeUser.getStoreAddress());
+		
+		if (result.hasErrors()) {
+			return "store/modifyInfo";
 		}
+		
+		//確認兩次密碼輸入一樣
+		if(comfirmPassword(storeUser)) {
+			result.rejectValue("storeCheckPassword", "confirmError", "密碼不一致");
+			return "store/modifyInfo";
+		}	
 		//預設店家等級為一
-		storeBean.setStoreLv(1);
-		storeService.save(storeBean);
+		storeUser.setStoreLv(1);
+		
+		//判斷是否有照片傳入
+		MultipartFile storePicture = storeUser.getStoreImage();
+		String ImageName = storePicture.getOriginalFilename();
+		if(ImageName.isEmpty()) {
+			storeService.saveNoPic(storeUser);
+		}else {
+			storeService.save(storeUser);
+		}
+		
 		return "redirect:/store/storeIndex";
 	}
 	//確認密碼是否依樣
