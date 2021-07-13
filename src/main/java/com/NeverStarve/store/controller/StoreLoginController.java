@@ -22,11 +22,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.NeverStarve.store.model.LoginBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
 
 @Controller
-@SessionAttributes({ "storeUser" })
+@SessionAttributes({"storeUser", "loginBean"})
 @RequestMapping("/store")
 public class StoreLoginController {
 
@@ -46,7 +47,7 @@ public class StoreLoginController {
 	public String register(@Valid StoreBean storeBean, BindingResult result) {
 
 		// 地址字串相加
-		storeBean.setStoreAddress(storeBean.getStoreCity() + storeBean.getStoreTown() + storeBean.getStoreAddress());
+		storeBean.setStoreAddress(storeBean.getStoreCity() + " " + storeBean.getStoreTown() + " " + storeBean.getStoreAddress());
 
 		// 確認帳號是否存在
 		if (storeService.accountExist(storeBean.getStoreAccount())) {
@@ -76,13 +77,13 @@ public class StoreLoginController {
 		}
 
 		storeService.save(storeBean);
-		return "store/login";
+		return "redirect:/store/login";
 	}
 
-	// 登入頁面頁面
+	// 進入登入的頁面
 	@GetMapping("/login")
 	public String loginPage(HttpServletRequest request, Model model) {
-		model.addAttribute("storeBean", new StoreBean());
+		model.addAttribute("loginBean", new LoginBean());
 		if (checkCookie(request, model)) {
 			return "redirect:/store/storeIndex";
 		}
@@ -91,12 +92,20 @@ public class StoreLoginController {
 
 	// 登入帳號
 	@PostMapping("/login")
-	public String login(@RequestParam String storeAccount, @RequestParam String storePassword,
-			HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String login(@Valid LoginBean loginBean, BindingResult result, HttpServletRequest request, 
+						HttpServletResponse response, Model model) {
+		if (result.hasErrors()) {
+			return "store/login";
+		}
+		
+		String storeAccount = loginBean.getStoreAccount();
+		String storePassword = loginBean.getStorePassword();
+		
 		StoreBean storeBean = storeService.findByStoreAccountAndStorePassword(storeAccount, storePassword);
 		if (storeBean != null) {
 			model.addAttribute("storeUser", storeBean);
 		} else {
+			result.rejectValue("accountOrPasswordError", "", "帳號或密碼錯誤");
 			return "store/login";
 		}
 		// 給cookie
