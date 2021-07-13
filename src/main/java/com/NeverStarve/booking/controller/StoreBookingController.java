@@ -129,24 +129,7 @@ public class StoreBookingController {
 			return "redirect:/booking/storeAllBookings";
 		}
 		
-//		storeService.findoneById(storeBean.getPkStoreId());
 		model.addAttribute("modBtb", modBtb);
-		
-//		Date modDate = btb.getBookingDate();
-//		Date modTime= btb.getBookingTime();
-//		Integer modPplNum = btb.getBookingNum();
-//		
-//		modBtb.setBookingDate(modDate);
-//		modBtb.setBookingTime(modTime);
-//		modBtb.setBookingNum(modPplNum);
-		
-//		StoreBean store = modBtb.getStoreBean();
-//		System.out.println(modBtb);
-//		model.addAttribute("modifyBtb", modBtb);
-//		model.addAttribute("btb", btb);
-		
-//		System.out.println(modBtb);
-//		bookingService.save(modBtb);
 		
 		return "booking/modifyBookingTable";
 	}
@@ -163,10 +146,10 @@ public class StoreBookingController {
 		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
 //		System.out.println("hi3: " + storeBean);
 		
-		btb.setPostTime(new Date());
+		btb.setPostTime(new Date()); //考慮是否更新時間也要設定
 		model.addAttribute("modBtb", btb);
 		
-		btb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
+		originBtb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
 		
 		originBtb.getMemberBean();
 //		System.out.println("hi4: " + originBtb.getMemberBean());

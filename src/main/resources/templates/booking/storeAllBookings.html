@@ -70,11 +70,6 @@
 											> ${#dates.format(booking.bookingDate,'yyyy 年 MM 月 dd 日')})">
 						<i class="bi bi-journal-x"></i> 取消預約
 					</button>
-<!-- 					<a th:href="@{'/StoreBooking/findBookings/' + ${booking.pkBookingNo}}"> -->
-<!-- 						<button class="btn btn-primary"> -->
-<!-- 							<i class='fa fa-calendar'></i> 修改預約 -->
-<!-- 						</button> -->
-<!-- 					</a> -->
 				</div>
 			</div>
 		</div>
@@ -84,9 +79,7 @@
 	</div>
 	
 		<script type="text/javascript" th:inline="javascript">
-	$().ready(function(){
-		console.log($(".modifyBtn"))
-		
+	$(function(){
 		$("span:contains('已取消')").parent().parent().parent()
 								   .addClass("bg-light text-secondary font-weight-lighter")
 								   .removeClass("text-info border border-info")
@@ -120,8 +113,12 @@
 	  				});	
 	  				Swal.fire('已成功取消預約', '', 'success')
 	  				
-	  				$(".canceled").attr("hidden",false)
-					$(this).attr("disabled", true)
+// 	  				$(".canceled").attr("hidden",false)
+	  				
+	  				//click取消預約按鈕後，按鈕disabled
+	  				$(this).attr("disabled", true)
+	  				//click取消預約按鈕後，修改預約按鈕也disabled
+	  				$(".modifyBtn").attr("disabled", true)
 	  				$(this).parent().addClass("bg-light text-secondary font-weight-lighter")
 	  								.removeClass("text-info border border-info")
 	  				$(this).parent().children().eq(0).html('<h4><span class="badge badge-secondary canceld"' 

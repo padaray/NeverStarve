@@ -87,6 +87,8 @@ public class BookingController {
 		
 		btb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
 		
+		//接service.save()的儲存成功或失敗(true or false)
+		
 		bookingService.save(btb);
 				
 		return "booking/bookingConfirm";
