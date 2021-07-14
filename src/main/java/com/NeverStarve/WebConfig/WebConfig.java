@@ -17,6 +17,7 @@ public class WebConfig implements WebMvcConfigurer{
 				.addPathPatterns("/store/storeIndex")
 				.addPathPatterns("/store/menu")
 				.addPathPatterns("/store/modifyInfo")
+				.addPathPatterns("/store/order")
 				.excludePathPatterns("/store/login")
 				.excludePathPatterns("/store/register");
 		

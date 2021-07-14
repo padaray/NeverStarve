@@ -29,7 +29,7 @@
 			</div>
 			<div class="form-group">
 				<label for="storePasswordId">密碼:</label>
-				<input type="text" name="storePassword" id="storePasswordId" class="form-controller" th:field="*{storePassword}">
+				<input type="password" name="storePassword" id="storePasswordId" class="form-controller" th:field="*{storePassword}">
 				<p class= "form-control-static text-danger"  th:errors="*{storePassword}"></p>
 				<p class= "form-control-static text-danger" th:errors="*{accountOrPasswordError}"></p>
 			</div>

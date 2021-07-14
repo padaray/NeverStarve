@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.repository.StoreRepository;
 import com.NeverStarve.store.service.StoreService;
@@ -57,6 +58,16 @@ public class StoreServiceImpl implements StoreService {
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
+			}
+		}else {
+			try {
+				byte[] b = toByteArrayJSON("/images/NeverStarvefavicon.png");
+				storeBean.setStoreImageName("NeverStarvefavicon.png");
+				Blob blob = new SerialBlob(b);
+				storeBean.setCoverImage(blob);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("檔案上傳發生異常else: " + e.getMessage());
 			}
 		}
 		return storeRepository.save(storeBean) ;
@@ -102,7 +113,8 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public StoreBean findCookieByStoreAccount(String storeAccount) {
-		return storeRepository.findCookieByStoreAccount(storeAccount);
+		StoreBean storeBean = storeRepository.findCookieByStoreAccount(storeAccount);
+		return tobase64simp(storeBean);
 	}
 
 	@Override
@@ -211,7 +223,24 @@ public class StoreServiceImpl implements StoreService {
 		return storeRepository.countByStoreAddressContaining(address);
 	}
 
-
+	//將單一menuBean變成base64
+	private StoreBean tobase64simp(StoreBean storeBean) {
+		if(storeBean != null) {
+			String filePath = "/images/NeverStarvefavicon.png";
+			StringBuffer stringBuff = new StringBuffer();
+			byte[] media = null;
+			NeverStarveUtil util = new NeverStarveUtil();
+			stringBuff.setLength(0);
+			String filename = storeBean.getStoreImageName();
+			Blob coverImage = storeBean.getCoverImage();
+			if (filename != null && coverImage != null) {
+				String base64img = util.blobToBase64(coverImage, context.getMimeType(filename));
+				storeBean.setBase64(base64img);
+				
+			} 
+		}
+		return storeBean;
+	}
 
 	
 }
