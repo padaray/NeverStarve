@@ -1,15 +1,17 @@
 package com.NeverStarve.booking.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,14 +66,23 @@ public class BookingController {
 			return "redirect:/";
 		}
 		model.addAttribute("store", store);
+		model.addAttribute("btb", btb);
 		System.out.println(store);
 		
 		return "booking/bookingTable";
 	}
 	
 	@PostMapping("/bookingPost")
-	public String postBooking(BookingTableBean btb, BindingResult result, Model model) {
+	public String postBooking(@Valid @ModelAttribute BookingTableBean btb, BindingResult result, Model model) {
 	
+		if(result.hasErrors()) {
+			System.out.println("hi1: 測試錯誤");
+			System.out.println(result.getFieldError().getDefaultMessage());
+			System.out.println(result.getFieldError().getField());
+			model.addAttribute("RequiredTime", "用餐時間必選");
+			return "booking/bookingTable";
+		}
+		
 		//取得會員的id傳進預約資料表中
 		//BookingTableBean的memberBean的cascadeType需改成cascade.MERGE 或不做級聯操作
 		MemberBean memberBean = (MemberBean) model.getAttribute("member"); 
@@ -87,9 +98,17 @@ public class BookingController {
 		
 		btb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
 		
-		//接service.save()的儲存成功或失敗(true or false)
+//		bookingService.save(btb);
 		
-		bookingService.save(btb);
+		//接service.save()的儲存成功或失敗(true or false)
+		if(bookingService.save(btb)) {
+			model.addAttribute("tOrF", true);
+			System.out.println("hi True");
+		} else {
+			model.addAttribute("tOrF", false);
+			System.out.println("hi false");
+			
+		}
 				
 		return "booking/bookingConfirm";
 	}

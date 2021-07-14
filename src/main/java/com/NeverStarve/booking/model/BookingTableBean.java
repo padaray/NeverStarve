@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -49,6 +50,7 @@ public class BookingTableBean {
 	@DateTimeFormat(pattern = "yyyy 年 MM 月 dd 日")
 	private Date bookingDate;
 	
+	@NotNull(message = "用餐時間必選")
 	@DateTimeFormat(pattern = "HH:mm")
 	private Date bookingTime;
 	

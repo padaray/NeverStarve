@@ -49,7 +49,7 @@
 				<strong>請選擇用餐日期、時間及人數</strong>
 			</p><hr>
 			<div>
-				<form action="#" th:action="@{/Booking/bookingPost}" method="post">
+				<form action="#" th:action="@{/Booking/bookingPost}" method="post" th:object="${btb}">
 <!-- 					<div class="form-group"> -->
 <!-- 						<label for="Member_Id_Id">會員ID(測試)</label> -->
 <!-- 						<input type="hidden" name="memberBean" id="Member_Id_Id" class="form-control" th:value="${session.member.pkMemberId}" > -->
@@ -101,12 +101,10 @@
 <!-- 							<label class="btn btn-outline-info"> -->
 <!-- 								<input type="radio" name="bookingTime" id="t1200" value="12:00">12:00 -->
 <!-- 							</label> -->
-<!-- 							<label class="btn btn-outline-info"> -->
-<!-- 								<input type="radio" name="bookingTime" id="t1300" value="13:00">13:00 -->
-<!-- 							</label> -->
+<!-- 								<input type="radio" name="bookingTime" th:fields="*{bookingTime}" hidden> -->
 						</div>
-<!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="12:00">12:00</button>	 -->
-<!-- 						<button type="button" name="bookingTime" id="bookingTimeId" class="btn btn-info" value="13:00">13:00</button>	 -->
+<!-- 							<p class= "form-control-static text-danger" th:errors="*{bookingTime}"></p> -->
+<!-- 							<p class= "form-control-static text-danger"  th:text="${RequiredTime}"></p> -->
 					<p id="testTime"> </p>
 					</div>
 					<div class="form-group">
@@ -155,6 +153,7 @@
 <!--     <script th:src="@{/js/main.js}"></script> -->
 	
 	<script th:inline="javascript">
+	
 	//jQ-ui的月曆工具
 	$( "#datepicker" ).datepicker({
         showOn: "both",
@@ -186,8 +185,9 @@
 		  $("#submitBookingId").prop("disabled", !$("#confirmSubmitId:checked").length);
 		});
 	
-	//選取預約日期後，ajax請求預約時段回傳至前端
-	$("#datepicker").change(function(){
+	//產生預約時段按鈕函數
+	createTimesBtns()
+	function createTimesBtns(){
 // 		console.log("change!");
 // 		console.log($(this).val());
 		storeId1 = /*[[@{/Booking/findTimesByDateAndStoreId/}]]*/
@@ -196,7 +196,7 @@
 			url: storeId1 + storeId2,
 			type: 'GET',
 			dataType: 'json',
-			data: {strDate : $(this).val()},
+			data: {strDate : $("#datepicker").val()},
 			contentType: 'application/json',
 			errors: function (xhr) {
 				alert("發生錯誤: " + xhr.status + " " + xhr.statusText);
@@ -208,18 +208,20 @@
 				$.each(response, function(index, element){
 					var strTime = element.bookingTime
 					strTime = strTime.substring(11, 16)
-					
-					bTimesBtn += '<label class="btn btn-outline-info" style="margin: 2px">' + 
-								 '<input type="radio" name="bookingTime" value="' + strTime + '">' + strTime +
+					bTimesBtn += '<label class="btn btn-outline-info bTimeBtn" style="margin: 2px">' + 
+								 '<input type="radio" name="bookingTime" th:fields="*{bookingTime}" value="' + strTime  + '" required>' + strTime +
 								 '</label>'
 				})
 // 					console.log(bTimesBtn)
 					$('#bTimesbtn').html(bTimesBtn)
-				;
 			}
-			
 		})
+	};
+	//選取預約日期後，ajax請求預約時段回傳至前端
+	$("#datepicker").change(function (){
+		createTimesBtns()
 	})
+
     </script>
 <!-- 				alert("success!" + ", " + "storeId: " + "[[${store.pkStoreId}]]"); -->
 <!-- 				$('#testTime').html('(測試用)抓到資料囉!') -->
