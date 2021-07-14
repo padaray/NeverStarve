@@ -57,7 +57,8 @@ public class OrderBean implements Serializable {
 	Double totalCost; // 整個訂單的總價
 	LocalDateTime orderDate; // 購買日期
 	Integer trading; // 交易成功的判斷
-
+	Integer confirm; // 店家接單跟取消
+	
 	@Transient
 	String ItemName;
 	
