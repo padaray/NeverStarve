@@ -184,9 +184,12 @@ public class StoreLoginController {
 	// 確認有沒有cookie
 	public boolean checkCookie(HttpServletRequest request, Model model) {
 		Cookie cookies[] = request.getCookies();
+		StoreBean storeBean = null;
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
-				StoreBean storeBean = storeService.findCookieByStoreAccount(cookie.getValue());
+				if(cookie.getName().equals("account")) {
+					storeBean = storeService.findCookieByStoreAccount(cookie.getValue());
+				}
 				if (storeBean != null) {
 					model.addAttribute("storeUser", storeBean);
 					return true;
@@ -196,76 +199,5 @@ public class StoreLoginController {
 		return false;
 	}
 
-	// 上傳圖片到本地
-	public void uploadImage(MultipartFile multipartFile) {
-
-		try {
-			// 保存圖片
-			File file = new File("C:\\_JSP\\workspace\\NeverStarve2.0\\src\\main\\resources\\static\\images\\"
-					+ multipartFile.getOriginalFilename());
-			multipartFile.transferTo(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("register");
-
-//		return modelAndView;
-	}
-
-//	//抓圖片
-//	@RequestMapping(value = "/getPicture/{bookId}", method = RequestMethod.GET)
-//	public ResponseEntity<byte[]> getPicture(HttpServletResponse resp, @PathVariable Integer bookId) {
-//		String filePath = "/resources/static/images/NoImage.jpg";
-//
-//		byte[] media = null;
-//		HttpHeaders headers = new HttpHeaders();
-//		String filename = "";
-//		int len = 0;
-//		BookBean bean = productService.getProductById(bookId);
-//		if (bean != null) {
-//			Blob blob = bean.getCoverImage();
-//			filename = bean.getFileName();
-//			if (blob != null) {
-//				try {
-//					len = (int) blob.length();
-//					media = blob.getBytes(1, len);
-//				} catch (SQLException e) {
-//					throw new RuntimeException("ProductController的getPicture()發生SQLException: " + e.getMessage());
-//				}
-//			} else {
-//				media = toByteArray(filePath);
-//				filename = filePath;
-//			}
-//		} else {
-//			media = toByteArray(filePath);
-//			filename = filePath;
-//		}
-//		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-//		String mimeType = context.getMimeType(filename);
-//		MediaType mediaType = MediaType.valueOf(mimeType);
-//		System.out.println("mediaType =" + mediaType);
-//		headers.setContentType(mediaType);
-//		ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
-//		return responseEntity;
-//	}
-
-//	private byte[] toByteArray(String filepath) {
-//		byte[] b = null;
-//		String realPath = context.getRealPath(filepath);
-//		System.out.println(realPath);
-//		try {
-//			File file = new File(realPath);
-//			long size = file.length();
-//			b = new byte[(int) size];
-//			InputStream fis = context.getResourceAsStream(filepath);
-//			fis.read(b);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return b;
 
 }

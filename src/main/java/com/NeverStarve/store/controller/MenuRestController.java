@@ -67,10 +67,8 @@ public class MenuRestController {
 		MultipartFile dishPicture = menuBean.getDishPicture();
 		String ImageName = dishPicture.getOriginalFilename();
 		if(ImageName.isEmpty()) {
-			System.out.println("123");
 			menuService.saveMenuListNoPic(menuBean);
 		}else {
-			System.out.println("456");
 			menuService.saveMenuList(menuBean);
 		}
 	}

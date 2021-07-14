@@ -50,16 +50,8 @@ public class StoreController {
 		}
 	}
 	
-//	//店家查看訂單 
-//	@GetMapping("/storeOrders")
-//	public String storeOrders(HttpServletRequest request,Model model) {
-//		if(!checkCookie(request, model)) {
-//			return "store/login";
-//		}
-//		return "store/storeOrders";
-//	}
 	
-	//修改店家詳細資料頁面
+	//修改店家頁面
 	@GetMapping("/modifyInfo")
 	public String modifyInfoPage(HttpServletRequest request, Model model) {
 		StoreBean storebean = checkCookie(request, model);
@@ -86,7 +78,7 @@ public class StoreController {
 		if(comfirmPassword(storeUser)) {
 			result.rejectValue("storeCheckPassword", "confirmError", "密碼不一致");
 			return "store/modifyInfo";
-		}	
+		}
 		//預設店家等級為一
 		storeUser.setStoreLv(1);
 		
@@ -101,6 +93,14 @@ public class StoreController {
 		
 		return "redirect:/store/storeIndex";
 	}
+	
+	@GetMapping("/findAll")
+	public String findAll(Model model){
+		List<StoreBean> storeall = storeService.findAll();
+		model.addAttribute("store",storeall);
+		return "store/testFindMenu";
+	}
+	
 	//確認密碼是否依樣
 	public boolean comfirmPassword(StoreBean storeBean) {
 		if(storeBean.getStorePassword().equals(storeBean.getStoreCheckPassword())){
@@ -109,7 +109,6 @@ public class StoreController {
 		return true;
 		
 	}
-	
 	
 	//確認有沒有cookie
 	public StoreBean checkCookie(HttpServletRequest request, Model model){
@@ -125,12 +124,6 @@ public class StoreController {
 		 	}
 		 }
 		 return storeBean;
-	}
-	@GetMapping("/findAll")
-	public String findAll(Model model){
-	List<StoreBean> storeall = storeService.findAll();
-		model.addAttribute("store",storeall);
-		return "store/testFindMenu";
 	}
 	
 }
