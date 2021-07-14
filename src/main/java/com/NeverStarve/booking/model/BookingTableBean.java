@@ -10,8 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.NeverStarve.member.model.MemberBean;
@@ -47,6 +50,7 @@ public class BookingTableBean {
 	@DateTimeFormat(pattern = "yyyy 年 MM 月 dd 日")
 	private Date bookingDate;
 	
+	@NotNull(message = "用餐時間必選")
 	@DateTimeFormat(pattern = "HH:mm")
 	private Date bookingTime;
 	
@@ -56,7 +60,7 @@ public class BookingTableBean {
 
 //	Double	totalAmount;
 	
-//	String	cancelTag;
+	Integer	cancelTag; //取消訂單: -1; 未取消: 1
 	
 	
 }

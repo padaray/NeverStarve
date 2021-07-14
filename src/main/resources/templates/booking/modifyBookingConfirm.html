@@ -32,14 +32,14 @@
 	<div th:insert="Generic :: Header"></div>
 	<div class="container" style="max-width: 700px; margin-top: 50px">
 <!-- 		<h3 class="page-header">確認訂位內容</h3> -->
-		<div class="jumbotron text-left" th:if="${tOrF == True}">
-			<p class="text-success text-center display-4" >
-				<strong>訂位成功!</strong>
+		<div class="jumbotron text-left">
+			<p class="text-success text-center display-4">
+				<strong>訂位修改成功!</strong>
 			</p>
 			<div>
-				<div class="" th:object="${btb}">
+				<div class="" th:object="${modBtb}">
 					<h4>訂位資訊：</h4><hr>
-					<p >預約餐廳：<span th:utext="${store.storeName}"></span> </p>
+					<p >預約餐廳：<span th:utext="${storeUser.storeName}"></span> </p>
 					<p >預約日期：<span th:utext="*{#dates.format(bookingDate,'yyyy 年 MM 月 dd 日')}"></span>
 						(<span th:utext="*{#dates.dayOfWeekNameShort(bookingDate)}"></span>)
 					 </p>
@@ -47,28 +47,32 @@
 					<p >預約時間：<span th:utext="*{#dates.format(bookingTime,'HH:mm')}"></span> </p>
 					<p >預約人數：<span th:utext="*{bookingNum}"></span> </p>
 				</div>
-			</div>
-			<div class="text-center">
-				<a href="#" class="btn btn-secondary" th:href="@{/}">回首頁</a>
+<!-- 				<form action="#" th:object="${btb}" method="post"> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="bookingDateId">用餐日期</label> -->
+<!--  						<input type="text" name="bookingDate" id="bookingDateId"  -->
+<!-- 								class="form-control" th:field="*{bookingDate}">  -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="bookingTimeId">用餐時間</label> <input type="text" -->
+<!-- 							name="bookingTime" id="bookingTimeId" class="form-control" -->
+<!-- 							th:field="*{bookingTime}"> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="bPeopleNumId">用餐人數</label> <input type="text" -->
+<!-- 							name="bPeopleNum" id="bPeopleNumId" class="form-control" -->
+<!-- 							th:field="*{bookingNum}"> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="bPeopleNumId">訂位訊息</label> <input type="text" -->
+<!-- 							name="bPeopleNum" id="bPeopleNumId" class="form-control"> -->
+<!-- 					</div> -->
+<!-- 				</form> -->
 			</div>
 		</div>
-		<div class="jumbotron text-left" th:if="${tOrF == false}">
-			<p class="text-danger text-center display-4" >
-				<strong>訂位失敗</strong>
-			</p>
-			<div>
-				<div class="text-center" th:object="${btb}">
-					<p>該時段或人數訂位已滿，無法預約。</p>
-					<p>請選擇其他時段或人數，謝謝您！</p>
-				</div>
-			</div>
-			<div class="text-center">
-<!-- 				<a href="#" class="btn btn-secondary" onclick="javascript:history.back()">返回</a> -->
-				<a href="#" class="btn btn-secondary" th:href="@{'/Booking/BookingByStoreId/' + ${store.pkStoreId}}">返回</a>
-<!-- 				<a href="#" class="btn btn-secondary" th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}">返回</a> -->
-			</div>
+		<div class="text-center">
+			<a href="#" class="btn btn-secondary" th:href="@{/}">回首頁</a>
 		</div>
-		
 	</div>
 </body>
 </html>
