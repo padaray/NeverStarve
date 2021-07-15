@@ -243,7 +243,7 @@ public class OrderController {
 			orderBean.setOrderDate(LocalDateTime.now().withNano(0));
 			orderBean.setShipping_address(addres);
 			orderBean.setTrading(0);
-			
+			orderBean.setConfirm(0);
 			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
 				productIDCookie.setMaxAge(0);
 				productQuantityCookie.setMaxAge(0);	
