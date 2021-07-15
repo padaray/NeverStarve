@@ -131,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
 		//拿到會員的資料
 		List<OrderBean> orderfindm = orderRepository.findOrdersByMemberBean(memberBean);
 		List<OrderBean> ordera = new ArrayList<OrderBean>();
-		for(int i=orderfindm.size()-1; i>0; i--) {
+		for(int i=orderfindm.size()-1; i>=0; i--) {
 			 OrderBean getorderf = orderfindm.get(i);
 			 ordera.add(getorderf);
 		}
