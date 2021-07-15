@@ -243,7 +243,7 @@ public class OrderController {
 			orderBean.setOrderDate(LocalDateTime.now().withNano(0));
 			orderBean.setShipping_address(addres);
 			orderBean.setTrading(0);
-			
+			orderBean.setConfirm(0);
 			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
 				productIDCookie.setMaxAge(0);
 				productQuantityCookie.setMaxAge(0);	
@@ -252,6 +252,7 @@ public class OrderController {
 				response.addCookie(productIDCookie);
 				response.addCookie(productQuantityCookie);
 			}
+			System.out.println("存到訂單"+orderBean);
 		
 		}
 
@@ -308,14 +309,26 @@ public class OrderController {
 
 		//0707訂單的展示
 		@GetMapping("order/NowOrder")
-		public String getNowOrder(Model model,
-				@CookieValue(value = "userId") String userid) {
+		public String getNowOrder(Model model,HttpServletRequest request) {
+			String userid = null;
+			MemberBean memberCookie =null ;
+			Cookie[] cookieList = request.getCookies();
+			if (cookieList != null) {
+				for (Cookie cookie : cookieList) {
+					if(cookie.getName().equals("userId")) {
+						userid = cookie.getValue();
+					}
+				}
+			}
+			if(userid != null) {
+				
+				memberCookie = memberService.getMamberById(Integer.valueOf(userid)).get();
+			}
 			
-			MemberBean m =null ;
-			m = memberService.getMamberById(Integer.valueOf(userid)).get();
-			if (m!=null) {
-				List<OrderBean> order = orderservice.findOrderByMemberBean(m);
-				model.addAttribute("id", m);
+			if (memberCookie!=null) {
+				List<OrderBean> order = orderservice.findOrderByMemberBean(memberCookie);
+				System.out.println("測試有沒有抓到"+order);
+				model.addAttribute("id", memberCookie);
 				model.addAttribute("orderSet",order);
 			}
 			return "order/OrderMember" ;

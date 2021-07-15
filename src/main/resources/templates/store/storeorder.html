@@ -16,7 +16,33 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" />
 <script src="/js/jquery.twzipcode.min.js"></script>
-<style type="text/css"></style>
+<style type="text/css">
+
+
+</style>
+<script type="text/javascript">
+$(function() {
+$(".confirm").click(function(){
+	var abc = $(this).parent().parent().find(".id").text()
+	console.log(abc)
+	$.ajax({ type: "GET", 
+		url:"[[@{/store/changeOrderConfirm}]]"+"?id="+abc,
+		dataType: "json", 
+		contentType: "application/json",
+		success: function (response) {
+			reponse.text()
+			$(".confirmtext").text()
+		}
+	});
+	
+})
+$(".cancel").click(function(){
+	
+	
+})
+
+})
+</script>
 <title>查看訂單</title>
 </head>
 <body>
@@ -35,20 +61,24 @@
 					<th>筆記</th>
 					<th>城市</th>
 					<th>金額</th>
-					<th>貿易狀態</th>
-					<th>狀態</th>
+					<th>付款狀態</th>
+					<th>訂單狀態</th>
+					<th>接受/取消訂單</th>
 				</tr>
 			</thead>
 			<tbody>	
 					<tr th:each="order,iterStat:${orderList}">
 						<td th:text="${iterStat.count}"></td>
-						<td style="display:none" th:text="${order.pkOrderId}"></td>
+						<td class="id" style="display:none" th:text="${order.pkOrderId}"></td>
 						<td th:text="${order.orderDate}"></td>
 						<td th:text="${order.order_note}"></td>
 						<td th:text="${order.shipping_address}"></td>
 						<td th:text="${order.totalCost}"></td>
 						<td th:text="${order.trading}"></td>
-						<td><a href="#">刪除</a></td>
+						<td class="confirmtext" th:text="${order.confirm}"></td>
+						<td><input class="confirm" type="button" name="confirm" value="確定" />
+							<input class="cancel" type="button" name="cancel" value="取消" /></td>
+<!-- 						<td><a href="#">刪除</a></td> -->
 <!-- 						<td><a th:href="@{'/books/input/' + ${menu.id}}">修改書本</a></td> -->
 					</tr>
 			</tbody>
