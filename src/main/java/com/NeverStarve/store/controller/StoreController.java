@@ -76,7 +76,19 @@ public class StoreController {
 			result.rejectValue("storeCheckPassword", "confirmError", "密碼不一致");
 			return "store/modifyInfo";
 		}
-		// 預設店家等級為一
+		
+		//將存進來的菜品種類相加
+		String sttp = "";
+		List<String> storeTypeL = storeUser.getStoreTypeList();
+		if(storeTypeL != null) {
+			for(String ST: storeTypeL) {
+				sttp += ST + ",";
+			}
+			String goSttp =  sttp.substring(0, sttp.length()-1);
+			storeUser.setStoreType(goSttp);
+		}
+		
+		//預設店家等級為一
 		storeUser.setStoreLv(1);
 
 		// 判斷是否有照片傳入
