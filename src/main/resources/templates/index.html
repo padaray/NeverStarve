@@ -37,14 +37,130 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<!-- seewt alert -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	
+<script type="text/javascript" th:inline="javascript">
+$(function(){
+	var checkCode =  /*[[${checkCode}]]*/
+	console.log()
+	var sessionCode = /*[[${session.code}]]*/
+	console.log()
+	var checkPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+	var password =null ; 
+
+if(checkCode){
+	 Swal.fire({
+		  title: '請輸入驗證碼',
+		  input: 'text',
+		  showCancelButton: false,
+		  confirmButtonText: '確認',
+		  showLoaderOnConfirm: false,
+		  inputValidator: (value) => {
+			    if (!value) {
+			      return 'You need to write something!'
+			    }
+			  },
+		  preConfirm: function(randomNumber) {
+				console.log(randomNumber);
+				console.log(sessionCode);
+
+		    return new Promise(function(resolve, reject) {
+		     
+		        if (randomNumber === sessionCode) {
+		          resolve();
+		        } else {
+		     showLoaderOnConfirm: true
+		     Swal.showValidationMessage('驗證碼錯誤，請重新輸入')
+		        }      
+		    });
+		   
+		  },
+		  allowOutsideClick: true
+		}).then((result) => {
+			if (result.isConfirmed) {
+				
+				    Swal.fire({
+				     title:'驗證碼正確',
+				     html: "",
+		    	     icon: 'success'
+				   	 }).then(function(){
+				   	
+		//=============修改新密碼===================
+				
+					Swal.fire({
+					  title: '請輸入您的新密碼',
+					  input: 'password',
+					  showCancelButton: false,
+					  confirmButtonText: '確認',
+					  showLoaderOnConfirm: false,
+					  inputValidator: (value) => {
+						  
+			    if (!checkPassword.test(value)) {
+			    	return '請輸入至少8個字包含一個英文及數字'	
+			    }
+			   password = value; 
+			  },
+				   		
+			}).then((result) =>{ 
+				if (result.isConfirmed){
+					 Swal.fire({
+						title:'密碼儲存成功', 
+						html: "",
+						icon: 'success'
+					 }).then((result)=>{
+				if (result.isConfirmed){
+					
+				var login = /*[[@{/Member/login}]]*/
+	            	window.location.href=login;
+				}
+			})	
+//------------------------------AJAX---------------------
+			var email = /*[[${session.email}]]*/
+			console.log(password)
+			console.log(email)
+			var update = /*[[@{/updateOnlyPassword}]]*/	
+			$.post({
+	            url: update,
+	            data:{"password" : password , "email" : email },
+	            success: function (res) {
+	            
+	            	
+	            	
+	            }
+	        })
+
+
+// -----------------------------AJAX---------------------
+				}
+			})   		
+	//==========================================				   		 
+				   	 })
+				   	 
+				   	 
+				   	 
+			}
+	
+	})
+
+}
+
+
+	
+	
+	})	
+
+</script>	
+	
+	
 </head>
 
 <body>
 	<div th:insert="Generic :: Header"></div>
 
-<!-- 	<div th:if="${session.member!=null}"> -->
-<!-- 		<div th:if="${session.member.userType=='0'}" -->
-<!-- 			th:insert="backstage/BackstageHeader :: Header"></div> -->
+	<div th:if="${session.member!=null}">
+		<div th:if="${session.member.userType=='0'}"
+			th:insert="backstage/BackstageHeader :: Header"></div>
 
 <!-- 		<p> -->
 <!-- 			<span th:text="用戶姓名+${session.member.name}">用戶姓名</span> -->
@@ -57,7 +173,7 @@
 <!-- 			<span th:case="0">管理員</span> <span th:case="1">一般會員</span> <span -->
 <!-- 				th:case="2">高級會員</span> <span th:case="3">白金會員</span> -->
 <!-- 		</p> -->
-<!-- 	</div> -->
+	</div>
 	<div class="jumbotron jumbotron-fluid" style="height: 250px">
 		<div class="container" style="width: 1000px;">
 			<h1>NeverStarve 永不飢餓萬事屋</h1>

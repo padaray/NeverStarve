@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import com.NeverStarve.member.model.MemberBean;
 
 public interface MemberService {
@@ -52,9 +54,13 @@ public interface MemberService {
 
 	public MemberBean cookieLogin(String email);
 	
-	//寄新密碼
+	//寄簡單信件
     void sendSimpleMail(String to, String subject, String content);
-
-	
+    //記驗證信
+    void sendForgotPasswordMail(String to, String subject, String content);
+    //確認session CODE跟用戶的CODE是否一致
+    boolean checkCode(String userCode);
+    //忘記密碼的更新
+    void updateForgotPassword (String password,String email);
  
 }

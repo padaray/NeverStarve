@@ -3,10 +3,14 @@ package com.NeverStarve.member.repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.NeverStarve.member.model.MemberBean;
@@ -36,7 +40,10 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	List<MemberBean> findByEmailContaining(String email);	//模糊搜尋會員信箱
 	
 	MemberBean findCookieByEmail(String email);
-	
+	@Transactional
+	@Modifying
+	@Query(nativeQuery = true,value = "UPDATE MEMBER SET password =?1 WHERE email =?2")
+	void updateForgotPassword(String password,String email );
 	
 //	List<MemberBean> findByRegisterTimeBetween(Timestamp start,Timestamp end);
 //	

@@ -1,5 +1,6 @@
 package com.NeverStarve.member.controller;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.servlet.http.Cookie;
@@ -50,6 +51,7 @@ public class LoginController {
 	@PostMapping("/login") 
 	public String loginPost( @Valid LoginBean bean,BindingResult result, Model model,
 							HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("初始時間"+LocalDateTime.now());
 		
 		if (result.hasErrors()) {
 			return "member/login";
@@ -66,7 +68,7 @@ public class LoginController {
 			member.setLongTime(new Date());
 			member.setMemberCity("1");
 			member.setMemberTown("1");
-			memberService.sendSimpleMail(member.getEmail(), "NeverStarve永不飢餓萬事屋", "您好"+member.getName()+"，您已於"+member.getLongTime()+"時登入");
+			memberService.sendSimpleMail(member.getEmail(), "[NeverStarve通知] 登入通知", "您好"+member.getName()+"，您已於"+member.getLongTime()+"時登入");
 			memberService.save(member);
 		}else {
 			// NG, 登入失敗, userid與密碼的組合錯誤，放相關的錯誤訊息到 errorMsgMap 之內
@@ -85,8 +87,13 @@ public class LoginController {
 		if (type.equals("0")) {
 			return "redirect:/Backstage/";
 		}
+		System.out.println("結束時間"+LocalDateTime.now());
+
 		return "redirect:/Member/memberDetail";
+		
 	}
+	
+
 	
 	
 	private void processCookies(MemberBean bean , HttpServletRequest request , HttpServletResponse response) {

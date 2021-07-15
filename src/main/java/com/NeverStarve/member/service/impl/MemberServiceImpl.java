@@ -13,9 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.NeverStarve.member.model.MemberBean;
@@ -40,6 +45,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	ServletContext context;
+	
+	@Autowired
+	HttpSession session;
 	
 	NeverStarveUtil nsUtil = new NeverStarveUtil();
 	
@@ -132,7 +140,12 @@ public class MemberServiceImpl implements MemberService {
 				bean.setCoverImage(orinigBean.getCoverImage());
 			}
 		}
-		return memberDao.save(bean);
+	    MemberBean member = memberDao.save(bean);
+	    if(member.getCoverImage()!=null) {
+	    	
+	    	member.setBas64(nsUtil.blobToBase64( member.getCoverImage(),context.getMimeType(member.getFileName())));
+	    } 
+		return member; 
 	}
 
 	@Override
@@ -417,6 +430,7 @@ public class MemberServiceImpl implements MemberService {
 	
 	
 	@Override
+	@Async	//非同步請求的註釋
 	public void sendSimpleMail(String to, String subject, String content) {
 		
 		SimpleMailMessage message = new SimpleMailMessage();
@@ -433,4 +447,72 @@ public class MemberServiceImpl implements MemberService {
  		
 	}
 
+	@Override
+	public void sendForgotPasswordMail(String email, String subject, String content) {
+		
+		SimpleMailMessage message = new SimpleMailMessage();
+		//從哪裡寄出
+        message.setFrom(from);
+        //收件人
+        message.setTo(email);
+        //信的開頭
+        message.setSubject(subject);
+        
+        String code = randomCode();
+        //信的內容
+        message.setText(content+"您的驗證碼是:"+code);
+        
+        //将随机数放置到session中
+        session.setAttribute("code",code);
+        
+        //将email存入session中
+        session.setAttribute("email",email);
+        mailSender.send(message);
+	}
+
+	   /**
+     * 随机生成6位数的验证码
+     * @return String code
+     */
+    public String randomCode(){
+        StringBuilder str = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            str.append(random.nextInt(9));
+        }
+        return str.toString();
+    }
+	
+    
+    /**
+     * 检验验证码是否一致
+     * @param userVo
+     * @param session
+     * @return
+     */
+	@Override
+    public boolean checkCode(String userCode){
+        //获取session中的验证信息
+        String code = (String) session.getAttribute("code");
+        
+        //获取表单中的提交的验证信息
+        String uc = userCode;
+
+         if (code.equals(uc)){
+        	 
+            return true;
+        }
+		return false;
+    
+    }
+
+	
+    //忘記密碼的更新
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void updateForgotPassword(String password, String email) {
+
+		memberDao.updateForgotPassword(password,email);
+	}
+	
 }
