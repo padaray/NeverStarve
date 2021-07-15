@@ -23,7 +23,7 @@ import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
 
 @Controller
-@SessionAttributes({"storeUser", "loginBean"})
+@SessionAttributes({"storeUser", "loginBean", "storeBean"})
 @RequestMapping("/store")
 public class StoreLoginController {
 
@@ -40,8 +40,9 @@ public class StoreLoginController {
 
 	// 註冊表單輸入
 	@PostMapping("/register")
-	public String register(@Valid StoreBean storeBean, BindingResult result) {
-
+	public String register(@Valid StoreBean storeBean, BindingResult result, Model model) {
+		
+		model.addAttribute("storeBean", storeBean);
 		// 地址字串相加
 		storeBean.setStoreAddress(storeBean.getStoreCity() + " " + storeBean.getStoreTown() + " " + storeBean.getStoreAddress());
 
@@ -68,8 +69,8 @@ public class StoreLoginController {
 			for(String ST: storeTypeL) {
 				sttp += ST + ",";
 			}
-			sttp.substring(0, sttp.length()-1);
-			storeBean.setStoreType(sttp);
+			String goSttp =  sttp.substring(0, sttp.length()-1);
+			storeBean.setStoreType(goSttp);
 		}
 
 		storeService.save(storeBean);
@@ -83,7 +84,7 @@ public class StoreLoginController {
 		if (checkCookie(request, model)) {
 			return "redirect:/store/storeIndex";
 		}
-		return "store/login";
+		return "/Member/login";
 	}
 
 	// 登入帳號
@@ -91,7 +92,7 @@ public class StoreLoginController {
 	public String login(@Valid LoginBean loginBean, BindingResult result, HttpServletRequest request, 
 						HttpServletResponse response, Model model) {
 		if (result.hasErrors()) {
-			return "member/login";
+			return "Member/login";
 		}
 		
 		String storeAccount = loginBean.getEmail();
@@ -102,7 +103,7 @@ public class StoreLoginController {
 			model.addAttribute("storeUser", storeBean);
 		} else {
 			result.rejectValue("emailOrPasswordError", "", "帳號或密碼錯誤");
-			return "member/login";
+			return "Member/login";
 		}
 		// 給cookie
 		processCookies(storeAccount, storePassword, request, response);
@@ -141,12 +142,12 @@ public class StoreLoginController {
 		Cookie cookiePassword = null;
 
 		cookieAccount = new Cookie("account", storeAccount);
-		cookieAccount.setMaxAge(2 * 60 * 60); // Cookie的存活期: 2小時
+		cookieAccount.setMaxAge(6 * 60 * 60); // Cookie的存活期: 6小時
 		cookieAccount.setPath(request.getContextPath()); // cookie設置路徑(抓到首頁NeverStarve前)
 
 //		String encodePassword = GlobalService.encryptString(password);
 		cookiePassword = new Cookie("password", storePassword);
-		cookiePassword.setMaxAge(2 * 60 * 60); // Cookie的存活期: 2小時
+		cookiePassword.setMaxAge(6 * 60 * 60); // Cookie的存活期: 6小時
 		cookiePassword.setPath(request.getContextPath());
 
 		// 給前段創立cookie
@@ -164,11 +165,11 @@ public class StoreLoginController {
 		String password = "";
 
 		cookieAccount = new Cookie("account", account);
-		cookieAccount.setMaxAge(0); // Cookie的存活期: 2小時
+		cookieAccount.setMaxAge(0); // Cookie的存活期: 
 		cookieAccount.setPath(request.getContextPath()); // cookie設置路徑(抓到首頁NeverStarve前)
 
 		cookiePassword = new Cookie("password", password);
-		cookiePassword.setMaxAge(0); // Cookie的存活期: 2小時
+		cookiePassword.setMaxAge(0); // Cookie的存活期: 
 		cookiePassword.setPath(request.getContextPath());
 
 		// 給前段創立cookie

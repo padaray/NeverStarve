@@ -21,6 +21,24 @@
 <script>
 $(function () {
 	
+	//讓後端傳來的菜色種類做切割
+	let storeTpUse = $("#storeTypeId").val().split(",");
+	let strStoreType = "";
+    for(j = 0; j < storeTpUse.length; j++){
+    	strStoreType += "<label class='btn btn-outline-info'> <input type='checkBox' name='storeTypeList' value='" + storeTpUse[j] + "'>" + storeTpUse[j] + "</label>";
+    }
+	$(".storeTypeDiv").html(strStoreType);
+	
+    //讓種類增加一籃可輸入欄位
+//     $(".storeTypeDiv").on("click", ".newType", function() {
+    $(".newType").click(function(){
+    	var nType = $(".other").val();
+    	console.log(nType);
+    	var nTypeApp = "<label class='btn btn-outline-info'> <input type='checkBox' name='storeTypeList' value='" + nType + "'>" + nType + "</label>";
+    	$(".storeTypeDiv").append(nTypeApp);
+    })
+    
+	//座位人數的加減
 	$(".min").click(function(){
 		var min = $(this).next().val();
 		var object = $(this).parent();
@@ -44,25 +62,27 @@ $(function () {
 		}
 	})
 	
-//刪除菜單的提示訊息
-$("#submitbutton").click(function(){
-	
-	Swal.fire({
-		title: '確定送出修改資料?',
-		icon: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: '是',
-		cancelButtonText: '否',
-	}).then((result) => {
-		if (result.isConfirmed) {
-			setTimeout(function(){$("#updateForm").submit();}, 1200);
-			
-		}
+	//刪除菜單的提示訊息
+	$("#submitbutton").click(function(){
 		
+		Swal.fire({
+			title: '確定送出修改資料?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '是',
+			cancelButtonText: '否',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				setTimeout(function(){$("#updateForm").submit();}, 1200);
+				
+			}
+			
+		})
 	})
-})
+
+
 	
 	
 	
@@ -116,9 +136,15 @@ $("#submitbutton").click(function(){
 						<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storePhone')}" th:errors="*{storePhone}"></p>
 					</div>
 					
-					<div class="form-group">
-						<label for="storeTypeId">菜色種類:</label> 
+					<div class="form-group" style="display: none">
+						<label for="storeTypeId">菜色種類:</label>
 						<input type="text" name="storeType" id="storeTypeId" class="form-control" th:field="*{storeType}">
+					</div>
+					
+					<div class="form-group">
+						<label >菜色種類:</label>
+						<div class="storeTypeDiv btn-group-toggle" data-toggle="buttons"></div>
+						<input type='text' class='form-control other' placeholder='其他'><input type="button" class='newType btn btn-secondary' value="新增種類">
 					</div>
 					
 					<div class="form-group">
@@ -144,7 +170,7 @@ $("#submitbutton").click(function(){
 				<div class="buttPlace d-flex justify-content-center" style="margin: 10px">
 					<div class="d-flex justify-content-between"  style="width: 170px">
 						<button id="submitbutton"class="btn btn-primary text-center">送出</button>
-						<a href="javascript:history.go(-1)"><button class="btn btn-secondary">返回前頁</button></a>
+						<a th:href="@{/store/storeIndex}"><button class="btn btn-secondary">返回前頁</button></a>
 					</div>	
 				</div>	
 			</div>
