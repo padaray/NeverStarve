@@ -9,5 +9,5 @@ public interface StoreOrderService {
 
 	List<OrderBean> getOrderByStoreBean(StoreBean storeBean);
 	
-	
+	boolean changeConfirm(Integer orderId,Integer confirm);
 }
