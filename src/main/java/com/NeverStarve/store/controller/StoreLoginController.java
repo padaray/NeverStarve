@@ -1,7 +1,5 @@
 package com.NeverStarve.store.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -17,12 +15,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.NeverStarve.store.model.LoginBean;
+import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
 
@@ -95,18 +91,18 @@ public class StoreLoginController {
 	public String login(@Valid LoginBean loginBean, BindingResult result, HttpServletRequest request, 
 						HttpServletResponse response, Model model) {
 		if (result.hasErrors()) {
-			return "store/login";
+			return "member/login";
 		}
 		
-		String storeAccount = loginBean.getStoreAccount();
-		String storePassword = loginBean.getStorePassword();
+		String storeAccount = loginBean.getEmail();
+		String storePassword = loginBean.getPassword();
 		
 		StoreBean storeBean = storeService.findByStoreAccountAndStorePassword(storeAccount, storePassword);
 		if (storeBean != null) {
 			model.addAttribute("storeUser", storeBean);
 		} else {
-			result.rejectValue("accountOrPasswordError", "", "帳號或密碼錯誤");
-			return "store/login";
+			result.rejectValue("emailOrPasswordError", "", "帳號或密碼錯誤");
+			return "member/login";
 		}
 		// 給cookie
 		processCookies(storeAccount, storePassword, request, response);
@@ -126,7 +122,7 @@ public class StoreLoginController {
 		if (checkCookie(request, model)) {
 			deleteCookie(request, response);
 		}
-		return "redirect:/store/login";
+		return "redirect:/";
 	}
 
 	// 確認密碼是否依樣
