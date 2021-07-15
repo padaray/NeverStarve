@@ -8,21 +8,21 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
 	crossorigin="anonymous"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
-	crossorigin="anonymous"></script>
+<!-- <script -->
+<!-- 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" -->
+<!-- 	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" -->
+<!-- 	crossorigin="anonymous"></script> -->
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 
 <!-- i標籤小圖 -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!-- bootstrap 5 樣式 -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
-	crossorigin="anonymous">
+<!-- <link -->
+<!-- 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" -->
+<!-- 	rel="stylesheet" -->
+<!-- 	integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" -->
+<!-- 	crossorigin="anonymous"> -->
 <!-- 首頁樣式 -->
 <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />
 <!-- 網站小圖 -->
@@ -153,6 +153,79 @@ if(checkCode){
 </script>	
 	
 	
+<script th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<script>
+ $(function(){
+	 showType()
+	 
+	 function showType(){
+		let typels = $(".card").find(".type");
+		
+		for(i = 0;i<typels.length;i++){
+			let eachtype = typels.eq(i).text().split(",");
+			let str = "";
+			for(j = 0;j < eachtype.length;j++){
+				str += "<button class='eachtype'>"+eachtype[j]+"</button>";
+			}
+			$(".card").find(".typebt").eq(i).html(str)
+		}
+	 }
+	 
+	 $(".storeimg").load(function(){
+
+		 console.log("載入完成！");
+
+		});
+	 
+	 function ifnoimg(){
+		 
+		 
+		 
+	 }
+	 
+	 function ajaxgettype(){
+		 let type = $(this).text();
+		 $.ajax({
+				type:"POST",
+				url:"[[@{/store/storetype}]]"+"/"+type,
+				success:function (data) {
+					$("#allcard").empty();
+					let str = "";
+					$.each(data, function(index, store){ 
+						str +='<div class="col-sm-3"><div class="card">'+
+						'<a href="[[@{/shop/getMenuByStoreId}]]"'+'/' + store.pkStoreId+'>';
+						if(store.base64 == null){
+							str+='<img  class="card-img-top basicimg" src = "images/NeverStarveicon.png" ></a>'
+						}else{
+							str+='<img class="card-img-top storeimg" src="'+store.base64+'"></a>'
+						}
+						str += '<a href="[[@{/shop/getMenuByStoreId}]]"'+'/' + store.pkStoreId+'>'+
+						store.storeName+'</a>'+
+						'<span class="type" hidden="hidden">'+store.storeType+'</span>'+
+						'<div class = "typebt"></div>'+
+						'<span>'+store.storePhone+'</span>'+
+						'<span>'+store.storeAddress+'</span></div></div>';
+					
+					})
+					$("#allcard").html(str);
+					showType();
+					$(".eachtype").click(ajaxgettype);
+			}
+	 	})
+	 }
+	 	
+	 $(".eachtype").click(ajaxgettype);
+	 
+	
+
+
+ 
+
+
+
+})
+</script>	
+
 </head>
 
 <body>
@@ -224,68 +297,23 @@ if(checkCode){
 	<div class="container" style="width: 1000px;" th:object="${stores}">
 		<h1>美食店家</h1>
 		<p>在這裡尋找您想要的餐廳吧！</p>
-		<div class="row">
-			<div class="col-sm-3" th:each="store, iterStat : ${stores}">
+		<div class="row" id="allcard">
+			<div class="col-sm-3 " th:each="store, iterStat : ${stores}">
 				<div class="card">
+					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}">
+					<img class="card-img-top storeimg" th:src="${store.base64}" th:if="${store.storeImageName!=null}">
+					<img  class="card-img-top basicimg" src = "images/NeverStarveicon.png" th:if="${store.storeImageName==null}">
+						</a>
 					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}"
-						th:text="${store.storeName}"> <img class="card-img-top"
-						th:src="@{${store.base64}}" alt="Card image test"> Basic
-						card
-						<div class="card-body" th:text="${store.storeName}">test1</div>
-						<p>test2</p>
+						th:text="${store.storeName}">
 					</a>
+					<span class="type" th:text="${store.storeType}" hidden="hidden"></span>
+					<div class = "typebt"></div>
+					<span th:text="${store.storePhone}"></span>
+					<span th:text="${store.storeAddress}"></span>
+					
 				</div>
 			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<a th:href="@{/}" class="card-body">Basic card
-						<div>test1</div>
-						<p>test2</p>
-					</a>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{'/store/'+${storeId}}">Basic card3</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{/}">Basic card</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{/}">Basic card</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{/}">Basic card</a>
-					</div>
-				</div>
-			</div>
-			<!-- 			<div class="col-sm-3"> -->
-			<!-- 				<div class="card"> -->
-			<!-- 					<div class="card-body"> -->
-			<!-- 						<a th:href="@{/}">Basic card</a> -->
-			<!-- 					</div> -->
-			<!-- 				</div> -->
-			<!-- 			</div> -->
-			<!-- 			<div class="col-sm-3"> -->
-			<!-- 				<div class="card"> -->
-			<!-- 					<div class="card-body"> -->
-			<!-- 						<a th:href="@{/}">Basic card</a> -->
-			<!-- 					</div> -->
-			<!-- 				</div> -->
-			<!-- 			</div> -->
 		</div>
 	</div>
 

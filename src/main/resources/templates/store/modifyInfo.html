@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
-	crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
 	crossorigin="anonymous"></script>
@@ -15,70 +11,194 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
 	crossorigin="anonymous"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" />
-<script src="/js/jquery.twzipcode.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript" src="/NeverStarve/js/jquery-2.2.3.min.js"></script>
+<script th:src="@{/js/jquery.twzipcode.min.js}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+$(function () {
+	
+	//讓後端傳來的菜色種類做切割
+	let storeTpUse = $("#storeTypeId").val().split(",");
+	let strStoreType = "";
+    for(j = 0; j < storeTpUse.length; j++){
+    	strStoreType += "<label class='btn btn-outline-info'> <input type='checkBox' name='storeTypeList' value='" + storeTpUse[j] + "'>" + storeTpUse[j] + "</label>";
+    }
+	$(".storeTypeDiv").html(strStoreType);
+	
+    //讓種類增加一籃可輸入欄位
+//     $(".storeTypeDiv").on("click", ".newType", function() {
+    $(".newType").click(function(){
+    	var nType = $(".other").val();
+    	console.log(nType);
+    	var nTypeApp = "<label class='btn btn-outline-info'> <input type='checkBox' name='storeTypeList' value='" + nType + "'>" + nType + "</label>";
+    	$(".storeTypeDiv").append(nTypeApp);
+    })
+    
+	//座位人數的加減
+	$(".min").click(function(){
+		var min = $(this).next().val();
+		var object = $(this).parent();
+		min	--;
+		if(min < 0){
+			min = 0;
+		}
+		$(this).next().val(min)
+	})
+	
+	$(".add").click(function(){
+		var object = $(this).parent();	
+		var add = $(this).prev().val();
+		add ++;
+		$(this).prev().val(add);
+	})
+	
+	$("#seatNumberId").change(function(){
+		if($(this).val() == ""){
+			$(this).val(0);
+		}
+	})
+	
+	//刪除菜單的提示訊息
+	$("#submitbutton").click(function(){
+		
+		Swal.fire({
+			title: '確定送出修改資料?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '是',
+			cancelButtonText: '否',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				setTimeout(function(){$("#updateForm").submit();}, 1200);
+				
+			}
+			
+		})
+	})
+
+
+	
+	
+	
+})
+</script>
 <title>修改資料</title>
 </head>
 <body>
-	<div class="container text-left" style="max-width: 500px">
-		<h3 class="page-header">資料修改</h3>
-		<div class="jumbotron">
-			<form th:action="@{/store/modifyInfo}" method="post" th:object="${storeUser}" enctype="multipart/form-data">
-				<input type="hidden" name="pkStoreId" th:field="*{pkStoreId}">
-				<div class="form-group">
-					<label for="storeAccountId">帳號:</label> 
-					<input type="text" name="storeAccount" id="storeAccountId" class="form-control" th:field="*{storeAccount}">
-				</div>
-				<div class="form-group">
-					<label for="storePasswordId">修改密碼:</label> 
-					<input type="text" name="storePassword" id="storePasswordId" class="form-control" th:field="*{storePassword}">
-				</div>
-				<div class="form-group">
-					<label for="storeCheckPasswordId">確認密碼:</label> 
-					<input type="text" name="storeCheckPassword" id="storeCheckPasswordId" class="form-control">
-					<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('storeCheckPassword')}" th:errors="*{storeCheckPassword}"></p>
-				</div>
-				<div class="form-group">
-					<label for="storeNameId">店家名稱:</label> 
-					<input type="text" name="storeName" id="storeNameId" class="form-control" th:field="*{storeName}">
-				</div>
-				<div class="form-group">
-					<label for="storeAddressId">地址:</label>
-					<input type="text" name="storeAddress" id="storeAddressId" class="form-control" th:field="*{storeAddress}">
+<div th:insert="GenericStore :: Header"></div>
+	<div class="container text-left">
+		<div style="max-width: 500px; margin: auto">
+			<h3 class="page-header">資料修改</h3>
+			<div class="jumbotron">
+				<form th:action="@{/store/modifyInfo}" method="post" th:object="${storeUser}" enctype="multipart/form-data" id="updateForm">
+					<span id="prompt"></span>
+					<input type="hidden" name="pkStoreId" th:field="*{pkStoreId}">
+					<div class="form-group">
+						<label for="storeAccountId">帳號:</label> 
+						<input type="text" name="storeAccount" id="storeAccountId" class="form-control" readonly th:field="*{storeAccount}">
+						<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeAccount')}" th:errors="*{storeAccount}"></p>
+					</div>
 					
-				</div>
-				<div class="form-group">
-					<label for="storePhoneId">電話:</label> 
-					<input type="text" name="storePhone" id="storePhoneId" class="form-control" th:field="*{storePhone}">
-				</div>
-				<div class="form-group">
-					<label for="storeTypeId">菜色種類:</label> 
-					<input type="text" name="storeType" id="storeTypeId" class="form-control" th:field="*{storeType}">
-				</div>
-				<div class="form-group">
-					<label for="seatNumberId">座位數量:</label> 
-					<input type="text" name="seatNumber" id="seatNumberId" class="form-control" th:field="*{seatNumber}">
-				</div>
-				<div class="form-group">
-					<label for="storeImageId">商家照片:</label> 
-					<input type="file" name="storeImage" id="storeImageId" class="form-control">
-				</div>
-				<p>
-					<button type="submit" class="btn btn-primary text-center">送出</button>
-				</p>
-			</form>
+					<div class="form-group">
+						<label for="storePasswordId">修改密碼:</label> 
+						<input type="text" name="storePassword" id="storePasswordId" class="form-control" th:field="*{storePassword}">
+						<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storePassword')}" th:errors="*{storePassword}"></p>
+					</div>
+					
+					<div class="form-group">
+						<label for="storeCheckPasswordId">確認密碼:</label> 
+						<input type="text" name="storeCheckPassword" id="storeCheckPasswordId" class="form-control">
+						<p class= "form-control-static text-danger" th:if="${#fields.hasErrors('storeCheckPassword')}" th:errors="*{storeCheckPassword}"></p>
+					</div>
+					
+					<div class="form-group">
+						<label for="storeNameId">店家名稱:</label> 
+						<input type="text" name="storeName" id="storeNameId" class="form-control" th:field="*{storeName}">
+						<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeName')}" th:errors="*{storeName}"></p>
+					</div>
+					
+					<div class="form-group">
+						<label for="storeAddressId">地址:</label>
+						<div id="twzipcode"></div>
+						<input type="text" name="storeAddress" id="storeAddressId" class="form-control" th:field="*{storeAddress}">
+						<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storeAddress')}" th:errors="*{storeAddress}"></p>
+					</div>
+					
+					<div class="form-group">
+						<label for="storePhoneId">電話:</label> 
+						<input type="text" name="storePhone" id="storePhoneId" class="form-control" th:field="*{storePhone}">
+						<p class="form-control-static text-danger" th:if="${#fields.hasErrors('storePhone')}" th:errors="*{storePhone}"></p>
+					</div>
+					
+					<div class="form-group" style="display: none">
+						<label for="storeTypeId">菜色種類:</label>
+						<input type="text" name="storeType" id="storeTypeId" class="form-control" th:field="*{storeType}">
+					</div>
+					
+					<div class="form-group">
+						<label >菜色種類:</label>
+						<div class="storeTypeDiv btn-group-toggle" data-toggle="buttons"></div>
+						<input type='text' class='form-control other' placeholder='其他'><input type="button" class='newType btn btn-secondary' value="新增種類">
+					</div>
+					
+					<div class="form-group">
+						<label for="seatNumberId">座位數量:</label><br> 
+						<div class="input-group" style="width: 50%">
+							<input class="min btn btn-secondary form-control" value="-"  type="button"/>
+							<input class="form-control text-center" name="seatNumber" id="seatNumberId" type="text" value="0" th:field="*{seatNumber}"/>
+							<input class="add btn btn-secondary form-control" value="+" type="button" />
+						</div>	
+					</div>
+					
+					<div class="form-group">
+						<label>目前照片:</label> 
+						<img style="width: 435px" th:src='${storeUser.base64}'>
+					</div>
+					
+					<div class="form-group">
+						<label for="storeImageId">替換照片:</label> 
+						<input type="file" name="storeImage" id="storeImageId" class="form-control">
+					</div>
+				</form>
+				
+				<div class="buttPlace d-flex justify-content-center" style="margin: 10px">
+					<div class="d-flex justify-content-between"  style="width: 170px">
+						<button id="submitbutton"class="btn btn-primary text-center">送出</button>
+						<a th:href="@{/store/storeIndex}"><button class="btn btn-secondary">返回前頁</button></a>
+					</div>	
+				</div>	
+			</div>
 		</div>
 	</div>
-<script>
+	
+	
+<script th:inline="javascript">
+
+var address=/*[[${session.storeUser.storeAddress}]]*/
+
+	first =address.indexOf(" ") //取第一個空白處索引直
+	end =address.lastIndexOf(" ") //取第二個 空白處索引直
+	var city =address.substr(0, first) //城市=第零個位置取到第一個空白處不含空白
+	var town =address.substring(first+1, end) //區 =第一個空白處+1 不取空白 取到第二個空白 不含空白
+	var street =address.substr(end+1) //地址等於 第二個空白不含空白 取以後
+	
+	$("#storeAddressId").val(street)
+
+
 $("#twzipcode").twzipcode({
-	countySel: "臺北市", // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
-	districtSel: "大安區", // 地區預設值
-	zipcodeIntoDistrict: true,  // 郵遞區號自動顯示在地區
-	css: ["county form-control", "district form-control", "zipcode form-control"], // 自訂 "城市"、"地區" class 名稱
-	countyName: "storeCity", // 自訂城市 select 標籤的 name 值
-	districtName: "storeTown" // 自訂地區 select 標籤的 name 值
-	});
+countySel: city, // 城市預設值, 字串一定要用繁體的 "臺", 否則抓不到資料
+districtSel: town, // 地區預設值
+zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
+css: ["city form-control", "town form-control"], // 自訂 "城市"、"地區" class 名稱
+countyName: "storeCity", // 自訂城市 select 標籤的 name 值
+districtName: "storeTown" // 自訂地區 select 標籤的 name 值
+});
 </script>
 </body>
 </html>

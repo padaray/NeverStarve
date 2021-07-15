@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
 
 public interface StoreService {
 	
 	StoreBean save(StoreBean storeBean);
+	
+	Integer saveNoPic(StoreBean storeBean);
 	
 	Optional<StoreBean> findoneById(int id);
 	
@@ -24,6 +25,8 @@ public interface StoreService {
 	Map<Integer, StoreBean> getPageStores(int pageNo);
 	Map<Integer, StoreBean> findByAddressContaining(int pageNo,String adderss);
 
+	List<StoreBean> findBystoreType(String storeType);
+	
 	int getRecordsPerPage();
 
 	long getRecordCounts();
@@ -35,4 +38,6 @@ public interface StoreService {
 	long getTotalcount();
 	
 	long getCityCount(String address);
+	
+	
 }

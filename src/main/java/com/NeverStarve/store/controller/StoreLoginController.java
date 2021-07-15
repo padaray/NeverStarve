@@ -1,7 +1,5 @@
 package com.NeverStarve.store.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -17,16 +15,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.NeverStarve.member.model.LoginBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
 
 @Controller
-@SessionAttributes({ "storeUser" })
+@SessionAttributes({"storeUser", "loginBean", "storeBean"})
 @RequestMapping("/store")
 public class StoreLoginController {
 
@@ -43,10 +40,11 @@ public class StoreLoginController {
 
 	// 註冊表單輸入
 	@PostMapping("/register")
-	public String register(@Valid StoreBean storeBean, BindingResult result) {
-
+	public String register(@Valid StoreBean storeBean, BindingResult result, Model model) {
+		
+		model.addAttribute("storeBean", storeBean);
 		// 地址字串相加
-		storeBean.setStoreAddress(storeBean.getStoreCity() + storeBean.getStoreTown() + storeBean.getStoreAddress());
+		storeBean.setStoreAddress(storeBean.getStoreCity() + " " + storeBean.getStoreTown() + " " + storeBean.getStoreAddress());
 
 		// 確認帳號是否存在
 		if (storeService.accountExist(storeBean.getStoreAccount())) {
@@ -71,33 +69,41 @@ public class StoreLoginController {
 			for(String ST: storeTypeL) {
 				sttp += ST + ",";
 			}
-			sttp.substring(0, sttp.length()-1);
-			storeBean.setStoreType(sttp);
+			String goSttp =  sttp.substring(0, sttp.length()-1);
+			storeBean.setStoreType(goSttp);
 		}
 
 		storeService.save(storeBean);
-		return "store/login";
+		return "redirect:/store/login";
 	}
 
-	// 登入頁面頁面
+	// 進入登入的頁面
 	@GetMapping("/login")
 	public String loginPage(HttpServletRequest request, Model model) {
-		model.addAttribute("storeBean", new StoreBean());
+		model.addAttribute("loginBean", new LoginBean());
 		if (checkCookie(request, model)) {
 			return "redirect:/store/storeIndex";
 		}
-		return "store/login";
+		return "/Member/login";
 	}
 
 	// 登入帳號
 	@PostMapping("/login")
-	public String login(@RequestParam String storeAccount, @RequestParam String storePassword,
-			HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String login(@Valid LoginBean loginBean, BindingResult result, HttpServletRequest request, 
+						HttpServletResponse response, Model model) {
+		if (result.hasErrors()) {
+			return "Member/login";
+		}
+		
+		String storeAccount = loginBean.getEmail();
+		String storePassword = loginBean.getPassword();
+		
 		StoreBean storeBean = storeService.findByStoreAccountAndStorePassword(storeAccount, storePassword);
 		if (storeBean != null) {
 			model.addAttribute("storeUser", storeBean);
 		} else {
-			return "store/login";
+			result.rejectValue("emailOrPasswordError", "", "帳號或密碼錯誤");
+			return "Member/login";
 		}
 		// 給cookie
 		processCookies(storeAccount, storePassword, request, response);
@@ -117,7 +123,7 @@ public class StoreLoginController {
 		if (checkCookie(request, model)) {
 			deleteCookie(request, response);
 		}
-		return "redirect:/store/login";
+		return "redirect:/";
 	}
 
 	// 確認密碼是否依樣
@@ -136,12 +142,12 @@ public class StoreLoginController {
 		Cookie cookiePassword = null;
 
 		cookieAccount = new Cookie("account", storeAccount);
-		cookieAccount.setMaxAge(2 * 60 * 60); // Cookie的存活期: 2小時
+		cookieAccount.setMaxAge(6 * 60 * 60); // Cookie的存活期: 6小時
 		cookieAccount.setPath(request.getContextPath()); // cookie設置路徑(抓到首頁NeverStarve前)
 
 //		String encodePassword = GlobalService.encryptString(password);
 		cookiePassword = new Cookie("password", storePassword);
-		cookiePassword.setMaxAge(2 * 60 * 60); // Cookie的存活期: 2小時
+		cookiePassword.setMaxAge(6 * 60 * 60); // Cookie的存活期: 6小時
 		cookiePassword.setPath(request.getContextPath());
 
 		// 給前段創立cookie
@@ -159,11 +165,11 @@ public class StoreLoginController {
 		String password = "";
 
 		cookieAccount = new Cookie("account", account);
-		cookieAccount.setMaxAge(0); // Cookie的存活期: 2小時
+		cookieAccount.setMaxAge(0); // Cookie的存活期: 
 		cookieAccount.setPath(request.getContextPath()); // cookie設置路徑(抓到首頁NeverStarve前)
 
 		cookiePassword = new Cookie("password", password);
-		cookiePassword.setMaxAge(0); // Cookie的存活期: 2小時
+		cookiePassword.setMaxAge(0); // Cookie的存活期: 
 		cookiePassword.setPath(request.getContextPath());
 
 		// 給前段創立cookie
@@ -175,9 +181,12 @@ public class StoreLoginController {
 	// 確認有沒有cookie
 	public boolean checkCookie(HttpServletRequest request, Model model) {
 		Cookie cookies[] = request.getCookies();
+		StoreBean storeBean = null;
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
-				StoreBean storeBean = storeService.findCookieByStoreAccount(cookie.getValue());
+				if(cookie.getName().equals("account")) {
+					storeBean = storeService.findCookieByStoreAccount(cookie.getValue());
+				}
 				if (storeBean != null) {
 					model.addAttribute("storeUser", storeBean);
 					return true;
@@ -187,76 +196,5 @@ public class StoreLoginController {
 		return false;
 	}
 
-	// 上傳圖片到本地
-	public void uploadImage(MultipartFile multipartFile) {
-
-		try {
-			// 保存圖片
-			File file = new File("C:\\_JSP\\workspace\\NeverStarve2.0\\src\\main\\resources\\static\\images\\"
-					+ multipartFile.getOriginalFilename());
-			multipartFile.transferTo(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("register");
-
-//		return modelAndView;
-	}
-
-//	//抓圖片
-//	@RequestMapping(value = "/getPicture/{bookId}", method = RequestMethod.GET)
-//	public ResponseEntity<byte[]> getPicture(HttpServletResponse resp, @PathVariable Integer bookId) {
-//		String filePath = "/resources/static/images/NoImage.jpg";
-//
-//		byte[] media = null;
-//		HttpHeaders headers = new HttpHeaders();
-//		String filename = "";
-//		int len = 0;
-//		BookBean bean = productService.getProductById(bookId);
-//		if (bean != null) {
-//			Blob blob = bean.getCoverImage();
-//			filename = bean.getFileName();
-//			if (blob != null) {
-//				try {
-//					len = (int) blob.length();
-//					media = blob.getBytes(1, len);
-//				} catch (SQLException e) {
-//					throw new RuntimeException("ProductController的getPicture()發生SQLException: " + e.getMessage());
-//				}
-//			} else {
-//				media = toByteArray(filePath);
-//				filename = filePath;
-//			}
-//		} else {
-//			media = toByteArray(filePath);
-//			filename = filePath;
-//		}
-//		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-//		String mimeType = context.getMimeType(filename);
-//		MediaType mediaType = MediaType.valueOf(mimeType);
-//		System.out.println("mediaType =" + mediaType);
-//		headers.setContentType(mediaType);
-//		ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
-//		return responseEntity;
-//	}
-
-//	private byte[] toByteArray(String filepath) {
-//		byte[] b = null;
-//		String realPath = context.getRealPath(filepath);
-//		System.out.println(realPath);
-//		try {
-//			File file = new File(realPath);
-//			long size = file.length();
-//			b = new byte[(int) size];
-//			InputStream fis = context.getResourceAsStream(filepath);
-//			fis.read(b);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return b;
 
 }

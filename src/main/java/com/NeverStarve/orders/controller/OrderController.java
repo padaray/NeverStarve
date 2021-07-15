@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tomcat.util.http.SameSiteCookies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -192,6 +191,7 @@ public class OrderController {
 			carProductQuantity.setPath(request.getContextPath());
 			response.addCookie(carProductID);
 			response.addCookie(carProductQuantity);
+			
 		}
 
 	}
@@ -243,7 +243,11 @@ public class OrderController {
 			orderBean.setOrderDate(LocalDateTime.now().withNano(0));
 			orderBean.setShipping_address(addres);
 			orderBean.setTrading(0);
-			
+			orderBean.setConfirm(0);
+			String memberkey = memberCookie.getValue();
+			System.out.println("87878787"+memberkey);
+			 Optional<MemberBean> memberBean = memberService.getMamberById(Integer.valueOf(memberkey));
+			 memberService.sendSimpleMail(memberBean.get().getEmail(), "[NeverStarve通知] 訂單建立成功囉!", "您的訂單已經建立成功");
 			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
 				productIDCookie.setMaxAge(0);
 				productQuantityCookie.setMaxAge(0);	
@@ -302,15 +306,13 @@ public class OrderController {
 		aio.setReturnURL("http://localhost:9527/NeverStarve/Order/returnURL");
 		aio.setOrderResultURL("http://localhost:9527/NeverStarve/Order/order/EcpayOrder");
 		ecpay.setHi(aioOne.aioCheckOut(aio,null));
-		System.out.println(aioOne.aioCheckOut(aio,null));
 		return ecpay ;
 	}
 
 		//0707訂單的展示
 		@GetMapping("order/NowOrder")
 		public String getNowOrder(Model model,
-				@CookieValue(value = "userId") String userid,
-				SameSiteCookies String ) {
+				@CookieValue(value = "userId") String userid) {
 			
 			MemberBean m =null ;
 			m = memberService.getMamberById(Integer.valueOf(userid)).get();
@@ -326,11 +328,37 @@ public class OrderController {
 		public String getEcpayOrder(Model model,
 				@RequestParam("RtnCode") int RtnCode,
 				@RequestParam("MerchantTradeNo") String MerchantTradeNo,
-				@CookieValue(value = "userId") String userid) {
-//			MemberBean member =(MemberBean) session.getAttribute("member");	
-			MemberBean member =null ;
-			member = memberService.getMamberById(Integer.valueOf(userid)).get();
-			if (member!=null) {
+				HttpServletResponse response,
+				HttpServletRequest request) {
+			MemberBean member =(MemberBean) session.getAttribute("member");	
+			MemberBean memberCookie =null ;
+			String userid = null;
+			Cookie[] cookieList = request.getCookies();
+			
+			if (cookieList != null) {
+				for (Cookie cookie : cookieList) {
+					if(cookie.getName().equals("userId")) {
+						userid = cookie.getValue();
+					}
+				}
+			}
+			if(userid != null) {
+				
+				memberCookie = memberService.getMamberById(Integer.valueOf(userid)).get();
+			}
+			if (memberCookie!=null) {
+				System.out.println("08是餅乾啦耖");
+				List<OrderBean> order = orderservice.findOrderByMemberBean(memberCookie);
+				model.addAttribute("id", memberCookie);
+				model.addAttribute("orderSet",order);
+			}else if(member!=null) {
+				System.out.println("08是Session啦");
+				List<OrderBean> order = orderservice.findOrderByMemberBean(member);
+				model.addAttribute("id", member);
+				model.addAttribute("orderSet",order);
+			}else {
+				System.out.println("08是死人啦");
+				member = memberService.getMamberById(1).get();
 				List<OrderBean> order = orderservice.findOrderByMemberBean(member);
 				model.addAttribute("id", member);
 				model.addAttribute("orderSet",order);

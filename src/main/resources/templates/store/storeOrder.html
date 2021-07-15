@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+	crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.15-rc1/jquery.twzipcode.min.js" />
+<script src="/js/jquery.twzipcode.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- i標籤小圖 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"> <!-- 新版I標籤小圖 -->
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+$(function() {
+$(".confirm").click(function(){
+	 abc = $(this).parent().parent().find(".id").text()
+	 bca =$(".confirm").click
+	bca=1
+	ddd =$(this).parent().parent().find(".count").text()
+	btn =$(this).siblings()
+	btn2 =$(this) 
+	
+	Swal.fire({
+  title: '確定要同意該筆訂單嗎?',
+  text: "確定後就不可以後悔囉!!!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '是，我確定要同意!',
+  cancelButtonText:'不，讓我再考慮考慮!'
+}).then((result) => {
+  if (result.isConfirmed) {
+
+		$.ajax({ type: "GET", 
+			url:"[[@{/store/changeConfirm}]]"+"/"+abc+"/"+bca,
+			dataType: "json", 
+			contentType: "application/json",
+			success: function (response) {
+				console.log(ddd);
+				$(".confirmtext").eq(ddd-1).html("已確認訂單")
+				btn.attr("hidden", true)
+				btn2.attr("hidden", true)
+			}
+		});
+    Swal.fire(
+      '確認成功!',
+      '訂單已經確認成功!',
+      'success'
+    )
+  }
+})
+	
+	
+	
+})
+$(".cancel").click(function(){
+	 abc = $(this).parent().parent().find(".id").text()
+	 bca =$(".cancel").click
+	bca=2
+	 ddd =$(this).parent().parent().find(".count").text()
+	 btn =$(this).siblings()
+	btn2 =$(this) 
+	Swal.fire({
+  title: '確定要取消該筆訂單嗎?',
+  text: "取消後就不可以後悔囉!!!!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '是，我確定要取消!',
+  cancelButtonText:'不，讓我再考慮考慮!'
+}).then((result) => {
+  if (result.isConfirmed) {
+	  $.ajax({ type: "GET", 
+			url:"[[@{/store/changeConfirm}]]"+"/"+abc+"/"+bca,
+			dataType: "json", 
+			contentType: "application/json",
+			success: function (response) {
+				$(".confirmtext").eq(ddd-1).html("已取消訂單")
+				btn.attr("hidden", true)
+				btn2.attr("hidden", true)
+			}
+		});
+    Swal.fire(
+      '取消成功!!',
+      '訂單已經取消成功',
+      'success'
+    )
+  }
+})
+	
+	
+})
+$(function(){
+		var elements = document.getElementsByClassName("dd");
+		var ddlist = $(".dd").get()
+		for(let i=0; i<ddlist.length; i++){
+			ddlist[i].innerHTML=ddlist[i].innerHTML.replace("-","年").replace("-","月").replace("T","日").substr(0,19)
+		}
+	})
+})
+</script>
+<title>查看訂單</title>
+</head>
+<body>
+
+<div th:insert="GenericStore :: Header"></div>
+	<div class="container">
+		<h2 class="page-header">查看訂單</h2>
+<!-- 		<div class="alert alert-success alert-dismissable" th:unless="${#strings.isEmpty(message)}"> -->
+<!--         &times; = X符號 -->
+<!-- 			<a href="#" class="close" data-dismiss="alert">&times;</a> -->
+<!-- 			<span th:text="${message}">修改完成</span> -->
+<!-- 		</div> -->
+		<table class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th>序號</th>
+					<th>日期</th>
+					<th>筆記</th>
+					<th>城市</th>
+					<th>金額</th>
+					<th>付款狀態</th>
+					<th>訂單狀態</th>
+					<th>接受/取消訂單</th>
+				</tr>
+			</thead>
+			<tbody>	
+					<tr th:each="order,iterStat:${orderList}">
+						<td class="count" th:text="${iterStat.count}"></td>
+						<td class="id" style="display:none" th:text="${order.pkOrderId}"></td>
+						<td  class="dd" id="date" th:text="${order.orderDate}"></td>
+						<td th:text="${order.order_note}"></td>
+						<td th:text="${order.shipping_address}"></td>
+						<td th:text="${order.totalCost}"></td>
+						<td valign="middle" th:switch="${order.trading}"> 
+						<span th:case="0">未付款</span> 
+						<span th:case="1">已付款</span>
+						</td>
+						<td class="confirmtext" th:switch="${order.confirm}">
+						<span th:case="0">未確認訂單</span> 
+						<span th:case="1">已接受訂單</span>
+						<span th:case="2">已取消訂單</span>
+						</td>
+						
+						<td class="tdbutton">
+							<input class="confirm" type="button" name="confirm" value="確定" th:if="${order.confirm}==0"/>
+							<input class="cancel" type="button" name="cancel" value="取消" th:if="${order.confirm}==0" />
+						</td>
+<!-- 						<td><a href="#">刪除</a></td> -->
+<!-- 						<td><a th:href="@{'/books/input/' + ${menu.id}}">修改書本</a></td> -->
+					</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
