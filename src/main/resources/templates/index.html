@@ -37,13 +37,83 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<script>
+ $(function(){
+	 showType()
+	 
+	 function showType(){
+		let typels = $(".card").find(".type");
+		
+		for(i = 0;i<typels.length;i++){
+			let eachtype = typels.eq(i).text().split(",");
+			let str = "";
+			for(j = 0;j < eachtype.length;j++){
+				str += "<button class='eachtype'>"+eachtype[j]+"</button>";
+			}
+			$(".card").find(".typebt").eq(i).html(str)
+		}
+	 }
+	 
+	 $(".storeimg").load(function(){
+
+		 console.log("載入完成！");
+
+		});
+	 
+	 function ifnoimg(){
+		 
+		 
+		 
+	 }
+	 
+	 function ajaxgettype(){
+		 let type = $(this).text();
+		 $.ajax({
+				type:"POST",
+				url:"[[@{/store/storetype}]]"+"/"+type,
+				success:function (data) {
+					$("#allcard").empty();
+					let str = "";
+					$.each(data, function(index, store){ 
+						str +='<div class="col-sm-3"><div class="card">'+
+						'<a href="[[@{/shop/getMenuByStoreId}]]"'+'/' + store.pkStoreId+'>';
+						if(store.base64 == null){
+							str+='<img  class="card-img-top basicimg" src = "images/NeverStarveicon.png" ></a>'
+						}else{
+							str+='<img class="card-img-top storeimg" src="'+store.base64+'"></a>'
+						}
+						str += '<a href="[[@{/shop/getMenuByStoreId}]]"'+'/' + store.pkStoreId+'>'+
+						store.storeName+'</a>'+
+						'<span class="type" hidden="hidden">'+store.storeType+'</span>'+
+						'<div class = "typebt"></div>'+
+						'<span>'+store.storePhone+'</span>'+
+						'<span>'+store.storeAddress+'</span></div></div>';
+					
+					})
+					$("#allcard").html(str);
+					showType();
+					$(".eachtype").click(ajaxgettype);
+			}
+	 	})
+	 }
+	 	
+	 $(".eachtype").click(ajaxgettype);
+	 
 	
+
+
+ 
+
+
+
+})
+</script>	
 
 </head>
 
 <body>
 	<div th:insert="Generic :: Header"></div>
-
 <!-- 	<div th:if="${session.member!=null}"> -->
 <!-- 		<div th:if="${session.member.userType=='0'}" -->
 <!-- 			th:insert="backstage/BackstageHeader :: Header"></div> -->
@@ -110,68 +180,23 @@
 	<div class="container" style="width: 1000px;" th:object="${stores}">
 		<h1>美食店家</h1>
 		<p>在這裡尋找您想要的餐廳吧！</p>
-		<div class="row">
-			<div class="col-sm-3" th:each="store, iterStat : ${stores}">
+		<div class="row" id="allcard">
+			<div class="col-sm-3 " th:each="store, iterStat : ${stores}">
 				<div class="card">
+					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}">
+					<img class="card-img-top storeimg" th:src="${store.base64}" th:if="${store.storeImageName!=null}">
+					<img  class="card-img-top basicimg" src = "images/NeverStarveicon.png" th:if="${store.storeImageName==null}">
+						</a>
 					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}"
-						th:text="${store.storeName}"> <img class="card-img-top"
-						th:src="@{${store.base64}}" alt="Card image test"> Basic
-						card
-						<div class="card-body" th:text="${store.storeName}">test1</div>
-						<p>test2</p>
+						th:text="${store.storeName}">
 					</a>
+					<span class="type" th:text="${store.storeType}" hidden="hidden"></span>
+					<div class = "typebt"></div>
+					<span th:text="${store.storePhone}"></span>
+					<span th:text="${store.storeAddress}"></span>
+					
 				</div>
 			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<a th:href="@{/}" class="card-body">Basic card
-						<div>test1</div>
-						<p>test2</p>
-					</a>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{'/store/'+${storeId}}">Basic card3</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{/}">Basic card</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{/}">Basic card</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div class="card">
-					<div class="card-body">
-						<a th:href="@{/}">Basic card</a>
-					</div>
-				</div>
-			</div>
-			<!-- 			<div class="col-sm-3"> -->
-			<!-- 				<div class="card"> -->
-			<!-- 					<div class="card-body"> -->
-			<!-- 						<a th:href="@{/}">Basic card</a> -->
-			<!-- 					</div> -->
-			<!-- 				</div> -->
-			<!-- 			</div> -->
-			<!-- 			<div class="col-sm-3"> -->
-			<!-- 				<div class="card"> -->
-			<!-- 					<div class="card-body"> -->
-			<!-- 						<a th:href="@{/}">Basic card</a> -->
-			<!-- 					</div> -->
-			<!-- 				</div> -->
-			<!-- 			</div> -->
 		</div>
 	</div>
 

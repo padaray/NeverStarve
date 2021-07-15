@@ -47,8 +47,7 @@ public class StoreRestController {
 			msg = "0";
 		}
 		
-		return "1";
-//		return msg;
+		return msg;
 	}
 
 }
