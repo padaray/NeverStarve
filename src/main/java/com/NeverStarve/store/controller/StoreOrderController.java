@@ -50,6 +50,6 @@ public boolean checkCookie(HttpServletRequest request, Model model){
 	 }
 	 return false;
 }
-
-
+ 
+   
 }
