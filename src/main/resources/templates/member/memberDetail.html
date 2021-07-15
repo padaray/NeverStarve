@@ -21,6 +21,8 @@
 <script th:src="@{/js/jquery.twzipcode.min.js}"></script>
 <!-- 網頁小圖 -->
 <link rel="shortcut icon" th:href="@{/favicon.ico}" />
+<!-- seewt alert -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script  type="text/javascript" th:inline="javascript">
 
@@ -32,23 +34,42 @@ $(function () {
 	
     $('#submitbutton').click(function (e) {
     	
-    	if(window.confirm("確認修改內容")){
     		//alert(“確定”);
     		
-        //Prevent default submission of form
+        //Prevent default submission of form       $('#updateForm').serialize()
         e.preventDefault();
  
         //Remove previous errors
         $('input').next('span').remove();
- 
+        
+    	Swal.fire({
+  		  title: '要儲存改變嗎?',
+  		  showDenyButton: true,
+//   		  showCancelButton: true,
+  		  confirmButtonText: '儲存',
+  		  denyButtonText: '取消儲存',
+  		}).then((result) => {
+  			 /* Read more about isConfirmed, isDenied below */
+  		  if (result.isConfirmed) {
+  			
+  		var formData = new FormData($("#updateForm")[0]);
+ 		var updateUrl = /*[[@{/Member/update}]]*/
+  			 		
         $.post({
-            url:'http://localhost:9527/NeverStarve/Member/update',
-            data:$('#updateForm').serialize(),
+            url:updateUrl,
+            data:formData,
+            contentType: false, 
+            processData: false, 
             success: function (res) {
                 if (res.validated) {
                     //take your successful action here; you may want to redirect to another page         
                     $("#prompt").html('<span class="error" style="color: green;" >更新成功</span>')
                     $('#submitbutton').attr('disabled', true);
+                    Swal.fire('修改成功!', '', 'success').then((result)=>{
+//           			history.go(0)
+//             			alert("你好")
+            			location.reload()
+              		})  
                 } else {
                 	  $("#prompt").html('<span class="error" style="color: red;" >更新失敗</span>')
                     $.each(res.errorMessages, function (key, value) {                   	
@@ -57,13 +78,16 @@ $(function () {
                 }
             }
         })
-        return true;
-		}else{
-		//alert(“取消”);
-		return false;
-		} 
+  		}else if (result.isDenied){
+  			 Swal.fire('修改未被儲存', '', 'info')
+  		}	
+  			
+  		})
+
+       
+		
         
-        
+    	
     });
 	
 	
@@ -101,10 +125,15 @@ $(function () {
 			<form id="updateForm" method="post" th:object="${member}" enctype="multipart/form-data">
 				<span id="prompt"></span>
 			<div th:if="*{bas64}!=null">
-					<label for="tobas64">圖片</label>
+					<label for="tobas64" >會員照片:</label>
 				<div class="form-group">
-					<img alt="" th:src="*{bas64}">
+					<img id="memberImg" alt=""   th:src="*{bas64}" style="height: 200px ; border-radius: 15px;">
 				</div>
+				<div  class="form-group" style="margin:20px auto">
+<!-- 					<label for="photoId">會員照片: </label> -->
+					<input type="file" name="memberImage" class="d-flex justify-content-center" id="photoId" th:field="*{memberImage}" multiple="multiple" style="margin:auto" >
+				</div>
+				
 			</div>
 				<div class="form-group">
 					<label for="emailId">帳號(E-MAIL)</label>
@@ -175,6 +204,17 @@ css: ["city form-control", "town form-control"], // 自訂 "城市"、"地區" c
 countyName: "memberCity", // 自訂城市 select 標籤的 name 值
 districtName: "memberTown" // 自訂地區 select 標籤的 name 值
 });
+
+
+//讓修改上傳圖片可以直接顯示圖片
+$('#photoId').on('change', function(e){      
+    const file = this.files[0];
+    const objectURL = URL.createObjectURL(file);
+    
+    $('#memberImg').attr('src', objectURL);
+  });
+
+
 </script>
 
 

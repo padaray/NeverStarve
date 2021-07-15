@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.response.MemberResponse;
@@ -26,7 +27,7 @@ import com.NeverStarve.member.service.MemberService;
 	
 @Controller
 @RequestMapping("/Member")
-//@SessionAttributes({"member"})  //model同時存入session = session.setAttribute("member", member);
+@SessionAttributes({"member"})  //model同時存入session = session.setAttribute("member", member);
 public class RegisterController {
 
 	@Autowired
@@ -88,6 +89,7 @@ public class RegisterController {
 		memberBean.setRegisterTime(registerTime);
 		memberBean.setUserType("1");
 		memberService.save(memberBean);
+
 		return "redirect:/Member/login";
 
 	}
@@ -112,9 +114,14 @@ public class RegisterController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	public MemberResponse update(@ModelAttribute @Valid MemberBean member,BindingResult result) {
+	public MemberResponse update(@ModelAttribute @Valid MemberBean member,BindingResult result,Model model) {
 		MemberResponse response = new MemberResponse();
 		MemberBean sessionMember = (MemberBean)session.getAttribute("member");
+//		//驗證不讓別人亂改頁面帳號
+//		if(!member.getEmail().equals(memberService.getMamberById(member.getPkMemberId()).get().getEmail())){
+//			return null;
+//		} 
+		
 		if(result.hasErrors()) {
 			
 			Map<String, String> errors = result.getFieldErrors().stream().collect(
@@ -126,12 +133,16 @@ public class RegisterController {
 			response.setValidated(true);	
 			member.setPkMemberId(sessionMember.getPkMemberId());
 			member.setUserType(sessionMember.getUserType());
+			
 
 			System.out.println(sessionMember.getEmail());
 			System.out.println(member);
-			memberService.updateMember(member);
+			member = memberService.updateMember(member);
+			model.addAttribute("member", member);
+
+			
 		}
-		return response;		
+		return response;	
 	}
 		
 	
