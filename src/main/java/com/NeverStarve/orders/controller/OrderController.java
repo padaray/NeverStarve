@@ -244,6 +244,10 @@ public class OrderController {
 			orderBean.setShipping_address(addres);
 			orderBean.setTrading(0);
 			orderBean.setConfirm(0);
+			String memberkey = memberCookie.getValue();
+			System.out.println("87878787"+memberkey);
+			 Optional<MemberBean> memberBean = memberService.getMamberById(Integer.valueOf(memberkey));
+			 memberService.sendSimpleMail(memberBean.get().getEmail(), "[NeverStarve通知] 訂單建立成功囉!", "您的訂單已經建立成功");
 			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
 				productIDCookie.setMaxAge(0);
 				productQuantityCookie.setMaxAge(0);	
@@ -302,7 +306,6 @@ public class OrderController {
 		aio.setReturnURL("http://localhost:9527/NeverStarve/Order/returnURL");
 		aio.setOrderResultURL("http://localhost:9527/NeverStarve/Order/order/EcpayOrder");
 		ecpay.setHi(aioOne.aioCheckOut(aio,null));
-		System.out.println(aioOne.aioCheckOut(aio,null));
 		return ecpay ;
 	}
 

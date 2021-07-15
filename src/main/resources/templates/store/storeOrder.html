@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- i標籤小圖 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"> <!-- 新版I標籤小圖 -->
 <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" /> <!-- 首頁樣式 -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
 $(function() {
 $(".confirm").click(function(){
@@ -28,17 +29,39 @@ $(".confirm").click(function(){
 	ddd =$(this).parent().parent().find(".count").text()
 	btn =$(this).siblings()
 	btn2 =$(this) 
-	$.ajax({ type: "GET", 
-		url:"[[@{/store/changeConfirm}]]"+"/"+abc+"/"+bca,
-		dataType: "json", 
-		contentType: "application/json",
-		success: function (response) {
-			console.log(ddd);
-			$(".confirmtext").eq(ddd-1).html("已確認訂單")
-			btn.attr("hidden", true)
-			btn2.attr("hidden", true)
-		}
-	});
+	
+	Swal.fire({
+  title: '確定要同意該筆訂單嗎?',
+  text: "確定後就不可以後悔囉!!!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '是，我確定要同意!',
+  cancelButtonText:'不，讓我再考慮考慮!'
+}).then((result) => {
+  if (result.isConfirmed) {
+
+		$.ajax({ type: "GET", 
+			url:"[[@{/store/changeConfirm}]]"+"/"+abc+"/"+bca,
+			dataType: "json", 
+			contentType: "application/json",
+			success: function (response) {
+				console.log(ddd);
+				$(".confirmtext").eq(ddd-1).html("已確認訂單")
+				btn.attr("hidden", true)
+				btn2.attr("hidden", true)
+			}
+		});
+    Swal.fire(
+      '確認成功!',
+      '訂單已經確認成功!',
+      'success'
+    )
+  }
+})
+	
+	
 	
 })
 $(".cancel").click(function(){
@@ -48,16 +71,35 @@ $(".cancel").click(function(){
 	 ddd =$(this).parent().parent().find(".count").text()
 	 btn =$(this).siblings()
 	btn2 =$(this) 
-	$.ajax({ type: "GET", 
-		url:"[[@{/store/changeConfirm}]]"+"/"+abc+"/"+bca,
-		dataType: "json", 
-		contentType: "application/json",
-		success: function (response) {
-			$(".confirmtext").eq(ddd-1).html("已取消訂單")
-			btn.attr("hidden", true)
-			btn2.attr("hidden", true)
-		}
-	});
+	Swal.fire({
+  title: '確定要取消該筆訂單嗎?',
+  text: "取消後就不可以後悔囉!!!!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: '是，我確定要取消!',
+  cancelButtonText:'不，讓我再考慮考慮!'
+}).then((result) => {
+  if (result.isConfirmed) {
+	  $.ajax({ type: "GET", 
+			url:"[[@{/store/changeConfirm}]]"+"/"+abc+"/"+bca,
+			dataType: "json", 
+			contentType: "application/json",
+			success: function (response) {
+				$(".confirmtext").eq(ddd-1).html("已取消訂單")
+				btn.attr("hidden", true)
+				btn2.attr("hidden", true)
+			}
+		});
+    Swal.fire(
+      '取消成功!!',
+      '訂單已經取消成功',
+      'success'
+    )
+  }
+})
+	
 	
 })
 $(function(){
