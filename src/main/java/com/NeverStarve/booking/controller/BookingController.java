@@ -101,7 +101,7 @@ public class BookingController {
 //		bookingService.save(btb);
 		
 		//接service.save()的儲存成功或失敗(true or false)
-		if(bookingService.saveB(btb)) {
+		if(bookingService.saveB(btb) == 1) {
 			model.addAttribute("tOrF", true);
 			System.out.println("hi True");
 		} else {
