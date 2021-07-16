@@ -20,11 +20,12 @@
 <!-- 網頁小圖 -->
 <link rel="shortcut icon"  th:href="@{/favicon.ico}"/>
 <script th:src="@{/js/jquery.twzipcode.min.js}"></script>  
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style th:inline="css">
 .table {
 	margin: auto;
 	margin-top: 20px;
-	width: 1300px;
+	width: 80%;
 	text-align: center;
 	align-items: center
 }
@@ -45,13 +46,28 @@
 	right: 80px;
 }
 </style>
-<script>
+<script >
 $(function(){
 		let pag = 1;
 		let recordsPerPage = parseInt("[[${recordsPerPage}]]");
 		let b1 =true;
+		let maxpag = $("#pageno").text().substring($("#pageno").text().indexOf("/")+1);
+		
+		disablebt();
+		setStoreLV();
+		
+		
 		
 // ---function區------------------------------------------------------------------
+		function setStoreLV(){
+			let storeList = document.getElementsByClassName('storeLVtext');
+			let objls = $(".storeLV").get();
+			for(let i = 0 ;i<storeList.length;i++){
+				objls[i].value = storeList[i].innerText;
+			}
+			
+		}
+		
 		function getPage(){
 			let totalpages="";
 			let count ="";
@@ -77,7 +93,10 @@ $(function(){
 						.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkStoreId+"'>" +element.pkStoreId+ "</a></th>")
 						.append($('<td valign="middle">').text(element.storeName))
 						.append($('<td valign="middle">').text(element.storeAddress))
-						.append($('<td valign="middle">').text(element.storeLv))
+						.append($('<td valign="middle">').html('<span class = "storeLVtext" style="display: none">'+element.storeLv+'</span><select style = "width: 125px" class = "storeLV form-select">'+
+						'<option value = "0">停權</option>'+
+					    '<option value = "1">正常店家</option>'+
+					    '<option value = "2">付費店家</option></select>'))
 						.append($('<td valign="middle">').text(element.storePhone))
 						.append($('<td valign="middle">').text(element.seatNumber))
 						.append("<td><img  height='120' src='"+element.base64 +"'/></td>")
@@ -92,6 +111,8 @@ $(function(){
 					}
 					$("#resl").text(count)
 					$("#tit").text("所有店家")
+					setStoreLV();
+					$(".storeLV").change(changeLV);
 				}
 				});
 		};
@@ -121,7 +142,10 @@ $(function(){
 						.append("<th valign='middle'><a id='a' th:inline='text' target='_blank' href='/NeverStarve/Backstage/Member/"+element.pkStoreId+"'>" +element.pkStoreId+ "</a></th>")
 						.append($('<td valign="middle">').text(element.storeName))
 						.append($('<td valign="middle">').text(element.storeAddress))
-						.append($('<td valign="middle">').text(element.storeLv))
+						.append($('<td valign="middle">').html('<span class = "storeLVtext" style="display: none">'+element.storeLv+'</span><select style = "width: 125px" class = "storeLV form-select">'+
+								'<option value = "0">停權</option>'+
+							    '<option value = "1">正常店家</option>'+
+							    '<option value = "2">付費店家</option></select>'))
 						.append($('<td valign="middle">').text(element.storePhone))
 						.append($('<td valign="middle">').text(element.seatNumber))
 						.append("<td><img  height='120' src='"+element.base64 +"'/></td>")
@@ -136,6 +160,8 @@ $(function(){
 					}
 					$("#resl").text(count);
 					$("#tit").text(city+"店家")
+					setStoreLV();
+					$(".storeLV").change(changeLV);
 				}
 				});
 		}else{
@@ -150,20 +176,65 @@ $(function(){
 				getPagebycity();
 			}
 		}
-//---------------------------------------------------------------------
+		
+		function disablebt(){
+			if(pag == 1 ){
+				$(".firstbt").attr('disabled', true);
+				$(".lastbt").attr('disabled', false);
+			}else if(pag == maxpag){
+				$(".firstbt").attr('disabled', false);
+				$(".lastbt").attr('disabled', true);
+			}
+		}
+		
+		function changeLV(){
+			let id = $(this).parents("tr").children().eq(0).text().substring(0,1);
+			let lv = $(this).val();
+			let obj = $(this);
+			Swal.fire({
+	    		  title: '確定要改變店家等級?',
+	    		  showDenyButton: true,
+	    		  confirmButtonText: '確定',
+	    		  denyButtonText: '取消',
+	    		}).then((result) => {
+	    			if (result.isConfirmed) {
+						$.ajax({
+								type:"get",
+								url:"[[@{/Backstage/Store/changeLV}]]"+"/"+id+"/"+lv,
+								success:function (data) {
+									if(data == 1){
+ 										obj.prev().text(lv);
+										Swal.fire('修改成功!', '', 'success')
+									}else{
+										 Swal.fire('更改失敗', '', 'error')
+										 setStoreLV();
+									}
+										
+								}
+							})
+	    			}else{
+	    				setStoreLV();
+	    			}
+	    		})
+		}
+		
+//--------------事件區-------------------------------------------------------
 	
 	$("#sele").click(function(){
 		pag = 1;
 		getPagebycity();
+		disablebt();
 		b1 = false;
 	})
 	$("#seleall").click(function(){
 		pag = 1;		
 		getPage();
+		disablebt();
 		b1 = true;
 	})
 	$("#firstbt").click(function(){
 		pag = 1;
+		disablebt()
 		way();
 	})
 	$("#prevbt").click(function(){
@@ -171,23 +242,27 @@ $(function(){
 		if(pag < 1){
 			pag = 1;
 		}
+		disablebt()
 		way();
 	})
 	$("#nextbt").click(function(){
 		pag ++;
 		let str = $("#pageno").text();
-		let maxpag = str.substring(str.indexOf("/")+1);
+		maxpag = str.substring(str.indexOf("/")+1);
 		if(pag > maxpag){
 			pag = maxpag;
 		}
+		disablebt()
 		way();
 	})
 	$("#lastbt").click(function(){
 		let str = $("#pageno").text();
-		let maxpag = str.substring(str.indexOf("/")+1);
+		maxpag = str.substring(str.indexOf("/")+1);
 		pag = maxpag;
+		disablebt()
 		way();
 	})
+	$(".storeLV").change(changeLV)
 	
 })
 
@@ -226,7 +301,11 @@ $(function(){
 						</a></th>
 						<td valign="middle">[[${store.value.storeName}]]</td>
 						<td valign="middle">[[${store.value.storeAddress}]]</td>
-						<td valign="middle">[[${store.value.storeLv}]]</td>
+						<td valign="middle"><span class = "storeLVtext"  style="display: none">[[${store.value.storeLv}]]</span><select style = "width: 125px" class = "storeLV form-select">
+												<option value = "0">停權</option>
+											    <option value = "1">正常店家</option>
+											    <option value = "2">付費店家</option>
+										   	</select></td>
 						<td valign="middle">[[${store.value.storePhone}]]</td>
 						<td valign="middle">[[${store.value.seatNumber}]]</td>
 						<td><img height="120" th:src='${store.value.base64}'>
@@ -235,11 +314,11 @@ $(function(){
 				</tbody>
 			</table>
 	<div class="center" style="margin: 20px">
-		<button id="firstbt" class="btn btn-primary" width='250px'>第一頁</button>
-		<button id="prevbt" class="btn btn-primary" width='250px'>上一頁</button>
+		<button id="firstbt" class="btn btn-primary firstbt" width='250px'>第一頁</button>
+		<button id="prevbt" class="btn btn-primary firstbt" width='250px'>上一頁</button>
 		<span id="pageno">[[${pageNo}]] / [[${totalPages}]]</span>
-		<button id="nextbt" class="btn btn-primary" width='250px'>下一頁</button>
-		<button id="lastbt" class="btn btn-primary" width='250px'>最尾頁</button>
+		<button id="nextbt" class="btn btn-primary lastbt" width='250px'>下一頁</button>
+		<button id="lastbt" class="btn btn-primary lastbt" width='250px'>最尾頁</button>
 	</div>
 		</div>
 

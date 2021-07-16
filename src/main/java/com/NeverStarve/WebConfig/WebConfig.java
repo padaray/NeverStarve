@@ -17,6 +17,7 @@ public class WebConfig implements WebMvcConfigurer{
 				.addPathPatterns("/store/storeIndex")
 				.addPathPatterns("/store/menu")
 				.addPathPatterns("/store/modifyInfo")
+				.addPathPatterns("/store/order")
 				.excludePathPatterns("/store/login")
 				.excludePathPatterns("/store/register");
 		
@@ -24,15 +25,12 @@ public class WebConfig implements WebMvcConfigurer{
 				.addPathPatterns("/Member/**")
 				.excludePathPatterns("/Member/login")
 				.excludePathPatterns("/Member/forgotPassword")
+				.excludePathPatterns("/Member/forgotPasswordp")
+				.excludePathPatterns("/Member/cheakRandomUrl")
 				.excludePathPatterns("/Member/register");
 	}
 	
-//	@Override
-//	public void addMemberInterceptors(InterceptorRegistry registry) {
-//
-//				
-//		
-//	}
+
 	
 	
 }

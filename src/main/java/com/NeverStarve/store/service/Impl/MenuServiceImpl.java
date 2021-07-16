@@ -150,15 +150,6 @@ public class MenuServiceImpl implements MenuService {
 			menuBean.setBase64(base64img);
 
 		} 
-//		else {
-//			//無圖片時會將"暫無圖片"塞進來
-//			media = fileToByteArray(filePath);
-//			String mimeType = context.getMimeType(filePath);
-//			stringBuff.append("data:" + mimeType + ";base64,");
-//			Base64.Encoder be = Base64.getEncoder();
-//			stringBuff.append(new String(be.encode(media)));
-//			menuBean.setBase64(stringBuff.toString());
-//		}
 		return menuBean;
 	}
 	

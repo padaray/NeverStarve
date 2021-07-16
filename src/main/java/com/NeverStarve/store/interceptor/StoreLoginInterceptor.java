@@ -11,7 +11,7 @@ public class StoreLoginInterceptor implements HandlerInterceptor{
 							HttpServletResponse response,
 							Object handler) throws Exception{
 		if(request.getSession().getAttribute("storeUser") == null) {
-			response.sendRedirect("/NeverStarve/store/login");
+			response.sendRedirect("/NeverStarve/Member/login");
 			return false;
 		}
 		return true;

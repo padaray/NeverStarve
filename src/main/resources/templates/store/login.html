@@ -15,6 +15,8 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
 	crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <title>店家登入</title>
 </head>
 <body>
@@ -24,14 +26,14 @@
 			<form th:action="@{/store/login}" method="post" th:object="${loginBean}">
 			<div class="form-group">
 				<label for="storeAccountId">帳號:</label>
-				<input type="text" name="storeAccount" id="storeAccountId" class="form-controller" th:field="*{storeAccount}">
-				<p class= "form-control-static text-danger"  th:errors="*{storeAccount}"></p>
+				<input type="text" name="storeAccount" id="storeAccountId" class="form-controller" th:field="*{email}">
+				<p class= "form-control-static text-danger"  th:errors="*{email}"></p>
 			</div>
 			<div class="form-group">
 				<label for="storePasswordId">密碼:</label>
-				<input type="text" name="storePassword" id="storePasswordId" class="form-controller" th:field="*{storePassword}">
-				<p class= "form-control-static text-danger"  th:errors="*{storePassword}"></p>
-				<p class= "form-control-static text-danger" th:errors="*{accountOrPasswordError}"></p>
+				<input type="password" name="storePassword" id="storePasswordId" class="form-controller" th:field="*{password}">
+				<p class= "form-control-static text-danger"  th:errors="*{password}"></p>
+				<p class= "form-control-static text-danger" th:errors="*{emailOrPasswordError}"></p>
 			</div>
 			<span>
 				<button type="submit" class="btn btn-primary text-center">送出</button>

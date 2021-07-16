@@ -9,9 +9,7 @@ import com.NeverStarve.store.model.StoreBean;
 
 public interface BookingService {
 
-	void persistBooking(BookingTableBean btb);
-	
-	BookingTableBean save(BookingTableBean btb);
+	boolean save(BookingTableBean btb);
 	
 	BookingTableBean getBooking(Integer BookingNo);
 	

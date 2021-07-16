@@ -1,6 +1,7 @@
 package com.NeverStarve.store.service.Impl;
 //check it is from store.repository.StoreOrderRepository
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -22,6 +23,22 @@ public class StoreOrderServiceImpl implements StoreOrderService {
 	public List<OrderBean> getOrderByStoreBean(StoreBean storeBean) {
 		
 		return orderRepository.findByStoreBean(storeBean);
+	}
+
+	@Override
+	public boolean changeConfirm(Integer orderId, Integer confirm) {
+		boolean b1;
+		try {
+			OrderBean orderBean = orderRepository.findById(orderId).get();
+			orderBean.setConfirm(confirm);
+			orderRepository.save(orderBean);
+			b1 = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			b1 = false;
+		}
+
+		return b1;
 	}
 
 }

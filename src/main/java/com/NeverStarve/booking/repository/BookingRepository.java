@@ -1,5 +1,6 @@
 package com.NeverStarve.booking.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,9 @@ public interface BookingRepository extends JpaRepository<BookingTableBean, Integ
 	List<BookingTableBean> findByMemberBean(MemberBean memberBean);
 
 	List<BookingTableBean> findByStoreBean(StoreBean storeBean);
+
+	List<BookingTableBean> findBookingNumByBookingDateAndBookingTimeAndStoreBean(Date bDate, Date bTime, StoreBean bStoreBean);
+	
 	
 //	List<BookingTableBean> findByMemberId(String memberId);
 	

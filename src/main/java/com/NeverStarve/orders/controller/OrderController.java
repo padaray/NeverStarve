@@ -243,7 +243,7 @@ public class OrderController {
 			orderBean.setOrderDate(LocalDateTime.now().withNano(0));
 			orderBean.setShipping_address(addres);
 			orderBean.setTrading(0);
-			
+			orderBean.setConfirm(0);
 			if(orderservice.saveOrderBeanAndOrderList(orderBean, orderListBeanList)) {
 				productIDCookie.setMaxAge(0);
 				productQuantityCookie.setMaxAge(0);	
@@ -252,6 +252,9 @@ public class OrderController {
 				response.addCookie(productIDCookie);
 				response.addCookie(productQuantityCookie);
 			}
+			String memberkey = memberCookie.getValue();
+			Optional<MemberBean> memberBean = memberService.getMamberById(Integer.valueOf(memberkey));
+			memberService.sendSimpleMail(memberBean.get().getEmail(), "[NeverStarve通知] 訂單建立成功囉!", "您的訂單已經建立成功，詳細請查看歷史訂單頁面");
 		
 		}
 
@@ -294,7 +297,7 @@ public class OrderController {
 		Optional<MemberBean> memberID = memberService.getMamberById(Integer.valueOf(memberCookieID));
 		Optional<OrderBean> orderBean = orderservice.getNewestOrderByMember(memberID.get());
 		aio.setMerchantID("2000132");
-		aio.setMerchantTradeNo("NeverStarve"+String.valueOf(orderBean.get().getPkOrderId()));
+		aio.setMerchantTradeNo("NeverStarveYY"+String.valueOf(orderBean.get().getPkOrderId()));
 	    aio.setMerchantTradeDate(String.valueOf(orderBean.get().getOrderDate()).substring(0,19).replace("T", " ").replace("-", "/"));
 	    aio.setTotalAmount(String.valueOf(orderBean.get().getTotalCost().intValue()));
 		aio.setTradeDesc("test shopping");
@@ -302,7 +305,6 @@ public class OrderController {
 		aio.setReturnURL("http://localhost:9527/NeverStarve/Order/returnURL");
 		aio.setOrderResultURL("http://localhost:9527/NeverStarve/Order/order/EcpayOrder");
 		ecpay.setHi(aioOne.aioCheckOut(aio,null));
-		System.out.println(aioOne.aioCheckOut(aio,null));
 		return ecpay ;
 	}
 
@@ -317,6 +319,7 @@ public class OrderController {
 				List<OrderBean> order = orderservice.findOrderByMemberBean(m);
 				model.addAttribute("id", m);
 				model.addAttribute("orderSet",order);
+				System.out.println("找到你囉"+order);
 			}
 			return "order/OrderMember" ;
 		}
@@ -362,10 +365,11 @@ public class OrderController {
 			}
 			if(RtnCode == 1) {
 				System.out.println("^_^凸，抓到你囉字串"+ MerchantTradeNo);
-			 	 String mno= MerchantTradeNo.replace("NeverStarve","");
+			 	 String mno= MerchantTradeNo.replace("NeverStarveYY","");
 			 	 int ino = Integer.valueOf(mno);
 			 	  OrderBean findorder = orderservice.findByPkOrderId(ino).get();
 			 	  findorder.setTrading(1);
+			 	  System.out.println("抓"+findorder);
 			 	  orderservice.update(findorder);
 			 	  
 			}

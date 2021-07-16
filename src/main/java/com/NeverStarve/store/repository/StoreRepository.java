@@ -31,6 +31,6 @@ public interface StoreRepository extends JpaRepository<StoreBean, Integer> {
 	@Transactional
 	Integer saveNoPic(Integer pkStoreId, String storeAccount, String storePassword, String storeName, String storeAddress, String storePhone, String storeType, Integer seatNumber);
 	
-	
+	List<StoreBean> findByStoreTypeContaining(String storeType);
 
 }

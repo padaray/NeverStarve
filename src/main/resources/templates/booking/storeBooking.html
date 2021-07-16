@@ -5,8 +5,11 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" -->
+<!-- 	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" -->
+<!-- 	crossorigin="anonymous"></script> -->
+<script src="https://code.jquery.com/jquery-3.6.0.js"
+	integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
 	crossorigin="anonymous"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
@@ -33,52 +36,7 @@
 <!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script> -->
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css"> -->
 
-<script type="text/javascript">
-$(".addDishPlace").on("click", "#submitButt", function() {
-	var saveMenu = [];
-	
-	var  allDishlength =$("#newDishForm").find(".menuInp").length;
-	
-	for(i=0; i < allDishlength; i++){
-		
-		var allDish = $(".menuInp");
-		saveMenu[saveMenu.length] = {
-				"dishName" : $(".DN").eq(i).val(),    
-				"dishIntroduction" : $(".DI").eq(i).val(),
-				"dishPrice" : $(".DP").eq(i).val(),
-				};
-		
-	}
-	//判斷書入欄位是否有空值
-	var flag = false;
-	for(i = 0; i < allDishlength; i++){
-		for(let obj in saveMenu[i]){
-			if(saveMenu[i][obj] == ''){
-				flag = true;
-			}
-		}
-		//判斷價格欄位是否為數字
-		re = /^[0-9]*$/;
-		if(!re.test(saveMenu[i].dishPrice)){
-			 $(".DP").eq(i).parent().find("span").html("請填入數字");
-			 flag = true;
-		}
-	}
-	if(!flag){
-		$.ajax({ type: "POST", 
-			url:"[[@{/StoreBooking/saveStoreBookingTimes}]]",
-			data: JSON.stringify(saveMenu), 
-			dataType: "json", 
-			contentType: "application/json",
-		});	
-		alert('已新增菜單');
-		location.reload();
-	}else{
-		$('.alertEmp').html("<strong class='text-danger'>請確認欄位是否有空白</strong>");
-	}
-		
-})
-</script>
+
 <title>店家訂位管理系統</title>
 </head>
 <body>
