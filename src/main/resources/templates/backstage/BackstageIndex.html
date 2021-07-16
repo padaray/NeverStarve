@@ -52,12 +52,14 @@ border-radius: 15px;
 		<a th:href="@{/Backstage/init}"><button class="but1">一鍵新增</button></a>
 	<div class="center">
 		<a th:href="@{/Backstage/Member/ShowMember}"><div class="block" id="member">我是會員區塊</div></a>
-		<div class="block">我是店家區塊</div>
-		<div class="block">我是報表區塊</div>
+		<a  th:href="@{/Backstage/Store/ShowStore}"><div class="block" id="store"></div></a>
+		<a th:href="@{/Backstage/Report}"><div class="block" id="roport"></div></a>
 		
     <script type="text/javascript" th:inline="javascript">
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('member'), 'dark');
+        var store = echarts.init(document.getElementById('store'), 'dark');
+        var report = echarts.init(document.getElementById('roport'), 'dark');
 		
         var tip =/*[[${tip}]]*/ 
         console.log(tip);
@@ -91,9 +93,83 @@ border-radius: 15px;
                 data: [tip ,newtip ,keeLong , Taoyuan, Taichung, Kaohsiung]
             }]
         };
-
+        onem = /*[[${many.one}]]*/
+		twom = /*[[${many.two}]]*/
+    	therem = /*[[${many.there}]]*/
+		fourm = /*[[${many.four}]]*/
+		fivem = /*[[${many.five}]]*/
+		sixm = /*[[${many.six}]]*/
+		sevenm = /*[[${many.seven}]]*/
+		eightm = /*[[${many.eight}]]*/
+		ninem = /*[[${many.nine}]]*/
+		tenm = /*[[${many.ten}]]*/
+		elevenm = /*[[${many.eleven}]]*/
+		twelvem = /*[[${many.twelve}]]*/
+		totlm = /*[[${many.totl}]]*/
+        
+        option2 = {
+        		title: {
+                    text: '店家查詢入口 :圖表:今年月份總金額'
+                },
+        	    xAxis: {
+        	        type: 'category',
+        	        data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月','八月','九月','十月','十一','十二']
+        	    },
+        	    yAxis: {
+        	        type: 'value'
+        	    },
+        	    series: [{
+        	    	data : [ onem, twom, therem, fourm, fivem, sixm,
+						sevenm, eightm, ninem, tenm, elevenm,
+						twelvem ],
+        	        type: 'bar',
+        	        showBackground: true,
+        	        backgroundStyle: {
+        	            color: 'rgba(180, 180, 180, 0.2)'
+        	        }
+        	    }]
+        	};
+    	one = /*[[${order.one}]]*/
+		two = /*[[${order.two}]]*/
+		there = /*[[${order.there}]]*/
+		four = /*[[${order.four}]]*/
+		five = /*[[${order.five}]]*/
+		six = /*[[${order.six}]]*/
+		seven = /*[[${order.seven}]]*/
+		eight = /*[[${order.eight}]]*/
+		nine = /*[[${order.nine}]]*/
+		ten = /*[[${order.ten}]]*/
+		eleven = /*[[${order.eleven}]]*/
+		twelve = /*[[${order.twelve}]]*/
+		totl = /*[[${order.totl}]]*/
+		
+		option3 = {
+        	title: {
+                 text: '報表入口 :圖表:今年總訂單'
+                },
+        	    xAxis: {
+        	        type: 'category',
+        	        data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月','八月','九月','十月','十一','十二']
+        	    },
+        	    yAxis: {
+        	        type: 'value'
+        	    },
+        	    series: [{
+        	    	data : [ one, two, there, four, five, six,
+						seven, eight, nine, ten, eleven,
+						twelve ],
+        	        type: 'bar',
+        	        showBackground: true,
+        	        backgroundStyle: {
+        	            color: 'rgba(180, 180, 180, 0.2)'
+        	        }
+        	    }]
+        	};
+		
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
+        store.setOption(option2);
+        report.setOption(option3);
     </script>
 	</div>
 </body>

@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.NeverStarve.member.model.MemberBean;
 
@@ -36,6 +37,9 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer>,Jpa
 	Long countByAddressContaining(String address);    //回傳有幾筆數量
 
 	Long countByEmailContaining(String email);    //回傳有幾筆數量
+	
+    @Query(value = "select count(*) from MEMBER t where  t.registerTime like :date% ",nativeQuery = true)
+	Long countRegisterTime(@Param("date") String yyyymm); 
 	
 	List<MemberBean> findByEmailContaining(String email);	//模糊搜尋會員信箱
 	
