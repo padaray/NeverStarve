@@ -16,16 +16,6 @@ import com.NeverStarve.store.service.ReportService;
 public class ReportController {
 	@Autowired ReportService reportService;
 	
-//	public class String2LocalDateConverter implements Converter<String, LocalDate> {
-//	    @Override
-//	    public LocalDate convert(String s) {
-//	        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//	        return LocalDate.parse(s, fmt);
-//	    }
-//	}
-	
-//	private static final Random RANDOM = new Random(System.currentTimeMillis());
-	
 	@GetMapping("/testpiechart")
 	public String testpiechart (Model model) {
 		model.addAttribute("chartData", getChartData());
@@ -42,24 +32,5 @@ public class ReportController {
 	        );
 	}
 	
-//	private StoreBean getpkStoreBean(HttpSession session) {//回傳對應的店家ID，從session拿到
-//		
-//		StoreBean mystorebean=(StoreBean) session.getAttribute("storeUser");
-//		return mystorebean;
-//	}
-	
-//	@GetMapping("/allquanty")
-//	@ResponseBody
-//	public Map<String,Integer> getOrderListAllQuanty(HttpSession session){
-//		
-//		StoreBean mystorebean=(StoreBean) session.getAttribute("storeUser");
-//		
-//		System.out.println(mystorebean.getStoreName());
-//		
-//		System.out.println(reportService.getQuantity(mystorebean));
-//		
-//		return reportService.getQuantity(mystorebean);
-//		
-//	}
 	
 }
