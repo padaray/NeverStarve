@@ -46,9 +46,9 @@ public class BookingServiceImpl implements BookingService {
 //		
 //	}
 	
-	@Transactional
+//	@Transactional
 	@Override
-	public boolean save(BookingTableBean btb) {
+	public int saveB(BookingTableBean btb) {
 
 		//客戶訂位的資訊(btb)
 		Date bDate = btb.getBookingDate();
@@ -60,52 +60,59 @@ public class BookingServiceImpl implements BookingService {
 		Integer bNum = btb.getBookingNum();
 //		System.out.println("hi4: "+ bNum);
 		
-		Integer bStoreId = bStoreBean.getPkStoreId();
+//		Integer bStoreId = bStoreBean.getPkStoreId();
 //		System.out.println("hi5: "+ bStoreId);
-		StoreBean originStoreBean = null;
-		Optional<StoreBean> opt = storeRepository.findById(bStoreId);
-		if(opt.isPresent()) {
-			originStoreBean = opt.get();
+//		StoreBean originStoreBean = null;
+//		Optional<StoreBean> opt = storeRepository.findById(bStoreId);
+//		if(opt.isPresent()) {
+//			originStoreBean = opt.get();
 //			System.out.println("hi6: "+ opt);
-		}
+//		}
 //		System.out.println("hi7: "+ originStoreBean);
 		
-		Integer totalSeatNum = originStoreBean.getSeatNumber();
+		Integer totalSeatNum = bStoreBean.getSeatNumber();
 //		System.out.println("hi8: "+ totalSeatNum);
 		List<BookingTableBean> bookedNumBeans = 
 				bookingRepository.findBookingNumByBookingDateAndBookingTimeAndStoreBean(bDate, bTime, bStoreBean);
 //		System.out.println("hi9: "+ bookedNumBeans);
 		
-		Integer BookedNoSum = 0;
+		Integer bookedNoSum = 0;
+		System.out.println("hi10A: "+bookedNumBeans.size());
 		for(BookingTableBean bookedNumBean : bookedNumBeans) {
-			Integer bookedNum = bookedNumBean.getBookingNum();
-			BookedNoSum += bookedNum;
+			if(bookedNumBean.getCancelTag() == 1) {
+				Integer bookedNum = bookedNumBean.getBookingNum();
+				bookedNoSum += bookedNum;
+				
+				System.out.println("hi10: "+ bookedNum);
+			}
 		}
-//		System.out.println("hi10: "+ BookedNoSum);
-		
+		System.out.println("hi11: "+ totalSeatNum);
+		System.out.println("hi12: "+ bookedNoSum);
 		//剩餘座位數 = 店家設定總座位數 - 已預約座位數總和
-		int remainSeat = totalSeatNum - BookedNoSum;
+		int remainSeat = totalSeatNum - bookedNoSum;
 		try {
+			System.out.println("testA: 剩餘座位足夠" + ", 預約人數: " + bNum + ", 剩餘座位: " + remainSeat);
 			if (bNum <= remainSeat) {
-				System.out.println("test: 剩餘座位足夠" + ", 預約人數: " + bNum + ", 剩餘座位: " + remainSeat);
+				System.out.println("testB: 剩餘座位足夠" + ", 預約人數: " + bNum + ", 剩餘座位: " + remainSeat);
 				System.out.println("test: 剩餘座位足夠");
 				
 				bookingRepository.save(btb);
+//				System.out.println("hi12: "+ bookingRepository.save(btb));
 
 				//1. to; 2. subject; 3. content
 				memberService.sendSimpleMail(btb.getMemberBean().getEmail(), 
 											"[NeverStarve通知] 訂位成功囉!", 
 											bookingSuccessContent(btb));
 				
-				return true;
+				return 1;
 				
 			} else {
 				System.out.println("test: 剩餘座位不足" + ", 預約人數: " + bNum + ", 剩餘座位: " + remainSeat);
 				System.out.println("test: 剩餘座位不足");
-				return false;
+				return 0;
 			}
 		} catch (Exception e) {
-			return false;
+			return 0;
 		}
 		
 	}

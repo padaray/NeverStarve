@@ -56,7 +56,7 @@
 <!-- 					<p th:utext="${#dates.format(#calendars.createToday(),'yyyy 年 MM 月 dd 日')}"> -->
 
 					<hr>
-					<a th:href="@{'/StoreBooking/findBookings/' + ${booking.pkBookingNo}}">
+					<a th:href="@{'/StoreBooking/findBookings/' + ${booking.pkBookingNo}}" class="modifyBtn">
 					<button type="button" class="btn btn-primary modifyBtn"
 						th:unless="${booking.cancelTag == -1} 
 										Or (${#dates.format(#calendars.createToday(),'yyyy 年 MM 月 dd 日')} 
@@ -118,13 +118,16 @@
 	  				//click取消預約按鈕後，按鈕disabled
 	  				$(this).attr("disabled", true)
 	  				//click取消預約按鈕後，修改預約按鈕也disabled
-	  				$(".modifyBtn").attr("disabled", true)
+	  				$(this).siblings("a").children().attr("disabled", true)
+					console.log($(this).siblings(".modifyBtn").attr("disabled", true))
 	  				$(this).parent().addClass("bg-light text-secondary font-weight-lighter")
 	  								.removeClass("text-info border border-info")
 	  				$(this).parent().children().eq(0).html('<h4><span class="badge badge-secondary canceld"' 
 	  									+ 'th:if="${booking.cancelTag == -1}">已取消</span></h4>')
 	  		  } else if (result.isDenied) {
 	  		    Swal.fire('感謝您的選擇', '', 'info')
+// 					console.log($(this).siblings("a").children().text())
+// 					console.log($(this).siblings(".modifyBtn").text())
 	  		  }
 	  		});
 		})

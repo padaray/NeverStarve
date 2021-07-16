@@ -143,15 +143,15 @@ public class StoreBookingController {
 //		System.out.println("hi2: " + btb);
 		
 		//取得店家的id傳進預約資料表中
-		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
+//		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
 //		System.out.println("hi3: " + storeBean);
 		
-		btb.setPostTime(new Date()); //考慮是否更新時間也要設定
+//		btb.setPostTime(new Date()); //考慮是否更新時間也要設定
 		model.addAttribute("modBtb", btb);
 		
-		originBtb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
+//		originBtb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
 		
-		originBtb.getMemberBean();
+//		originBtb.getMemberBean();
 //		System.out.println("hi4: " + originBtb.getMemberBean());
 //		System.out.println("hi5: " + originBtb);
 		
@@ -159,8 +159,15 @@ public class StoreBookingController {
 		originBtb.setBookingNum(btb.getBookingNum());
 		originBtb.setBookingTime(btb.getBookingTime());
 		
-		bookingService.save(originBtb);
-				
+		;
+		if(bookingService.saveB(originBtb) == 1) {
+			model.addAttribute("tOrF", true);
+			System.out.println("hi True");
+		} else {
+			model.addAttribute("tOrF", false);
+			System.out.println("hi false");
+			
+		}		
 		return "booking/modifyBookingConfirm";
 	}
 	
