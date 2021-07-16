@@ -102,7 +102,8 @@ $(function(){
 						<th>金額</th>
 						<th>成立日期</th>
 						<th>地址</th>
-						<th>訂單狀態</th>
+						<th>訂單付款狀態</th>
+						<th>訂單確認狀態</th>
 						<th>訂單備註</th>
 						<th>詳細資訊</th>
 					</tr>		
@@ -116,6 +117,11 @@ $(function(){
 						<td valign="middle" th:switch="${order.trading}"> 
 						<span th:case="0">未付款</span> 
 						<span th:case="1">已付款</span>
+						</td>
+						<td class="confirmtext" th:switch="${order.confirm}">
+						<span th:case="0">未確認訂單</span> 
+						<span th:case="1">已接受訂單</span>
+						<span th:case="2">已取消訂單</span>
 						</td>
 						
 						<td valign="middle">[[${order.order_note}]] </td>
