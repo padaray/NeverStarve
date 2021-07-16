@@ -89,7 +89,7 @@ public class LoginController {
 		}
 		System.out.println("結束時間"+LocalDateTime.now());
 
-		return "redirect:/Member/memberDetail";
+		return "redirect:/";
 		
 	}
 	
