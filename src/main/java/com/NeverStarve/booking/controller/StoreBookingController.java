@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -20,7 +19,6 @@ import com.NeverStarve.booking.model.BookingTableBean;
 import com.NeverStarve.booking.model.StoreBookingBean;
 import com.NeverStarve.booking.service.BookingService;
 import com.NeverStarve.booking.service.StoreBookingService;
-import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
 
@@ -155,12 +153,16 @@ public class StoreBookingController {
 //		System.out.println("hi4: " + originBtb.getMemberBean());
 //		System.out.println("hi5: " + originBtb);
 		
-		originBtb.setBookingDate(btb.getBookingDate());
-		originBtb.setBookingNum(btb.getBookingNum());
-		originBtb.setBookingTime(btb.getBookingTime());
+		btb.setCancelTag(originBtb.getCancelTag());
+		btb.setStoreBean(originBtb.getStoreBean());
+		btb.setMemberBean(originBtb.getMemberBean());
+		btb.setPostTime(originBtb.getPostTime());
+//		originBtb.setBookingDate(btb.getBookingDate());
+//		originBtb.setBookingNum(btb.getBookingNum());
+//		originBtb.setBookingTime(btb.getBookingTime());
 		
 		;
-		if(bookingService.saveB(originBtb) == 1) {
+		if(bookingService.saveB(btb) == 1) {
 			model.addAttribute("tOrF", true);
 			System.out.println("hi True");
 		} else {
