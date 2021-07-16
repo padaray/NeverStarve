@@ -77,7 +77,7 @@ public class BookingRestController {
 //		System.out.println(originBtb);
 		originBtb.setCancelTag(-1);
 		
-		bookingService.save(originBtb);
+		bookingService.saveB(originBtb);
 	}
 	
 }

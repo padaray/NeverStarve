@@ -3,9 +3,7 @@ package com.NeverStarve.booking.service;
 import java.util.Date;
 import java.util.List;
 
-import com.NeverStarve.booking.model.BookingTableBean;
 import com.NeverStarve.booking.model.StoreBookingBean;
-import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
 
 public interface StoreBookingService {

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -20,7 +19,6 @@ import com.NeverStarve.booking.model.BookingTableBean;
 import com.NeverStarve.booking.model.StoreBookingBean;
 import com.NeverStarve.booking.service.BookingService;
 import com.NeverStarve.booking.service.StoreBookingService;
-import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.StoreService;
 
@@ -143,24 +141,35 @@ public class StoreBookingController {
 //		System.out.println("hi2: " + btb);
 		
 		//取得店家的id傳進預約資料表中
-		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
+//		StoreBean storeBean = (StoreBean) model.getAttribute("storeUser");
 //		System.out.println("hi3: " + storeBean);
 		
-		btb.setPostTime(new Date()); //考慮是否更新時間也要設定
+//		btb.setPostTime(new Date()); //考慮是否更新時間也要設定
 		model.addAttribute("modBtb", btb);
 		
-		originBtb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
+//		originBtb.setCancelTag(1); //取消狀態預設值: 1(未取消); 狀態值: -1(確認取消)
 		
-		originBtb.getMemberBean();
+//		originBtb.getMemberBean();
 //		System.out.println("hi4: " + originBtb.getMemberBean());
 //		System.out.println("hi5: " + originBtb);
 		
-		originBtb.setBookingDate(btb.getBookingDate());
-		originBtb.setBookingNum(btb.getBookingNum());
-		originBtb.setBookingTime(btb.getBookingTime());
+		btb.setCancelTag(originBtb.getCancelTag());
+		btb.setStoreBean(originBtb.getStoreBean());
+		btb.setMemberBean(originBtb.getMemberBean());
+		btb.setPostTime(originBtb.getPostTime());
+//		originBtb.setBookingDate(btb.getBookingDate());
+//		originBtb.setBookingNum(btb.getBookingNum());
+//		originBtb.setBookingTime(btb.getBookingTime());
 		
-		bookingService.save(originBtb);
-				
+		;
+		if(bookingService.saveB(btb) == 1) {
+			model.addAttribute("tOrF", true);
+			System.out.println("hi True");
+		} else {
+			model.addAttribute("tOrF", false);
+			System.out.println("hi false");
+			
+		}		
 		return "booking/modifyBookingConfirm";
 	}
 	

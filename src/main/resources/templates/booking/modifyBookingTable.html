@@ -190,8 +190,9 @@
 		  $("#submitBookingId").prop("disabled", !$("#confirmSubmitId:checked").length);
 		});
 	
-	//選取預約日期後，ajax請求預約時段回傳至前端
-	$("#datepicker").change(function(){
+	//產生預約時段按鈕函數
+	createTimesBtns()
+	function createTimesBtns(){
 // 		console.log("change!");
 // 		console.log($(this).val());
 		storeId1 = /*[[@{/Booking/findTimesByDateAndStoreId/}]]*/
@@ -200,7 +201,7 @@
 			url: storeId1 + storeId2,
 			type: 'GET',
 			dataType: 'json',
-			data: {strDate : $(this).val()},
+			data: {strDate : $("#datepicker").val()},
 			contentType: 'application/json',
 			errors: function (xhr) {
 				alert("發生錯誤: " + xhr.status + " " + xhr.statusText);
@@ -214,7 +215,7 @@
 					strTime = strTime.substring(11, 16)
 					
 					bTimesBtn += '<label class="btn btn-outline-info" style="margin: 2px">' + 
-								 '<input type="radio" name="bookingTime" value="' + strTime + '">' + strTime +
+								 '<input type="radio" name="bookingTime" value="' + strTime + '" required>' + strTime +
 								 '</label>'
 				})
 // 					console.log(bTimesBtn)
@@ -223,6 +224,11 @@
 			}
 			
 		})
+	}
+	
+	//選取預約日期後，ajax請求預約時段回傳至前端
+	$("#datepicker").change(function(){
+		createTimesBtns()
 	})
     </script>
 <!-- 				alert("success!" + ", " + "storeId: " + "[[${storeUser.pkStoreId}]]"); -->
