@@ -67,7 +67,7 @@ body{
 				</div>
 				<div class="form-group">
 					<label for="passwordId">密碼</label>
-					<input type="text" name="password" id="passwordId" class="form-control" placeholder="請輸入密碼"  th:field="*{password}">
+					<input type="password" name="password" id="passwordId" class="form-control" placeholder="請輸入密碼"  th:field="*{password}">
 					<p class= "form-control-static text-danger"  th:errors="*{password}"></p>
 					<p class= "form-control-static text-danger" th:errors="*{emailOrPasswordError}"></p>
 				</div>

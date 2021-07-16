@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.NeverStarve.backStage.model.Month;
+import com.NeverStarve.backStage.service.BackstageMemberSevice;
 import com.NeverStarve.init.MemberInitins;
 import com.NeverStarve.member.service.MemberService;
 
@@ -17,6 +19,9 @@ public class Backstage {
 	MemberService memberService;
 	
 	@Autowired
+	BackstageMemberSevice backstageMemberservice;
+	
+	@Autowired
 	MemberInitins memberinit;
 	@GetMapping("/")
 	public String index(Model  model) {	
@@ -26,6 +31,10 @@ public class Backstage {
 		Long Taoyuan=memberService.getCityCount("桃園市");
 		Long Taichung=memberService.getCityCount("台中市");
 		Long Kaohsiung=memberService.getCityCount("高雄市");
+		Month many=backstageMemberservice.sumOrderMany("2021");
+		Month order=backstageMemberservice.countOrder("2021");
+		model.addAttribute("order",order);
+		model.addAttribute("many",many);
 		model.addAttribute("keeLong",keeLong);
 		model.addAttribute("tip",tip);
 		model.addAttribute("newtip",newtip);

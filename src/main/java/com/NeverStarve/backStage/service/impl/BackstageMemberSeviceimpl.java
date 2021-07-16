@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
@@ -19,6 +21,8 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.NeverStarve.backStage.model.Month;
+import com.NeverStarve.backStage.repository.ReportOrderRepository;
 import com.NeverStarve.backStage.service.BackstageMemberSevice;
 import com.NeverStarve.member.model.MemberBean;
 import com.NeverStarve.member.repository.MemberRepository;
@@ -29,9 +33,12 @@ public class BackstageMemberSeviceimpl implements BackstageMemberSevice {
 
 	@Autowired
 	MemberRepository memberRepository;
+	
+	@Autowired
+	ReportOrderRepository reportOrderRepository;
 
 	@Autowired
-	ServletContext context;
+	ServletContext context;	
 
 	@Override
 	public List<MemberBean> findByEmailContaining(String email) {
@@ -111,4 +118,80 @@ public class BackstageMemberSeviceimpl implements BackstageMemberSevice {
 		List<OrderBean> list1 = new ArrayList<OrderBean>(order);
 		return  list1.stream().sorted(Comparator.comparing(OrderBean::getPkOrderId).reversed()).collect(Collectors.toCollection(ArrayList::new));	
 	}
+
+
+	@Override
+	public Month countMonthsMember(String yyyy) {
+		if (yyyy==null) {
+			yyyy="2021";
+		}
+		Month momth = new Month();
+		momth.setOne(memberRepository.countRegisterTime(yyyy+"-01"));
+		momth.setTwo(memberRepository.countRegisterTime(yyyy+"-02"));
+		momth.setThere(memberRepository.countRegisterTime(yyyy+"-03"));
+		momth.setFour(memberRepository.countRegisterTime(yyyy+"-04"));
+		momth.setFive(memberRepository.countRegisterTime(yyyy+"-05"));
+		momth.setSix(memberRepository.countRegisterTime(yyyy+"-06"));
+		momth.setSeven(memberRepository.countRegisterTime(yyyy+"-07"));
+		momth.setEight(memberRepository.countRegisterTime(yyyy+"-08"));
+		momth.setNine(memberRepository.countRegisterTime(yyyy+"-09"));
+		momth.setTen(memberRepository.countRegisterTime(yyyy+"-10"));
+		momth.setEleven(memberRepository.countRegisterTime(yyyy+"-11"));
+		momth.setTwelve(memberRepository.countRegisterTime(yyyy+"-12"));
+		momth.setTotl(memberRepository.countRegisterTime(yyyy));
+		
+		return  momth; 	
+	}
+
+	@Override
+	public Month countOrder(String yyyy) {
+		if (yyyy==null) {
+			yyyy="2021";
+		}
+		Month momth = new Month();
+		momth.setOne(reportOrderRepository.countOrder(yyyy+"-01"));
+		momth.setTwo(reportOrderRepository.countOrder(yyyy+"-02"));
+		momth.setThere(reportOrderRepository.countOrder(yyyy+"-03"));
+		momth.setFour(reportOrderRepository.countOrder(yyyy+"-04"));
+		momth.setFive(reportOrderRepository.countOrder(yyyy+"-05"));
+		momth.setSix(reportOrderRepository.countOrder(yyyy+"-06"));
+		momth.setSeven(reportOrderRepository.countOrder(yyyy+"-07"));
+		momth.setEight(reportOrderRepository.countOrder(yyyy+"-08"));
+		momth.setNine(reportOrderRepository.countOrder(yyyy+"-09"));
+		momth.setTen(reportOrderRepository.countOrder(yyyy+"-10"));
+		momth.setEleven(reportOrderRepository.countOrder(yyyy+"-11"));
+		momth.setTwelve(reportOrderRepository.countOrder(yyyy+"-12"));
+		momth.setTotl(reportOrderRepository.countOrder(yyyy));
+		return momth;
+	}
+
+
+	@Override
+	public Month sumOrderMany(String yyyy) {
+		if (yyyy==null) {
+			yyyy="2021";
+		}
+		Month momth = new Month();
+		try {
+			momth.setOne(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-01-01")));
+			momth.setTwo(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-02-01")));
+			momth.setThere(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-03-01")));
+			momth.setFour(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-04-01")));
+			momth.setFive(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-05-01")));
+			momth.setSix(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-06-01")));
+			momth.setSeven(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-07-01")));
+			momth.setEight(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-08-01")));
+			momth.setNine(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-09-01")));
+			momth.setTen(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-10-01")));
+			momth.setEleven(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-11-01")));
+			momth.setTwelve(reportOrderRepository.countordermany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-12-01")));
+			momth.setTotl(reportOrderRepository.countOrderYearmany( new SimpleDateFormat("yyyy-MM-dd").parse(yyyy+"-01-01")));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return momth;
+	}
+	
+	
+	
 }

@@ -42,9 +42,10 @@
 <body>
 	<div th:insert="Generic :: Header"></div>
 
-<!-- 	<div th:if="${session.member!=null}"> -->
-<!-- 		<div th:if="${session.member.userType=='0'}" -->
-<!-- 			th:insert="backstage/BackstageHeader :: Header"></div> -->
+	<div th:if="${session.member!=null}">
+		<div th:if="${session.member.userType=='0'}"
+			th:insert="backstage/BackstageHeader :: Header"></div>			
+	</div>
 
 <!-- 		<p> -->
 <!-- 			<span th:text="用戶姓名+${session.member.name}">用戶姓名</span> -->
