@@ -448,6 +448,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Async	//非同步請求的註釋
 	public void sendForgotPasswordMail(String email, String subject, String content) {
 		
 		SimpleMailMessage message = new SimpleMailMessage();

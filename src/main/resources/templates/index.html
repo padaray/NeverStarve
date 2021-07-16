@@ -229,7 +229,9 @@ if(checkCode){
 </head>
 
 <body>
+<div>
 	<div th:insert="Generic :: Header"></div>
+</div>
 
 	<div th:if="${session.member!=null}">
 		<div th:if="${session.member.userType=='0'}"
