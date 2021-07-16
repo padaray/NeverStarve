@@ -17,19 +17,57 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
 	crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" th:inline="javascript">
+google.charts.load('current', {'packages':['corechart']});
+
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+	var real_data = /*[[${resultMap}]]*/
+	console.log();
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'Topping');
+	data.addColumn('number', 'Slices');
+ 
+	Object.keys(real_data).forEach(function(key) {
+		data.addRow([ key, real_data[key] ]);
+	});
+
+	var options = {'title':'產品訂單銷量圓餅圖', 'width':800, 'height':600,
+			legend:{position: 'left'},
+			chartArea:{width: 600},
+			pieHole: 0.35,
+			pieSliceTextStyle: {color: 'black'},
+			fontSize: 20,
+			pieSliceText: 5,
+			slices: {
+	            0: { color: '#FFDC35' },
+	            1: { color: '#00FFFF' },
+	            2: { color: '#28FF28' },
+	            3: { color: '#9F35FF' },
+	            4: { color: '#FF8000' },
+	            5: { color: '#EA0000' },
+	            6: { color: '#B87070' }
+	          }};
+
+	var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+	chart.draw(data, options);
+}
+</script>
 <title>店家首頁</title>
 </head>
 <body>
 <div th:insert="GenericStore :: Header"></div>
 	<div class="container text-center">
 		<div class="d-flex justify-content-center">
-			<div class="jumbotron" style="width: 80%">
+			<div class="jumbotron" style="width: 80%; margin-top: 100px">
 			<div>
 				<h1 th:text="${session.storeUser.storeName}" style="font-weight: 1000"></h1>
 				<a href="#" th:href="@{/store/modifyInfo}"><button class="btn btn-light"><div><i class="bi bi-pencil-square" style="font-size: 50px"></i></div><div>修改資料</div></button></a>
 				<a href="#" th:href="@{/store/menu}"><button class="btn btn-light"><div><i class="bi bi-layout-text-sidebar-reverse" style="font-size: 50px"></i></div><div>修改菜單</div></button></a>
 				<a href="#" th:href="@{/store/order}"><button class="btn btn-light"><div><i class="bi bi-file-earmark" style="font-size: 50px"></i></div><div>查看訂單</div></button></a>
-				<a href="#" th:href="@{/store/orderList}"> <button class="btn btn-light"><div><i class="bi bi-reception-4" style="font-size: 50px"></i></div><div>查看報表</div></button></a>
+<!-- 				<a href="#" th:href="@{/store/orderList}"> <button class="btn btn-light"><div><i class="bi bi-reception-4" style="font-size: 50px"></i></div><div>查看報表</div></button></a> -->
 				<a href="#" th:href="@{/StoreBooking/findBookings}"> <button class="btn btn-light"><div><i class="bi bi-journal-text" style="font-size: 50px"></i></div><div>查看訂位清單</div></button></a>
 				<a href="#" th:href="@{/StoreBooking/}"> <button class="btn btn-light"><div><i class="bi bi-calendar2-check" style="font-size: 50px"></i></div><div>設定預約時段</div></button></a>
 			</div>
@@ -41,31 +79,73 @@
 		
 		
 		<div class="d-flex justify-content-center">
-		<table class="table table-bordered table-hover table-striped text-center " style="width: 80%">
-			<thead>
-				<tr>
-					<th style="width: 9%">序號</th>
-					<th style="width: 18%">菜名</th>
-					<th style="width: 27%">說明</th>
-					<th style="width: 12%">價錢(元)</th>
-					<th style="width: 12%">圖片</th>
-<!-- 					<th style="width: 22%">操作</th> -->
-				</tr>
-			</thead>
-			<tbody class="info">
-				<tr th:each="menu,iterStat:${menuList}">
-					<td th:text="${iterStat.count}" class="dishNum"></td>
-					<td style="display: none" th:text="${menu.pkDishId}" class="p"></td>
-					<td th:text="${menu.dishName}"></td>
-					<td th:text="${menu.dishIntroduction}"></td>
-					<td th:text="${menu.dishPrice}"></td>
-					<td ><img height="80" th:src='${menu.base64}'> </td>
-<!-- 					<td><button class="modify btn btn-primary">修改</button><button class="delete btn btn-danger">刪除</button></td> -->
-				</tr>
-			</tbody>
-		</table>
+		<div id="accordion"  style="width:888px">
+
+		<div class="card">
+			<div class="card-header">
+				<a class="card-link" data-toggle="collapse" href="#collapseOne" style="font-size: 25px">
+					查看產品訂單銷量
+				</a>
+			</div>
+			<div id="collapseOne" class="collapse" data-parent="#accordion">
+				<div class="card-body jumbotron">
+				
+					<!--顯示訂單圓餅圖 -->
+						<div id="chart_div"></div>
+					
+				</div>
+			</div>
 		</div>
 		
+		</div>
+		</div>
+		
+		
+		
+		<div class="d-flex justify-content-center">
+		<div id="accordion2"  style="width:888px">
+
+		<div class="card">
+			<div class="card-header">
+				<a class="card-link" data-toggle="collapse" href="#collapseTwo" style="font-size: 25px">
+					查看店家菜單
+				</a>
+			</div>
+			<div id="collapseTwo" class="collapse" data-parent="#accordion2">
+				<div class="card-body jumbotron">
+				
+					<!--顯示店家菜單 -->
+					<table class="table table-bordered table-hover table-striped text-center ">
+						<thead>
+							<tr>
+								<th style="width: 9%">序號</th>
+								<th style="width: 18%">菜名</th>
+								<th style="width: 27%">說明</th>
+								<th style="width: 12%">價錢(元)</th>
+								<th style="width: 12%">圖片</th>
+							</tr>
+						</thead>
+						<tbody class="info">
+							<tr th:each="menu,iterStat:${menuList}">
+								<td th:text="${iterStat.count}" class="dishNum"></td>
+								<td style="display: none" th:text="${menu.pkDishId}" class="p"></td>
+								<td th:text="${menu.dishName}"></td>
+								<td th:text="${menu.dishIntroduction}"></td>
+								<td th:text="${menu.dishPrice}"></td>
+								<td ><img height="80" th:src='${menu.base64}'> </td>
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+			</div>
+		</div>
+		</div>
+		
+		</div>
+		
+		
 	</div>
+	
 </body>
 </html>
