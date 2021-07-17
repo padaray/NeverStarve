@@ -245,11 +245,23 @@ if(checkCode){
 })
 </script>	
 <style type="text/css">
-	.card:hover {
-	border-color: #5bc0de;
-	border-width: 2px;
+	.card {
+		border-width: 2px;
 	
-}
+	}
+	.card:hover {
+		border-color: #5bc0de;
+		border-width: 2px;
+	
+	}
+	.storeCards {
+		margin-bottom: 20px;
+	}
+	.card-img-top {
+    width: 100%;
+    height: 15vw;
+    object-fit: cover;
+	}
 </style>
 </head>
 
@@ -348,13 +360,13 @@ if(checkCode){
 		<h1>美食店家</h1>
 		<p>在這裡尋找您想要的餐廳吧！</p>
 		<div class="row" id="allcard">
-			<div class="col-sm-3 " th:each="store, iterStat : ${stores}">
+			<div class="col-sm-3 storeCards" th:each="store, iterStat : ${stores}">
 				<div class="card">
 					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}">
-						<img class="card-img-top storeimg" th:src="${store.base64}" th:if="${store.storeImageName!=null}" width="220"
-						height="170">
-						<img class="card-img-top basicimg" src = "images/NeverStarveicon.png" th:if="${store.storeImageName==null}" width="220"
-						height="170">
+						<img class="card-img-top mx-auto d-block storeimg" th:src="${store.base64}" 
+							th:if="${store.storeImageName!=null}" style="height: 200px">
+						<img class="card-img-top mx-auto d-block basicimg" src = "images/NeverStarveicon.png" 
+							th:if="${store.storeImageName==null}" style="height: 200px">
 					</a>
           
 					<div class="card-body" style="padding: 10px">
