@@ -319,14 +319,14 @@ if(checkCode){
 						<img class="card-img-top basicimg" src = "images/NeverStarveicon.png" th:if="${store.storeImageName==null}" width="220"
 						height="170">
 					</a>
-					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}"
-						th:text="${store.storeName}">
-					</a>
-					<span class="type" th:text="${store.storeType}" hidden="hidden"></span>
-					<span th:text="${store.storePhone}"></span>
-					<span th:text="${store.storeAddress}"></span>
-					<div class = "typebt"></div>
-					
+					<div style="margin-left: 10px">
+						<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}" th:text="${store.storeName}" style="font-size: 22px; color: black; font-weight: 900">
+						</a><br>
+						<span class="type" th:text="${store.storeType}" hidden="hidden"></span>
+						<span th:text="${store.storePhone}" style="color: #4F4F4F"></span><br>
+						<span th:text="${store.storeAddress}" style="color: #4F4F4F"></span><br>
+						<div class = "typebt"></div>
+					</div>
 				</div>
 			</div>
 		</div>
