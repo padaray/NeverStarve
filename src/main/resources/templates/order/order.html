@@ -16,9 +16,11 @@
 	
 <title>結帳畫面</title>
 <script>
+$(function() {
 	$.ajax({ type: "GET", 
 			url: "[[@{/Order/getShoppingCar}]]",
 			dataType: "json", 
+			async:false,
 			contentType: "application/json",
 			 success: function (response) { 
 				 $.each(response, function(index, element){
@@ -36,15 +38,12 @@
 			 )}
 			
 		});	
-$(function() {
-setTimeout(function(){
 setAllTotal ();
-},100) 
 $(".min").click(function(){
 	var min = $(this).next().val();
 	var object = $(this).parent();
 	if(min == 1){
-		DeleteProduct()
+		DeleteProduct($(this))
 	}else{
 		min	--;
 	}
@@ -83,9 +82,11 @@ function setAllTotal () {
 }
 
 
-$(".delete").click(DeleteProduct)
-function DeleteProduct(){
-	
+$(".delete").click(function(){
+	DeleteProduct($(this))
+})
+function DeleteProduct(obj){
+	var menuID=obj.parent().parent().find(".p").text();
 	Swal.fire({
 		  title: '確定要刪掉此餐點嗎??',
 		  showDenyButton: true,
@@ -93,15 +94,16 @@ function DeleteProduct(){
 		  denyButtonText: `讓我在想想`,
 		}).then((result) => {
 		  if (result.isConfirmed) {
-			  $(this).parent().parent().remove();
-				var menuID = $(this).parent().parent().find(".p").text()
+			  obj.parent().parent().remove();
 				$.ajax({ type: "GET", 
-					url: "[[@{/Order//deleteProduct/}]]"+ menuID
+					url: "[[@{/Order/deleteProduct/}]]"+ menuID
 					
 				});
 		    Swal.fire('該餐點已經移除囉', '', 'success')
+		    setAllTotal ();
 		  } else if (result.isDenied) {
 		    Swal.fire('看起來你還在思考呢', '', 'info')
+		    setAllTotal ();
 		  }
 		})
 	
@@ -156,6 +158,7 @@ $("#save").click(function(){
 							window.location = "[[@{/Order/order/NowOrder}]]"
 						}, 1000);
 					}
+							
 		
 	}else{
 		$.ajax({ type: "POST", 
@@ -180,13 +183,15 @@ $("#save").click(function(){
 		}else{
 			setTimeout(function(){
 			alert("訂單送出成功，即將前往歷史訂單")
+			$("#save").attr("disabled",true)
 			window.location = "[[@{/Order/order/NowOrder}]]"
 			}, 1000);
 		}
 		
 	}
-		
+	$("#save").attr("disabled",true)	
 })
+//取得會員的地址
 $("#maddres").click(function(){
 	$.ajax({ type: "GET", 
 		url:"[[@{/Order/getaddresByID}]]",
@@ -210,7 +215,8 @@ $("#ggininder").hide();
 $('input[name=checktake]').change(function(){
 	takeout = $('input[name=checktake]:checked').val()
 	if(takeout==1){
-		$("#ggininder").hide();	
+		$("#ggininder").hide();
+		$("#addressId").val("")
 	}else{
 		$("#ggininder").show();	
 	}
