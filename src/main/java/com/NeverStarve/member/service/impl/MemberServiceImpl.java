@@ -75,6 +75,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		MultipartFile memberImage = bean.getMemberImage();
 		if (memberImage != null && !memberImage.isEmpty() ) {
+			System.out.println("我來印東西");
 			String ImageFileName = memberImage.getOriginalFilename();
 			bean.setFileName(ImageFileName);
 			try {
@@ -86,7 +87,8 @@ public class MemberServiceImpl implements MemberService {
 				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
 			}
 			//如果沒圖片的話就存入吉祥物圖片
-		}else if(bean.getCoverImage()==null && memberImage == null) {
+		}else {
+			System.out.println("印東西");
 			try {
 				byte[] b = toByteArrayJSON("/images/NeverStarvefavicon.png");
 				bean.setFileName("NeverStrave.png");
@@ -98,9 +100,12 @@ public class MemberServiceImpl implements MemberService {
 			}
 			
 		}
+		MemberBean member =  memberDao.save(bean);
+		if(member.getCoverImage()!=null) {
+			member.setBas64(nsUtil.blobToBase64(member.getCoverImage(), context.getMimeType(member.getFileName())));
+		}
 		
-		
-		return memberDao.save(bean);
+		return member ;
 	}
 
 	
