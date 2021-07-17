@@ -326,6 +326,7 @@ if(checkCode){
 						<img class="card-img-top basicimg" src = "images/NeverStarveicon.png" th:if="${store.storeImageName==null}" width="220"
 						height="170">
 					</a>
+          
 					<div class="card-body" style="padding: 10px">
 					<a th:href="@{'/shop/getMenuByStoreId/' + ${store.pkStoreId}}"
 						th:text="${store.storeName}" style="font-size: 30px; text-decoration: none">

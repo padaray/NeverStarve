@@ -152,12 +152,13 @@ navigator.geolocation.getCurrentPosition(function(position){
 	var mapUrl = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0";
 	var add1 ="&origin="+latitude+","+longitude+"&destination="
 	var add2 =/*[[${store.storeAddress}]]*/
-
+	console.log();
+	setTimeout(function(){
+		
 	$("iframe").attr("src",mapUrl+add1+add2) 
-// 	alert($("iframe").attr("src"));
+	},500)
+
 	});	
-	
-	
 	
 
 })
@@ -193,16 +194,16 @@ navigator.geolocation.getCurrentPosition(function(position){
 	<div class="container" style="max-width: 700px; margin-top: 50px">
 		<div class="jumbotron text-left">
 			<div class="d-flex justify-content-center" th:inline="text">
-  <iframe
-  	id="map"
-    width="500"
-    height="500"
-    zoom="16"
-    frameborder="20" 
-    style="border:20"
-    src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&origin=台北市政府&waypoints=台北101|國父紀念館&destination=大安森林公園">
-  </iframe>
-
+		  <iframe
+		  	id="map"
+		    width="500"
+		    height="500"
+		    zoom="16"
+		    frameborder="20" 
+		    style="border:20"
+		    th:src="${storeAddress}">
+		  </iframe>
+  
 </div>
 			<div>
 				<div>
