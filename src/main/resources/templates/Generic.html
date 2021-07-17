@@ -4,11 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>NeverStarve</title>
+
 </head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">	
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"> -->
-<!-- <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+	crossorigin="anonymous">
+<link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	
 <!-- bootStrap icon -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
@@ -16,13 +20,11 @@
     src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
     crossorigin="anonymous"></script>
-
+    
+<title>NeverStarve</title>
 </head>
 <body class="index">
-	<header th:fragment="Header">
-	<!-- bootStrap icon -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-
+	<header th:fragment="Header" class="fixed-top">
       <div id="headbar" style="background-color: #C4E1E1 	;box-shadow: 0 4px 10px rgba(0,0,0,0.3) ;width:100% ">
             <div class="logodiv">
                 <a th:href="@{/}"><img th:src=@{/images/NeverStarvelogo3.png} height="80px" ></a>
@@ -30,7 +32,7 @@
                 
             </div>
              
-            <div class="logodiv d-flex justify-content-end fixed-top" style="weigth:125px ;position: fixed">
+            <div class="logodiv d-flex justify-content-end" style="width:125px">
 <!--             	<a th:href="@{/Booking/}" type="button" class="btn btn-dark"><i class='fa fa-calendar'></i> 訂位系統(暫停使用)</a> -->
 <!--             	<a th:href="@{/}" type="button" class="btn btn-success">Temp</a> longin-->
             </div>
@@ -56,12 +58,12 @@
 <!--             </div>           -->
         </div>
         
-        
-        <nav class="navbar navbar-expand-sm bg-light navbar-black nav justify-content-end fixed-top" style="height: 60px;width:100% ;top:80px" th:if ="${session.member != null} and ${session.member.userType != '0'}">
-						  <!-- Brand/logo-->
-						  <a class="navbar-brand" href="#">
-						    <img th:src="${session.member.bas64}" class="rounded" alt="logo" style="width:40px; margin-right: 0px">
-						  </a>
+        <nav class="navbar navbar-expand-sm bg-light navbar-black nav justify-content-end fixed-top" 
+        		style="height: 60px;width:100% ;top:80px" th:if ="${session.member != null} and ${session.member.userType != '0'}">
+			<!-- Brand/logo-->
+				<a class="navbar-brand" href="#">
+					<img th:src="${session.member.bas64}" class="rounded" alt="logo" style="width:40px; margin-right: 0px">
+				</a>
   <!-- Links -->
 			<ul class="navbar-nav">
 <!-- 				<li class="nav-item"><a class="nav-link" href="#">Link 1</a></li> -->
@@ -70,7 +72,8 @@
 
 				<!-- Dropdown -->
 				<li class="nav-item dropdown" style="margin-right: 80px">
-				<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown" th:text="'Hello!'+${session.member.name}"></a>
+				<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown" 
+						th:text="'Hello!&nbsp'+${session.member.name}"></a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" th:href="@{/Order/order/NowOrder}">查看歷史訂單</a> 
 						<a class="dropdown-item" th:href="@{/Booking/findBookings}">預約座位查詢</a>
@@ -80,10 +83,9 @@
 						<a class="dropdown-item" th:href="@{/Member/logout}">登出</a>
 					</div>
 				 </li>
-
 			</ul>
-
 		</nav>
+
 	</header>
 	
 	<footer th:fragment="Footer">
