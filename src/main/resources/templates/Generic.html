@@ -48,7 +48,7 @@
 <!--             <div class="logindiv"> -->
 <!--             </div>           -->
         </div>
-        <nav class="navbar navbar-expand-sm bg-light navbar-black nav justify-content-end" th:if ="${session.member != null}">
+        <nav class="navbar navbar-expand-sm bg-light navbar-black nav justify-content-end" th:if ="${session.member != null} and ${session.member.userType!='0'}">
 						  <!-- Brand/logo-->
 						  <a class="navbar-brand" href="#">
 						    <img th:src="${session.member.bas64}"   class="rounded" alt="logo" style="width:40px;">
