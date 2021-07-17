@@ -142,12 +142,12 @@ $(function () {
 				
 				<div class="form-group">
 					<label for="passwordId">密碼</label>
-					<input type="text" name="password" id="passwordId" class="form-control" th:field="*{password}">
+					<input type="password" name="password" id="passwordId" class="form-control" th:value="${session.member.password}">
 				</div>
 				
 				<div class="form-group">
 					<label for="checkPasswordId">確認密碼</label>
-					<input type="text" name="checkPassword" id="checkPasswordId" class="form-control" th:value="${session.member.password}">
+					<input type="password" name="checkPassword" id="checkPasswordId" class="form-control" th:value="${session.member.password}">
 				</div>
 				
 				<div class="form-group">
