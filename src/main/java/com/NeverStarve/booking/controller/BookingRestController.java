@@ -64,8 +64,9 @@ public class BookingRestController {
 //		System.out.println(sdf.format(d));
 		
 		System.out.println(storeBookingService.findTimesByDateAndStoreId(d, storeId));
+		List<StoreBookingBean> responseStrList = storeBookingService.findTimesByDateAndStoreId(d, storeId);
 		
-		return storeBookingService.findTimesByDateAndStoreId(d, storeId);
+		return responseStrList;
 	}
 	
 	@PostMapping("/cancelBooking/{bookingNo}")

@@ -1,6 +1,7 @@
 package com.NeverStarve.store.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.MenuService;
+import com.NeverStarve.store.service.StoreOrderListService;
 import com.NeverStarve.store.service.StoreService;
 
 @Controller
@@ -34,16 +36,21 @@ public class StoreController {
 
 	@Autowired
 	MenuService menuService;
+	
+	@Autowired 
+	StoreOrderListService storeOrderListService;
 
 	// 店家首頁
 	@GetMapping("/storeIndex")
 	public String storeIndex(HttpServletRequest request, Model model) {
-		StoreBean storebean = checkCookie(request, model);
-		if (storebean == null) {
+		StoreBean storeBean = checkCookie(request, model);
+		if (storeBean == null) {
 			return "store/login";
 		} else {
-			List<MenuBean> menuList = menuService.getMenuByStoreBean(storebean);
+			List<MenuBean> menuList = menuService.getMenuByStoreBean(storeBean);
 			model.addAttribute("menuList", menuList);
+			Map<String ,Integer> resultMap= storeOrderListService.getOrderListByStoreBean(storeBean);
+			model.addAttribute("resultMap", resultMap);
 			return "store/storeIndex";
 		}
 	}
@@ -138,8 +145,11 @@ public class StoreController {
 	@PostMapping("/storetype/{type}")
 	public @ResponseBody List<StoreBean> getstorebytype(@PathVariable String type) {
 
-		System.out.println(type);
 		return storeService.findBystoreType(type);
 	}
-
+	
+	@PostMapping({"/searchBar/{keyword}","/searchBar"})
+	public @ResponseBody List<StoreBean> searchBar(@PathVariable(required = false) String keyword) {
+		return storeService.searchBar(keyword);
+	}
 }
