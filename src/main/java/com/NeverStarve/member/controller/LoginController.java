@@ -60,7 +60,6 @@ public class LoginController {
 		MemberBean member =  memberService.loginMember(bean.getEmail(),bean.getPassword());
 		
 		if(member != null) {
-			model.addAttribute("member" , member);
 //			Date date = null;  //DATE轉字串 轉DATE
 //				SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //				String str = sdf.format(new Date());
@@ -70,6 +69,7 @@ public class LoginController {
 			member.setMemberTown("1");
 			memberService.sendSimpleMail(member.getEmail(), "[NeverStarve通知] 登入通知", "您好"+member.getName()+"，您已於"+member.getLongTime()+"時登入");
 			memberService.save(member);
+			model.addAttribute("member" , member);
 		}else {
 			// NG, 登入失敗, userid與密碼的組合錯誤，放相關的錯誤訊息到 errorMsgMap 之內
 			result.rejectValue("emailOrPasswordError", "", "帳號或密碼錯誤");
@@ -175,7 +175,7 @@ public class LoginController {
 			session.invalidate();	// session.invalidate()讓SESSION失效.
 		}
 		
-		return "redirect:/Member/login";
+		return "redirect:/";
 	}
 	
 	
