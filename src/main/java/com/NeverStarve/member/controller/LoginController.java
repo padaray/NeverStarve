@@ -175,7 +175,7 @@ public class LoginController {
 			session.invalidate();	// session.invalidate()讓SESSION失效.
 		}
 		
-		return "redirect:/Member/login";
+		return "redirect:/";
 	}
 	
 	

@@ -121,6 +121,9 @@ public class RegisterController {
 //		if(!member.getEmail().equals(memberService.getMamberById(member.getPkMemberId()).get().getEmail())){
 //			return null;
 //		} 
+		if (!confirmPassword(member)) {
+			result.rejectValue("checkPassword", "confirmError", "密碼不一致");
+		}
 		
 		if(result.hasErrors()) {
 			
@@ -134,9 +137,6 @@ public class RegisterController {
 			member.setPkMemberId(sessionMember.getPkMemberId());
 			member.setUserType(sessionMember.getUserType());
 			
-
-			System.out.println(sessionMember.getEmail());
-			System.out.println(member);
 			member = memberService.updateMember(member);
 			model.addAttribute("member", member);
 
