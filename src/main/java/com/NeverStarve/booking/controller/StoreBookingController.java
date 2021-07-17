@@ -84,24 +84,30 @@ public class StoreBookingController {
 		model.addAttribute("sbb", sbb);
 		
 //		System.out.println(sbb.getBookingTimes());
-		
-		String timeStr = "";
-		for(Date time : sbb.getBookingTimes()) {
-			timeStr += String.valueOf(time) + ","; 
-		}
-		timeStr = timeStr.substring(0, timeStr.length()-1);
+		if(sbb.getBookingTimes() != null) {
+			String timeStr = "";
+			for(Date time : sbb.getBookingTimes()) {
+				timeStr += String.valueOf(time) + ","; 
+			}
+			timeStr = timeStr.substring(0, timeStr.length()-1);
+			
 //		System.out.println("hi: " + timeStr);
 
-		String[] timeStrSplit = timeStr.split(",");
-		for(String t : timeStrSplit) {
-			StoreBookingBean newBean = new StoreBookingBean();
-			newBean.setBookingTime(t);
-			newBean.setBookingDate(sbb.getBookingDate());
-			newBean.setStoreBean(storeBean);
+			String[] timeStrSplit = timeStr.split(",");
+			for(String t : timeStrSplit) {
+				StoreBookingBean newBean = new StoreBookingBean();
+				newBean.setBookingTime(t);
+				newBean.setBookingDate(sbb.getBookingDate());
+				newBean.setStoreBean(storeBean);
+				
+				System.out.println(t);
+	
+				storeBookingService.save(newBean);
+			}
 			
-			System.out.println(t);
-
-			storeBookingService.save(newBean);
+		} else {
+			model.addAttribute("nullTimes", "請選擇時段");
+			return "booking/storeBooking";
 		}
 		
 		return "booking/storeBookingConfirm";
