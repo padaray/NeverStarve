@@ -13,8 +13,7 @@
 	integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
 	crossorigin="anonymous">
 <link rel='stylesheet' th:href="@{/css/index.css}" type="text/css" />	
-<!-- bootStrap icon -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
 
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
@@ -25,6 +24,8 @@
 </head>
 <body class="index">
 	<header th:fragment="Header"  >
+	<!-- bootStrap icon -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 	<div style="width: 100%;height: 160px;">
 	<div style="position: fixed;top: 0;left: 0;width: 100%;z-index: 999;">
 	
@@ -42,7 +43,8 @@
             <div>
 	           	<a th:href="@{/Member/register}" type="button" class="btn btn-primary " th:if ="${session.member == null}">註冊</a>
 	           	<a th:href="@{/Member/login}" type="button" class="btn btn-primary " th:if ="${session.member == null}">登入</a>
-	           	<a  class="btn btn-warning "  th:href="@{/Member/logout}" th:if="${session.member!=null} and ${session.member.userType == '0'}">登出</a>           
+	           	<a  class="btn btn-warning "  th:href="@{/Member/logout}" th:if="${session.member!=null} and ${session.member.userType == '0'}">登出</a>   
+	            
             </div>
             
 
@@ -71,7 +73,7 @@
 			<ul class="navbar-nav">
 <!-- 				<li class="nav-item"><a class="nav-link" href="#">Link 1</a></li> -->
 		<!-- Dropdown -->
-				<li class="nav-item dropdown" style="margin-right: 80px">
+				<li class="nav-item dropdown"style="margin-right: 10px" >
 				<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown" 
 						th:text="'Hello!&nbsp'+${session.member.name}"></a>
 					<div class="dropdown-menu">
@@ -83,6 +85,8 @@
 						<a class="dropdown-item" th:href="@{/Member/logout}">登出</a>
 					</div>
 				 </li>
+				<li class="nav-item" style="margin-right:20px"><a class="nav-link" th:href="@{/Order/order}"> <i class="bi bi-cart4"></i></a></li>
+				  
 			</ul>
 		</nav>
 <!-- 	會員後臺BAR -->
