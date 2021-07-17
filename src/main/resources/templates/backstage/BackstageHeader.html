@@ -31,8 +31,8 @@
 		            其他
 		          </a>
 		          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-		            <li><a class="dropdown-item" href="#">我的訂單</a></li>
-		            <li><a class="dropdown-item" href="#">修改會員資料</a></li>
+		            <li><a class="dropdown-item" th:href="@{/Order/order/NowOrder}">我的訂單</a></li>
+		            <li><a class="dropdown-item" th:href="@{/Member/memberDetail}">修改會員資料</a></li>
 		            <li><hr class="dropdown-divider"></li>
 		            <li><a class="dropdown-item" th:href="@{/Member/logout}">登出</a></li>
 		          </ul>

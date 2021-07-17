@@ -153,6 +153,9 @@ $(function () {
 				
 				<div style="margin: 20px;">
 					<label for="photoId">會員照片: </label>
+					<div class="form-group">
+						<img id="memberImg" alt=""   th:src="*{bas64}" style="height: 200px ; border-radius: 15px;">
+					</div>
 					<input type="file" name="memberImage"  id="photoId" th:field="*{memberImage}" multiple="multiple">
 				</div>
 
@@ -198,6 +201,15 @@ $(function () {
 			"margin" : "10px auto",		
 			"align-items": "center"
 		});
+		
+		//讓修改上傳圖片可以直接顯示圖片
+		$('#photoId').on('change', function(e){      
+		    const file = this.files[0];
+		    const objectURL = URL.createObjectURL(file);
+		    
+		    $('#memberImg').attr('src', objectURL);
+		  });
+
 		
 	</script>
 
