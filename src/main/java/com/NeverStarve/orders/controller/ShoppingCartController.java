@@ -50,6 +50,7 @@ public class ShoppingCartController {
 		model.addAttribute("menu",MenuByStorId);
 		model.addAttribute("member",member);
 		
+		
 		/*
 		 * Tony-20210706
 		 */
@@ -62,6 +63,9 @@ public class ShoppingCartController {
 				return "redirect:/";
 			}
 			model.addAttribute("store", store);
+			
+			//前端地圖功能拿來抓商家地址位置
+			model.addAttribute("storeAddress","https://www.google.com/maps/embed/v1/place?key=AIzaSyCXObnx9bRVH2HGiSWdaVMVYKNkQpzqEg0&q="+store.getStoreAddress());
 		
 		return "test/testcrat";
 	}
