@@ -41,12 +41,12 @@
 </head>
 <body>
 	<div th:insert="Generic :: Header"></div>
-	<div class="container" style="max-width: 700px; margin-top: 50px">
+	<div class="container" style="max-width: 700px; margin-top: 150px">
 		<h3 class="page-header">線上訂位</h3>
 		<div class="jumbotron text-left">
 			<p ><span th:text="${session.member.name}"></span>，您好！歡迎使用本平台訂位系統！</p>
 			<p>
-				<strong>請選擇用餐日期、時間及人數</strong>
+				<strong>請選擇用餐日期、時間及人數（皆必填*）</strong>
 			</p><hr>
 			<div>
 				<form action="#" th:action="@{/Booking/bookingPost}" method="post" th:object="${btb}">
@@ -105,6 +105,7 @@
 						</div>
 <!-- 							<p class= "form-control-static text-danger" th:errors="*{bookingTime}"></p> -->
 <!-- 							<p class= "form-control-static text-danger"  th:text="${RequiredTime}"></p> -->
+<!-- 					<p th:if="*{bookingTime == null}" th:text="本店家該時段無營業或未開放預約時段，請選擇其他日期"> </p> -->
 					<p id="testTime"> </p>
 					</div>
 					<div class="form-group">
@@ -129,6 +130,9 @@
 <!-- 					<p th:text="'總座位數(測試): ' + ${store.seatNumber}"> </p> -->
 					</div>
 					<hr>
+					<div>
+						
+					</div>
 					<p>
 						<input id="confirmSubmitId" type="checkbox" name="confirm" th:checked="false" value="1">
 						<label for="confirmSubmitId">已確認預約資訊無誤</label>
@@ -199,22 +203,28 @@
 			data: {strDate : $("#datepicker").val()},
 			contentType: 'application/json',
 			errors: function (xhr) {
-				alert("發生錯誤: " + xhr.status + " " + xhr.statusText);
+// 				alert("發生錯誤: " + xhr.status + " " + xhr.statusText);
+				
 			},
 			success: 
 				function (response) {
-
-				var bTimesBtn = "";
-				$.each(response, function(index, element){
-					var strTime = element.bookingTime
-					strTime = strTime.substring(11, 16)
-					bTimesBtn += '<label class="btn btn-outline-info bTimeBtn" style="margin: 2px">' + 
-								 '<input type="radio" name="bookingTime" th:fields="*{bookingTime}" value="' + strTime  + '" required>' + strTime +
-								 '</label>'
-				})
-// 					console.log(bTimesBtn)
-					$('#bTimesbtn').html(bTimesBtn)
-			}
+					if(response != ""){
+						var bTimesBtn = "";
+						$.each(response, function(index, element){
+							var strTime = element.bookingTime
+							strTime = strTime.substring(11, 16)
+							bTimesBtn += '<label class="btn btn-outline-info bTimeBtn" style="margin: 2px">' + 
+										 '<input type="radio" name="bookingTime" th:fields="*{bookingTime}" value="' + strTime  + '" required>' + strTime +
+										 '</label>'
+						})
+// 							console.log(bTimesBtn)
+							$('#bTimesbtn').html(bTimesBtn)
+					} else {
+						var bTimesBtnErr = "";
+						bTimesBtnErr = '<p class="text-danger">本店家該日無營業或未開放預約時段，請選擇其他日期 </p>'
+						$('#bTimesbtn').html(bTimesBtnErr)
+					}
+				}
 		})
 	};
 	//選取預約日期後，ajax請求預約時段回傳至前端
