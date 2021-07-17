@@ -86,7 +86,9 @@ $(function(){
 </script>
 </head>
 <body>
-	<div class=" text-center" id="textst">
+	 <div th:insert="Generic :: Header"></div>
+	 
+	<div class=" text-center" id="textst" style="margin-top: 150px">
 	<p id="tu"><span th:text="${id.name}"></span>，您好！這是您的歷史訂單！</p>
 	</div>
 	<div class="container" style="width: 1800px">

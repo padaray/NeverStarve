@@ -191,14 +191,14 @@ navigator.geolocation.getCurrentPosition(function(position){
  <div th:insert="Generic :: Header"></div>
 
 	<!--  若購物車頁面改成餐廳詳細資訊頁面，直接加入此段的預約功能，再做排版  -->
-	<div class="container" style="max-width: 700px; margin-top: 50px">
+	<div class="container" style="max-width: 700px; margin-top: 150px">
 		<div class="jumbotron text-left">
 			<div class="d-flex justify-content-center" th:inline="text">
 		  <iframe
 		  	id="map"
 		    width="500"
 		    height="500"
-		    zoom="16"
+		    zoom="20"
 		    frameborder="20" 
 		    style="border:20"
 		    th:src="${storeAddress}">
