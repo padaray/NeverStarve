@@ -171,18 +171,6 @@ if(checkCode){
 		}
 	 }
 	 
-	 $(".storeimg").load(function(){
-
-		 console.log("載入完成！");
-
-		});
-	 
-	 function ifnoimg(){
-		 
-		 
-		 
-	 }
-	 
 	 function ajaxgettype(){
 		 let type = $(this).text();
 		 $.ajax({
@@ -216,7 +204,36 @@ if(checkCode){
 	 	
 	 $(".eachtype").click(ajaxgettype);
 	 
-	
+	$("#searchbt").click(function(){
+		 let keyword = $("#searchBar").val();
+		 $.ajax({
+				type:"POST",
+				url:"[[@{/store/searchBar}]]"+"/"+keyword,
+				success:function (data) {
+					$("#allcard").empty();
+					let str = "";
+					$.each(data, function(index, store){ 
+						str +='<div class="col-sm-3"><div class="card">'+
+						'<a href="[[@{/shop/getMenuByStoreId}]]'+'/' + store.pkStoreId+'">';
+						if(store.base64 == null){
+							str+='<img  class="card-img-top basicimg" src = "images/NeverStarveicon.png" ></a>'
+						}else{
+							str+='<img class="card-img-top storeimg" src="'+store.base64+'"></a>'
+						}
+						str += '<a href="[[@{/shop/getMenuByStoreId}]]'+'/' + store.pkStoreId+'">'+
+						store.storeName+'</a>'+
+						'<span class="type" hidden="hidden">'+store.storeType+'</span>'+
+						'<div class = "typebt"></div>'+
+						'<span>'+store.storePhone+'</span>'+
+						'<span>'+store.storeAddress+'</span></div></div>';
+					
+					})
+					$("#allcard").html(str);
+					showType();
+					$(".eachtype").click(ajaxgettype);
+			}
+	 	})
+	})
 
 
  
@@ -261,8 +278,8 @@ if(checkCode){
 		
 		<div class="d-flex justify-content-center">
 			<div class="input-group d-flex justify-content-center" >
-				<input type="text"  style="width: 850px; height: 60px; font-size: 25px" placeholder="店家名稱、地區、菜色種類" id="searchBar">
-				<div class="input-group-append">
+				<input id="searchBar" type="text"  style="width: 850px; height: 60px; font-size: 25px" placeholder="店家名稱、地區、菜色種類">
+				<div id="searchbt" class="input-group-append">
 					<button class=" btn btn-info" style="font-size: 25px">查詢店家</button>
 				</div>
 			</div>

@@ -27,6 +27,8 @@ public interface StoreService {
 
 	List<StoreBean> findBystoreType(String storeType);
 	
+	List<StoreBean> searchBar(String keyword);
+
 	int getRecordsPerPage();
 
 	long getRecordCounts();

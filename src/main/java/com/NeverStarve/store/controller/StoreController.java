@@ -24,7 +24,6 @@ import com.NeverStarve.store.model.MenuBean;
 import com.NeverStarve.store.model.StoreBean;
 import com.NeverStarve.store.service.MenuService;
 import com.NeverStarve.store.service.StoreOrderListService;
-import com.NeverStarve.store.service.StoreOrderService;
 import com.NeverStarve.store.service.StoreService;
 
 @Controller
@@ -146,8 +145,11 @@ public class StoreController {
 	@PostMapping("/storetype/{type}")
 	public @ResponseBody List<StoreBean> getstorebytype(@PathVariable String type) {
 
-		System.out.println(type);
 		return storeService.findBystoreType(type);
 	}
-
+	
+	@PostMapping({"/searchBar/{keyword}","/searchBar"})
+	public @ResponseBody List<StoreBean> searchBar(@PathVariable(required = false) String keyword) {
+		return storeService.searchBar(keyword);
+	}
 }

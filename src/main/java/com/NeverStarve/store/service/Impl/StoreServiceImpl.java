@@ -261,4 +261,16 @@ public class StoreServiceImpl implements StoreService {
 		return sbls;
 	}
 
+	@Override
+	public List<StoreBean> searchBar(String keyword) {
+		if (keyword == null) {
+
+			return storeRepository.findAll();
+		} else {
+
+			return storeRepository.findByStoreNameContainingOrStoreAddressContainingOrStoreTypeContaining(keyword,
+					keyword, keyword);
+		}
+	}
+
 }

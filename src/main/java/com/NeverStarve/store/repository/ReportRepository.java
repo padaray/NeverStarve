@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.NeverStarve.orders.model.OrderListBean;
-import com.NeverStarve.store.model.StoreBean;
 
 
 public  interface ReportRepository extends JpaRepository<OrderListBean, Integer>{
