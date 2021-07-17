@@ -24,6 +24,8 @@ public interface StoreRepository extends JpaRepository<StoreBean, Integer> {
 
 	List<StoreBean> findByStoreAddressContaining(String address);
 	
+	List<StoreBean> findByStoreNameContainingOrStoreAddressContainingOrStoreTypeContaining(String keyword,String keyword1,String keyword2);
+	
 	Long countByStoreAddressContaining(String address);
 	
 	@Modifying

@@ -5,15 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.Base64;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
