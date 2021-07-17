@@ -12,6 +12,7 @@
 <link rel="shortcut icon"  th:href="@{/favicon.ico}"/> <!-- 網站小圖 -->	
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 	
 <title>結帳畫面</title>
 <script>
@@ -42,8 +43,10 @@ setAllTotal ();
 $(".min").click(function(){
 	var min = $(this).next().val();
 	var object = $(this).parent();
+	var menuID = $(this).parent().parent().find(".p").text()
 	if(min == 1){
-		DeleteProduct()
+		console.log(DeleteProduct)	
+		DeleteProduct(menuID)
 	}else{
 		min	--;
 	}
@@ -95,12 +98,14 @@ function DeleteProduct(){
 			  $(this).parent().parent().remove();
 				var menuID = $(this).parent().parent().find(".p").text()
 				$.ajax({ type: "GET", 
-					url: "[[@{/Order//deleteProduct/}]]"+ menuID
+					url: "[[@{/Order/deleteProduct/}]]"+ menuID
 					
 				});
 		    Swal.fire('該餐點已經移除囉', '', 'success')
+		    setAllTotal ();
 		  } else if (result.isDenied) {
 		    Swal.fire('看起來你還在思考呢', '', 'info')
+		    setAllTotal ();
 		  }
 		})
 	
@@ -155,6 +160,7 @@ $("#save").click(function(){
 							window.location = "[[@{/Order/order/NowOrder}]]"
 						}, 1000);
 					}
+							
 		
 	}else{
 		$.ajax({ type: "POST", 
@@ -179,12 +185,13 @@ $("#save").click(function(){
 		}else{
 			setTimeout(function(){
 			alert("訂單送出成功，即將前往歷史訂單")
+			$("#save").attr("disabled",true)
 			window.location = "[[@{/Order/order/NowOrder}]]"
 			}, 1000);
 		}
 		
 	}
-		
+	$("#save").attr("disabled",true)	
 })
 $("#maddres").click(function(){
 	$.ajax({ type: "GET", 
