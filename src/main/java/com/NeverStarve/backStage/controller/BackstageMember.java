@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletContext;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import com.NeverStarve.member.service.MemberService;
 import com.NeverStarve.orders.model.OrderBean;
 import com.NeverStarve.orders.model.OrderListBean;
 import com.NeverStarve.orders.service.OrderService;
+import com.NeverStarve.util.NeverStarveUtil;
 
 @Controller
 @RequestMapping("/Backstage/Member")
@@ -42,10 +44,20 @@ public class BackstageMember {
 	@Autowired
 	OrderService orderService ;
 	
+	@Autowired
+	ServletContext context;
+	
+	NeverStarveUtil nsUtil = new NeverStarveUtil();
+	
 	@GetMapping("/{id}")
 	public String getMamberById(@PathVariable int id, Model model) {
 		Optional<MemberBean> member = memberservice.getMamberById(id);
 		MemberBean m = member.get();
+		if (m.getCoverImage() != null && m.getFileName() != null) {
+
+			m.setBas64(
+					nsUtil.blobToBase64(m.getCoverImage(), context.getMimeType(m.getFileName())));
+		}
 		model.addAttribute("member",m);
 		return "backstage/update" ;
 	}

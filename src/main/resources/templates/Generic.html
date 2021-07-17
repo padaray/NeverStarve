@@ -39,10 +39,9 @@
 <!--             	<a th:href="@{/Booking/}" type="button" class="btn btn-dark"><i class='fa fa-calendar'></i> 訂位系統(暫停使用)</a> -->
 <!--             	<a th:href="@{/}" type="button" class="btn btn-success">Temp</a> longin-->
             </div>
-            <div>
+            <div style="margin-right: 20px;">
 	           	<a th:href="@{/Member/register}" type="button" class="btn btn-primary " th:if ="${session.member == null}">註冊</a>
-	           	<a th:href="@{/Member/login}" type="button" class="btn btn-primary " th:if ="${session.member == null}">登入</a>
-	           	<a  class="btn btn-warning "  th:href="@{/Member/logout}" th:if="${session.member!=null} and ${session.member.userType == '0'}">登出</a>           
+	           	<a th:href="@{/Member/login}" type="button" class="btn btn-primary " th:if ="${session.member == null}">登入</a>          
             </div>
             
 
