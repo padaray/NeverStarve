@@ -185,6 +185,8 @@ $(function () {
 				
 			</form>
 		</div>
+		<button class="btn btn-primary" id="demoBtn" type="button" style="margin-left: 500px;width: 100px">一鍵新增</button>
+		
 	</div>
 <script>
 $("#twzipcode").twzipcode({
@@ -195,6 +197,19 @@ $("#twzipcode").twzipcode({
 	countyName: "storeCity", // 自訂城市 select 標籤的 name 值
 	districtName: "storeTown" // 自訂地區 select 標籤的 name 值
 	});
+	
+
+$("#demoBtn").click(function(){
+	$("#storeAccountId").val("SaltyChicken");
+	$("#storePasswordId").val("a1113210");
+	$("#storeCheckPasswordId").val("a1113210");
+	$("#storeNameId").val("噴水鹹水雞");
+	$("#storeAddressId").val("信義路二段171號");
+	$("#storePhoneId").val("25660784");
+	$("#seatNumberId").val("20");
+	
+	
+})
 </script>
 </body>
 </html>
