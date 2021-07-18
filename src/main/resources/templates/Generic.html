@@ -24,8 +24,6 @@
 </head>
 <body class="index">
 	<header th:fragment="Header"  >
-	<!-- bootStrap icon -->
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 	<div style="width: 100%;height: 160px;">
 	<div style="position: fixed;top: 0;left: 0;width: 100%;z-index: 999;">
 	
@@ -41,24 +39,9 @@
 <!--             	<a th:href="@{/}" type="button" class="btn btn-success">Temp</a> longin-->
             </div>
             <div style="margin-right: 20px;">
-	           	<a th:href="@{/Member/register}" type="button" class="btn btn-primary " th:if ="${session.member == null}">註冊</a>
-	           	<a th:href="@{/Member/login}" type="button" class="btn btn-primary " th:if ="${session.member == null}">登入</a>          
+	           	<a th:href="@{/Member/register}" type="button" class="btn btn-info " th:if ="${session.member == null}">註冊</a>
+	           	<a th:href="@{/Member/login}" type="button" class="btn btn-info " th:if ="${session.member == null}">登入</a>          
             </div>
-            
-
-<!--             <div class="headform"> -->
-<!--                 <form > -->
-<!--                    <div class="input-group mb-3"> -->
-<!-- 					  <input type="text" class="form-control" placeholder="查詢" aria-label="Recipient's username" aria-describedby="basic-addon2"> -->
-<!-- 					  <div class="input-group-append"> -->
-<!-- 					    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button> -->
-<!-- 					  </div> -->
-<!-- 					</div>                                                 -->
-<!--                 </form> -->
-<!--             </div>  -->
-            
-<!--             <div class="logindiv"> -->
-<!--             </div>           -->
         </div>
     
 			<!--     會員BAR -->
@@ -97,8 +80,24 @@
 	</div>	
 	</header>
 	
-	<footer th:fragment="Footer">
-<!-- 	---------------------- -->
+	<footer th:fragment="Footer" style="height: 200px">
+		<!-- footer applied by bootstrap 5 -->
+		<div id="footbar" style="background-color: #C4E1E1">
+			<div class="d-flex p-2 bd-highlight mb-3 align-items-center justify-content-center" style="height: 200px; ">
+				<div class="text-center">
+					<div class="">
+						<p style="font-size: 30px">NeverStarve</p>
+					</div>
+					<div class="">
+						<p>EEIT 127 JAVA跨領域工程師養成班 第五組</p>
+					</div>
+					<div class="">
+						<p>© Copyright©2021</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
 	</footer>
 
 
