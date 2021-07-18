@@ -23,6 +23,8 @@ public interface StoreRepository extends JpaRepository<StoreBean, Integer> {
 	Page<StoreBean> findByStoreAddressContaining(Pageable pageable, String address);
 
 	List<StoreBean> findByStoreAddressContaining(String address);
+
+	List<StoreBean> findByStoreLv(Integer storeLv);
 	
 	List<StoreBean> findByStoreNameContainingOrStoreAddressContainingOrStoreTypeContaining(String keyword,String keyword1,String keyword2);
 	

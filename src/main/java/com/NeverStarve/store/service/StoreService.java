@@ -15,6 +15,8 @@ public interface StoreService {
 	Optional<StoreBean> findoneById(int id);
 	
 	List<StoreBean> findAll();
+
+	List<StoreBean> getRandomAdvertising(Integer storeLv);
 	
 	boolean accountExist(String storeAccount);
 	

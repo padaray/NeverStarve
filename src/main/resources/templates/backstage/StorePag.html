@@ -188,7 +188,8 @@ $(function(){
 		}
 		
 		function changeLV(){
-			let id = $(this).parents("tr").children().eq(0).text().substring(0,1);
+			let id = $(this).parents("tr").children().eq(0).text();
+			console.log(id);
 			let lv = $(this).val();
 			let obj = $(this);
 			Swal.fire({
@@ -295,8 +296,8 @@ $(function(){
 				</thead>
 				<tbody id="tbody">
 					<tr th:each="store,loopStatus: ${products_DPP}">
-						<th valign="middle"><a id="a" th:inline="text"
-							th:href="@{'/Backstage/Store/Showstore/'+${store.value.pkStoreId}}">[[${store.value.pkStoreId}]]
+						<th valign="middle"><a id="a" th:text="${store.value.pkStoreId}"
+							th:href="@{'/Backstage/Store/Showstore/'+${store.value.pkStoreId}}">
 						</a></th>
 						<td valign="middle">[[${store.value.storeName}]]</td>
 						<td valign="middle">[[${store.value.storeAddress}]]</td>
