@@ -21,6 +21,7 @@ public class HomeController {
 		model.addAttribute("imgurl", "../static/images/NeverStarvelogo3.png");
 		
 		//搜尋所有店家資料，用來呈現到首頁上
+		model.addAttribute("advertising",storeSerivce.getRandomAdvertising(2));
 		List<StoreBean> storeAll = storeSerivce.findAll();
 		model.addAttribute("stores",storeAll);
 		

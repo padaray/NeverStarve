@@ -5,12 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.sql.rowset.serial.SerialBlob;
@@ -271,6 +273,34 @@ public class StoreServiceImpl implements StoreService {
 			return storeRepository.findByStoreNameContainingOrStoreAddressContainingOrStoreTypeContaining(keyword,
 					keyword, keyword);
 		}
+	}
+
+	@SuppressWarnings("null")
+	@Override
+	public List<StoreBean> getRandomAdvertising(Integer storeLv) {
+		List<StoreBean> sbls = storeRepository.findByStoreLv(storeLv);
+		List<StoreBean> newsbls = new ArrayList<StoreBean>();
+		
+		Random rd = new Random(); //產生Random物件
+		List<Integer> al=new ArrayList<>();
+		while(al.size()<=2){ //總共3個數字
+			int n=rd.nextInt(sbls.size()); 
+			if(al.contains(n)) 
+				continue;     //重複的不加入
+			else
+				al.add(n);
+			}
+
+		for (int i :al) {
+			StoreBean sb = sbls.get(i);
+			System.out.println(sb.getPkStoreId());
+			if(sb.getCoverImage()!=null) {
+				sb.setBase64(util.blobToBase64(sb.getCoverImage(), context.getMimeType(sb.getStoreImageName())));
+			}
+			newsbls.add(sb);
+		}
+
+		return newsbls;
 	}
 
 }
