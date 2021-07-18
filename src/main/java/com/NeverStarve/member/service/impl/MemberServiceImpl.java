@@ -75,7 +75,6 @@ public class MemberServiceImpl implements MemberService {
 		
 		MultipartFile memberImage = bean.getMemberImage();
 		if (memberImage != null && !memberImage.isEmpty() ) {
-			System.out.println("我來印東西");
 			String ImageFileName = memberImage.getOriginalFilename();
 			bean.setFileName(ImageFileName);
 			try {
@@ -87,8 +86,7 @@ public class MemberServiceImpl implements MemberService {
 				throw new RuntimeException("檔案上傳發生異常: " + e.getMessage());
 			}
 			//如果沒圖片的話就存入吉祥物圖片
-		}else {
-			System.out.println("印東西");
+		}else if(bean.getFileName()==null){
 			try {
 				byte[] b = toByteArrayJSON("/images/NeverStarvefavicon.png");
 				bean.setFileName("NeverStrave.png");
@@ -453,7 +451,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	@Async	//非同步請求的註釋
+//	@Async	//非同步請求的註釋
 	public void sendForgotPasswordMail(String email, String subject, String content) {
 		
 		SimpleMailMessage message = new SimpleMailMessage();

@@ -126,6 +126,9 @@ public class LoginController {
 		Cookie cookieEmail = null;
 		Cookie cookiePassword = null;
 		Cookie cookieId = null;
+		Cookie productIDCookie=null;
+		Cookie productQuantityCookie = null;
+		
 		String email = "";
 		String password = "";
 		String userId = "";
@@ -143,9 +146,21 @@ public class LoginController {
 		cookieId.setMaxAge(0);
 		cookieId.setPath(request.getContextPath());
 		
+		//下面兩個是刪除購物車的COOKIE
+		productIDCookie = new Cookie("productIDName","");
+		productIDCookie.setMaxAge(0);
+		productIDCookie.setPath(request.getContextPath());
+		
+		productQuantityCookie = new Cookie("productQuantityName","");
+		productQuantityCookie.setMaxAge(0);	
+		productQuantityCookie.setPath(request.getContextPath());
+		
 		response.addCookie(cookieEmail);
 		response.addCookie(cookiePassword);
 		response.addCookie(cookieId);
+		
+		response.addCookie(productIDCookie);
+		response.addCookie(productQuantityCookie);
 	}
 	//確認有沒有cookie
 	public boolean checkCookie(String email, Model model){
