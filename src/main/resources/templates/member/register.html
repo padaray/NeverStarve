@@ -97,7 +97,7 @@
 </head>
 <body>
 <div th:insert="Generic :: Header"></div>
-	<div class="container" style="max-width: 600px; margin-top: 50px">
+	<div class="container" style="max-width: 600px">
 		<h3 class="page-header">會員註冊</h3>
 		<div class="jumbotron text-center">
 			<form th:action="@{/Member/register}" method="post" th:object="${memberBean}"  enctype="multipart/form-data">
